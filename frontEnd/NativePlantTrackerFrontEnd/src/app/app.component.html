@@ -1,0 +1,20 @@
+<nav class="navbar">
+  <a class="navbar-brand" routerLink="/">Native Plant Tracker</a>
+  
+  <div class="nav-links">
+    <!-- Use routerLink for internal navigation -->
+    <a routerLink="/dashboard">Dashboard</a>
+
+    <!-- You can use *ngIf to show/hide links based on login status -->
+    <a *ngIf="!authService.isAuthenticated()" routerLink="/login">Log In</a>
+    <a *ngIf="!authService.isAuthenticated()" routerLink="/register">Sign Up</a>
+    
+    <!-- A logout button -->
+     
+    <a *ngIf="authService.isAuthenticated()" (click)="logout()">Log Out</a>
+  </div>
+</nav>
+
+<main class="container">
+  <router-outlet></router-outlet>
+</main>
