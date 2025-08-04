@@ -1,1 +1,81 @@
-<p>dashboard works!</p>
+<!-- Show a loading indicator while data is being fetched -->
+<div *ngIf="isLoading" class="loading-spinner">
+  Loading your dashboard...
+</div>
+
+<!-- Main Dashboard Content -->
+<div *ngIf="!isLoading" class="dashboard-container">
+  
+  <!-- GREETING -->
+  <header class="dashboard-header">
+    <h1>Welcome back, {{ username || 'Gardener' }}!</h1>
+    <p>Here's a snapshot of your vibrant, growing world.</p>
+  </header>
+
+  <!-- ========================================================== -->
+  <!-- VIEW 1: USER HAS GARDENS (The main dashboard)              -->
+  <!-- ========================================================== -->
+  <div *ngIf="gardens.length > 0; else noGardensTemplate">
+
+    <!-- STATS BAR -->
+    <section class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-number">{{ gardens.length }}</span>
+        <span class="stat-label">Gardens</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ totalPlants }}</span>
+        <span class="stat-label">Total Plants</span>
+      </div>
+      <!-- This third stat could be the oldest garden's age -->
+      <div class="stat-item">
+        <span class="stat-number">Up to {{ getYearsEstablished(gardens[0].created_on.toDateString() || '') }}</span>
+        <span class="stat-label">Years Established</span>
+      </div>
+    </section>
+
+    <!-- GARDEN LIST -->
+    <section class="garden-list-section">
+      <div class="section-header">
+        <h2>Your Gardens</h2>
+        <button class="btn btn-primary" (click)="addNewGarden()">+ Add New Garden</button>
+      </div>
+
+      <div class="garden-list">
+
+<!-- GARDEN CARDS -->
+
+        <div *ngFor="let garden of gardens" class="garden-card" [routerLink]="['/gardens', garden.id]">
+          <h3>{{ garden.name }}</h3>
+          <p class="garden-description">{{ garden.description || 'No description provided.' }}</p>
+          <button onclick="onDelete(garden.id)">Delete</button>
+          <div class="garden-card-footer">
+            <span>{{ garden.plantList?.length || 0 }} Plants</span>
+            <span>Est. {{ getYearsEstablished(garden.createdAt) }} years ago</span>
+          </div>
+        </div>
+      </div>
+    <button class="btn btn-large btn-primary" (click)="addNewGarden()">+ Add a Garden</button>
+
+    </section>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- VIEW 2: USER HAS NO GARDENS (The "Get Started" message)    -->
+  <!-- ========================================================== -->
+  <ng-template #noGardensTemplate>
+    <div class="get-started-container">
+      <h2>Let's Start Your Rewilding Adventure!</h2>
+      <p>
+        Your dashboard is ready and waiting. The first step to creating a vibrant habitat is to define your first garden. 
+        This could be a small patch in your front yard, a series of pots on your balcony, or a whole backyard meadow!
+      </p>
+      <p>
+        Once you create a garden, you can start logging the native plants you add, track pollinator sightings, and watch your
+        personal ecosystem come to life.
+      </p>
+      <button class="btn btn-large btn-primary" (click)="addNewGarden()">+ Add Your First Garden</button>
+    </div>
+  </ng-template>
+
+</div>
