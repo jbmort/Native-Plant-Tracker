@@ -133,7 +133,7 @@ public class GardenController {
         return ResponseEntity.noContent().build();
     }
 
-    // 9. GET all plants for the user
+    // 10. GET all plants for the user
     @GetMapping("/plants")
     public ResponseEntity<List<Plant>> getGardenPlants(Authentication authentication) {
         String currentUsername = authentication.getName();
@@ -145,7 +145,7 @@ public class GardenController {
         return ResponseEntity.ok(plants);
     }
 
-    // 10. GET a generated plant report object for the user
+    // 11. GET a generated plant report object for the user
     @GetMapping("plants/report")
     public ResponseEntity<List<PlantReportDTO>> getPlantReport(Authentication authentication) {
         String currentUsername = authentication.getName();
@@ -153,7 +153,7 @@ public class GardenController {
         return ResponseEntity.ok(report);
     }
 
-    // 11. GET a generated garden report object for the user
+    // 12. GET a generated garden report object for the user
     @GetMapping("/report")
     public ResponseEntity<List<GardenReportDto>> getGardenReport(Authentication authentication) {
         String currentUsername = authentication.getName();

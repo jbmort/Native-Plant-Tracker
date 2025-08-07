@@ -14,6 +14,7 @@ import { GardenDetailComponent } from './pages/garden-detail/garden-detail.compo
 import { GardenReportComponent } from './pages/garden-report/garden-report.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { authGuard } from './guards/auth.guard';
+import { PlantReportComponent } from './pages/plant-report/plant-report.component';
 
 export const routes: Routes = [
     // Public Routes //
@@ -37,6 +38,11 @@ export const routes: Routes = [
     path: 'gardens/:id/report', 
     component: GardenReportComponent, 
     canActivate: [authGuard] 
+  },
+  {
+    path: 'plants/report',
+    component: PlantReportComponent,
+    canActivate: [authGuard]
   },
   
  

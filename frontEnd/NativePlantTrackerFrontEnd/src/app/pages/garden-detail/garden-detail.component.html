@@ -1,1 +1,67 @@
-<p>garden-detail works!</p>
+<!-- Main container for the detail page -->
+<div class="garden-detail-container">
+
+  <!-- Show a loading message while the garden data is being fetched -->
+  <div *ngIf="!garden && !errorMessage">
+    <p>Loading garden details...</p>
+  </div>
+
+  <!-- Show an error message if something went wrong -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <!-- Main content area, displayed only when garden data is successfully loaded -->
+  <div *ngIf="garden">
+
+    <!-- Section 1: Garden Header Information -->
+    <header class="garden-header">
+      <h1>{{ garden.name }}</h1>
+      <p class="garden-description">{{ garden.description }}</p>
+      
+      <!-- Summary stats -->
+      <div class="garden-stats">
+        <span><strong>Age:</strong> {{ gardenAge }} years</span>
+        <span><strong>Plant Count:</strong> {{ plantList.length }}</span>
+      </div>
+      <button class="btn btn-secondary" (click)="openEditGardenModal()">Edit Garden</button>
+    </header>
+
+    <hr>
+
+    <section class="plant-section">
+      <div class="plant-controls">
+        <h2>Plants in this Garden</h2>
+        <div class="button-group">
+          <!-- The "Add Plant" button is always visible -->
+          <button class="btn btn-success" (click)="openAddPlantModal(gardenId, null)">+ Add Plant</button>
+          
+          <!-- The "Edit Plants" button toggles the editMode flag -->
+          <button class="btn btn-secondary" (click)="toggleEditMode()">
+            {{ editMode ? 'Done Editing' : 'Edit Plants' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Plant list -->
+      <ul class="plant-list list-group mt-3">
+        <li *ngFor="let plant of plantList" class="list-group-item d-flex justify-content-between align-items-center">
+          
+          <span class="plant-name">{{plant.name.length > 0 ? plant.name : plant.sci_name }}</span>
+          
+          <div *ngIf="editMode" class="plant-actions">
+            <button class="btn btn-sm btn-primary me-2" (click)="openAddPlantModal(gardenId ,plant)">Update</button>
+            <button class="btn btn-sm btn-danger" (click)="deletePlant(plant.id)">Delete</button>
+          </div>
+
+        </li>
+      </ul>
+
+      <!-- Message to show if the garden has no plants -->
+      <div *ngIf="plantList.length === 0" class="no-plants-message mt-3">
+        <p>This garden doesn't have any plants yet. Click "Add Plant" to get started!</p>
+      </div>
+    </section>
+
+  </div>
+</div>

@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { GardenService } from '../../services/garden.service'; // Adjust path
-import { AuthService } from '../../services/auth.service'; // Adjust path
+import { GardenService } from '../../services/garden.service'; 
+import { AuthService } from '../../services/auth.service';
 import { Garden } from '../../models/garden';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AddGardenModalComponent } from '../../components/add-garden-modal/add-garden-modal.component';
 
-//
-// Add a add garden function
-
-//
 
 @Component({
   standalone: true,
@@ -27,7 +25,9 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private gardenService: GardenService,
-    private authService: AuthService
+    private authService: AuthService,
+    private modalService: NgbModal,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -94,8 +94,26 @@ export class DashboardComponent implements OnInit {
   }
 
     
-addNewGarden() {
-throw new Error('Method not implemented.');
+openAddGardenModal(): void {
+    const modalRef = this.modalService.open(AddGardenModalComponent);
+
+    modalRef.componentInstance.gardenCreated.subscribe(() => {
+      this.loadDashboardData();
+    });
+
+    // You can also handle the result when the modal is closed
+    modalRef.result.then(
+      (result) => {
+        console.log(`Modal closed with: ${result}`);
+      },
+      (reason) => {
+        console.log(`Modal dismissed with: ${reason}`);
+      }
+    );
+  }
+
+viewPlantReport(): void {
+  this.router.navigate([''])
 }
   
 }

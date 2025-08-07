@@ -1,0 +1,39 @@
+<!-- Modal Header -->
+<div class="modal-header">
+  <h4 class="modal-title">Add a New Garden</h4>
+  <button type-="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+
+<!-- Modal Body with the Form -->
+<div class="modal-body">
+  <form [formGroup]="gardenForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="garden-name" class="form-label">Garden Name</label>
+      <input type="text" id="garden-name" class="form-control" formControlName="name" required>
+      <div *ngIf="gardenForm.get('name')?.invalid && gardenForm.get('name')?.touched" class="text-danger">
+        Name is required.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="garden-description" class="form-label">Description</label>
+      <textarea id="garden-description" class="form-control" formControlName="description" maxlength="255" rows="3"></textarea>
+      <div *ngIf="gardenForm.get('description')?.invalid && gardenForm.get('description')?.touched" class="text-danger">
+        Description must be less than 255 characters.
+      </div>
+    </div>
+
+    <!-- Display submission errors -->
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>
+
+<!-- Modal Footer with Buttons -->
+<div class="modal-footer">
+  <!-- The Cancel button -->
+  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss('Cancel click')">Cancel</button>
+  <!-- The Add button (disabled if form is invalid) -->
+  <button type="submit" class="btn btn-primary" (click)="onSubmit()" [disabled]="gardenForm.invalid">Add Garden</button>
+</div>

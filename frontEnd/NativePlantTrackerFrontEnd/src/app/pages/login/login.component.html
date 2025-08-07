@@ -30,6 +30,10 @@
     </div>
   </div>
 
+   <div *ngIf="errorMessage" class="error-message" style="color:red">
+    {{ errorMessage }}
+  </div>
+
   <button type="submit" [disabled]="loginForm.invalid">Login</button>
     <a routerLink="/register"><button type="button" >Sign-Up</button></a>
 

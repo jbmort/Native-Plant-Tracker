@@ -38,7 +38,7 @@
     <section class="garden-list-section">
       <div class="section-header">
         <h2>Your Gardens</h2>
-        <button class="btn btn-primary" (click)="addNewGarden()">+ Add New Garden</button>
+        <button class="btn btn-primary" (click)="openAddGardenModal()">+ Add New Garden</button>
       </div>
 
       <div class="garden-list">
@@ -55,8 +55,6 @@
           </div>
         </div>
       </div>
-    <button class="btn btn-large btn-primary" (click)="addNewGarden()">+ Add a Garden</button>
-
     </section>
   </div>
 
@@ -74,7 +72,7 @@
         Once you create a garden, you can start logging the native plants you add, track pollinator sightings, and watch your
         personal ecosystem come to life.
       </p>
-      <button class="btn btn-large btn-primary" (click)="addNewGarden()">+ Add Your First Garden</button>
+      <button class="btn btn-large btn-primary" (click)="openAddGardenModal()">+ Add Your First Garden</button>
     </div>
   </ng-template>
 

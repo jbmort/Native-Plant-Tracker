@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { FormsModule} from '@angular/forms';
 import { NgIf } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { LoginCredentials } from '../../models/auth';
+
 
 @Component({
   selector: 'app-login',
@@ -12,16 +15,43 @@ import { RouterLink } from '@angular/router';
 })
 export class LoginComponent {
 
-  constructor(  ){}
+  constructor(private authService: AuthService, private router: Router
+   ){}
 
    loginData = {
     username: '',
     password: ''
   };
 
+  errorMessage: string | null = null;
+
+
   onSubmit() {
-    // Handle login logic here
+
     console.log(this.loginData);
+
+    this.errorMessage = null; 
+
+    const creds: LoginCredentials = {
+      username: this.loginData.username,
+      password: this.loginData.password,
+    }
+
+    this.authService.login(creds).subscribe({
+
+      next: (response) => {
+              console.log('Login successful!', response);
+
+            },
+      error: (err) => {
+        console.error('Login failed:', err);
+        if (err.status === 401 || err.status === 403) {
+          this.errorMessage = 'Login failed. Please check your username and password.';
+        } else {
+          this.errorMessage = 'An unexpected error occurred. Please try again later.';
+        }
+      }
+    });    
   }
 
 }
