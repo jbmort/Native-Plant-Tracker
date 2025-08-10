@@ -1,5 +1,5 @@
 export class PlantDto {
-    commonName: String = '';
-    sciName: String = '';
+    common_name: String = '';
+    sci_name: String = '';
     description: String = '';
 }

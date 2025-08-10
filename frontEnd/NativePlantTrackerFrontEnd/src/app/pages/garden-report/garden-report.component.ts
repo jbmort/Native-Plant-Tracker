@@ -1,5 +1,5 @@
   import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Import CommonModule
+import { CommonModule, NgFor } from '@angular/common'; // Import CommonModule
 import { GardenReport } from '../../models/garden-report'; // Import your new interface
 import { GardenService } from '../../services/garden.service'; // You can reuse your GardenService
 
@@ -7,7 +7,7 @@ import { GardenService } from '../../services/garden.service'; // You can reuse 
 @Component({
   selector: 'app-garden-report',
   standalone: true,
-  imports: [CommonModule], // Add CommonModule to imports
+  imports: [CommonModule, NgFor],
   templateUrl: './garden-report.component.html',
   styleUrls: ['./garden-report.component.css']
 })
@@ -30,6 +30,7 @@ export class GardenReportComponent implements OnInit {
         this.errorMessage = null;
         this.gardenReport = report;
         this.isLoading = false;
+        console.log(this.gardenReport)
       },
       error: (err) => {
         console.error("Error loading garden report: ", err);

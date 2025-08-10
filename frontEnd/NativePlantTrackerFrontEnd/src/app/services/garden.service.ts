@@ -13,6 +13,7 @@ import { GardenReport } from '../models/garden-report';
 })
 export class GardenService {
   private apiUrl = 'http://localhost:8080/api/gardens';
+  private reportUrl = 'http://localhost:8080/api/reports'
 
   constructor(private http: HttpClient) { }
 
@@ -79,13 +80,13 @@ export class GardenService {
 
   // 11. GET a generated plant report object for the user
   getPlantReport(): Observable<Array<PlantReport>>{
-    const url = `${this.apiUrl}/plants/report`;
+    const url = `${this.reportUrl}/plant`;
     return this.http.get<Array<PlantReport>>(url)
   }
 
   // 12. GET a generated garden report object for the user
   getGardenReport(): Observable<Array<GardenReport>>{
-    const url = `${this.apiUrl}/report`;
+    const url = `${this.reportUrl}/garden`;
     return this.http.get<Array<GardenReport>>(url);
 
   }

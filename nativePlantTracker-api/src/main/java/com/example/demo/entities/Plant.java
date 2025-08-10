@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -27,8 +28,9 @@ public class Plant {
     @NotNull
     private LocalDateTime created_on;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "plantList")
-    private List<Garden> gardenList;
+//    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "plantList")
+//    @JsonBackReference
+//    private List<Garden> gardenList;
 
 
     public long getId() {
@@ -73,11 +75,11 @@ public class Plant {
         this.created_on = created_on;
     }
 
-    public List<Garden> getGardenList() {
-        return gardenList;
-    }
-
-    public void setGardenList(List<Garden> gardenList) {
-        this.gardenList = gardenList;
-    }
+//    public List<Garden> getGardenList() {
+//        return gardenList;
+//    }
+//
+//    public void setGardenList(List<Garden> gardenList) {
+//        this.gardenList = gardenList;
+//    }
 }

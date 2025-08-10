@@ -12,7 +12,7 @@ public class NativePlantTrackerApiApplication {
 
 		SpringApplication.run(NativePlantTrackerApiApplication.class, args);
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		String rawPassword = "mySecretPassword";
+		String rawPassword = "secrectpasswordforthenativeplanttrackerapp";
 		String encodedPassword = encoder.encode(rawPassword);
 		System.out.println("Encoded password: " + encodedPassword);
 

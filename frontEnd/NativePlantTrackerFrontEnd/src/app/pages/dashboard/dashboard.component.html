@@ -28,31 +28,46 @@
         <span class="stat-label">Total Plants</span>
       </div>
       <!-- This third stat could be the oldest garden's age -->
-      <div class="stat-item">
-        <span class="stat-number">Up to {{ getYearsEstablished(gardens[0].created_on.toDateString() || '') }}</span>
-        <span class="stat-label">Years Established</span>
+      <div *ngIf="gardens.length >= 1" class="stat-item">
+        <span class="stat-number">Up to {{ getYearsEstablished(gardens[0].created_on) }}</span>
+        <span class="stat-label"> Established</span>
       </div>
+
+  <div class="search">
+    <form [formGroup]="searchBar" ngSubmit="searchGardens()">
+    <input type="search" formControlName="search" id="search" class="form-control" (blur)="searchBlur()" (input)="updateList()" placeholder="Search for a garden">
+    <button type="submit" (click)="searchGardens()">Search</button>
+    <p *ngIf="searchError != null" class="text-danger">{{searchError}}</p>
+    </form>
+  </div>
     </section>
 
     <!-- GARDEN LIST -->
     <section class="garden-list-section">
       <div class="section-header">
         <h2>Your Gardens</h2>
+        <div class="gardenButtons">
         <button class="btn btn-primary" (click)="openAddGardenModal()">+ Add New Garden</button>
+        <button class="btn btn-primary" (click)="openReportModal()">Generate Report</button>
+        </div>
       </div>
 
       <div class="garden-list">
 
 <!-- GARDEN CARDS -->
 
-        <div *ngFor="let garden of gardens" class="garden-card" [routerLink]="['/gardens', garden.id]">
-          <h3>{{ garden.name }}</h3>
-          <p class="garden-description">{{ garden.description || 'No description provided.' }}</p>
-          <button onclick="onDelete(garden.id)">Delete</button>
-          <div class="garden-card-footer">
-            <span>{{ garden.plantList?.length || 0 }} Plants</span>
-            <span>Est. {{ getYearsEstablished(garden.createdAt) }} years ago</span>
-          </div>
+        <div *ngFor="let garden of filteredGardens" class="garden-card" >
+            <div class="garden-card-body" [routerLink]="['/gardens', garden.id]">
+                <h3>{{ garden.name }}</h3>
+                <p class="garden-description">{{ garden.description || 'No description provided.' }}</p>
+                <div class="garden-card-footer">
+                    <span>{{ garden.gardenPlants.length || 0 }} Plants</span>
+                    <span>Est. {{ getYearsEstablished(garden.created_on) }} ago</span>
+                </div>
+            </div>
+            <div>
+                <button (click)="onDelete(garden.id)">Delete</button>
+            </div>
         </div>
       </div>
     </section>

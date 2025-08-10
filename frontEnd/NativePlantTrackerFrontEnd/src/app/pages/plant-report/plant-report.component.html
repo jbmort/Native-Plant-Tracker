@@ -35,16 +35,19 @@
           <th scope="col">Plant Name</th>
           <th scope="col">Description</th>
           <th scope="col" class="text-center">Total Instances</th>
-          <th scope="col" class="text-center">Years Present</th>
+          <th scope="col" class="text-center">Year Planted</th>
         </tr>
       </thead>
       <tbody>
         <!-- Loop over the plantReport array to create a row for each item -->
         <tr *ngFor="let plant of plantReport">
           <td><strong>{{ plant.name }}</strong></td>
-          <td class="truncate-text" [title]="plant.description">{{ plant.description }}</td>
-          <td class="text-center">{{ plant.instances }}</td>
+          <td *ngIf="plant.description.length > 1; else noDescription" class="truncate-text" [title]="plant.description">{{ plant.description }}</td>
+          <td class="text-center">{{ plant.num_instances }}</td>
           <td class="text-center">{{ plant.years_present }}</td>
+          <ng-template #noDescription>
+                      <td></td>
+          </ng-template>
         </tr>
       </tbody>
     </table>

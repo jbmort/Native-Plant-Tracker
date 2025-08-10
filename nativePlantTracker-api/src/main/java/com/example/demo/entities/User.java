@@ -1,42 +1,56 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="User")
+@Table(name="Users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private long id;
 
     @NotNull
-    @Column(unique = true)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @NotNull
+    @Column(name = "password", nullable=false)
     private String password;
 
     @NotNull
+    @Column(name = "email", nullable=false)
     private String email;
 
-    @NotNull
+    @Nullable
+    @Column(name = "first_name")
     private String first_name;
 
-    @NotNull
+    @Nullable
+    @Column(name = "last_name")
     private String last_name;
 
     @NotNull
+    @Column(name = "created_on", nullable=false, updatable = false)
     private LocalDateTime created_on;
 
-    @Nullable
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Garden> gardenList;
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    @JsonManagedReference("user-garden")
+    private List<Garden> gardenList = new ArrayList<>();
+
 
     @Nullable
     public List<Garden> getGardenList() {
@@ -53,7 +67,7 @@ public class User {
         this.created_on = LocalDateTime.now();
     }
 
-    public User(String username, String password, String email, String first_name, String last_name) {
+    public User(String username, String password, String email, @Nullable String first_name, @Nullable String last_name) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -94,19 +108,21 @@ public class User {
         this.email = email;
     }
 
+    @Nullable
     public String getFirst_name() {
         return first_name;
     }
 
-    public void setFirst_name(String first_name) {
+    public void setFirst_name(@Nullable String first_name) {
         this.first_name = first_name;
     }
 
+    @Nullable
     public String getLast_name() {
         return last_name;
     }
 
-    public void setLast_name(String last_name) {
+    public void setLast_name(@Nullable String last_name) {
         this.last_name = last_name;
     }
 

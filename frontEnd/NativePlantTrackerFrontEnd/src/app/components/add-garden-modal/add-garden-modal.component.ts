@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GardenDTO } from '../../models/garden-dto'; 
@@ -14,8 +14,8 @@ import { Garden } from '../../models/garden';
   styleUrl: './add-garden-modal.component.css'
 })
 
-export class AddGardenModalComponent {
-  gardenForm: FormGroup;
+export class AddGardenModalComponent implements OnInit{
+  gardenForm!: FormGroup;
   errorMessage: string | null = null;
 
   @Input() gardenToEdit: Garden | null = null
@@ -26,9 +26,9 @@ export class AddGardenModalComponent {
     public activeModal: NgbActiveModal,
     private fb: FormBuilder,
     private gardenService: GardenService
-  ) {
-    
-   
+  ) {}
+
+  ngOnInit(): void {
     this.gardenForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],
@@ -68,6 +68,7 @@ export class AddGardenModalComponent {
           next: (updatedGarden) => { 
             this.gardenCreated.emit();
             console.log('Garden updated: ' + updatedGarden.name)
+            this.activeModal.close('Garden Updated');
           },
           error: (err) => {
             this.errorMessage = 'Failed to update garden. Please try again.';

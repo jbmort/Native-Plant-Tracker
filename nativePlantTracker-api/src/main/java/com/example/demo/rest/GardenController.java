@@ -26,14 +26,16 @@ public class GardenController {
     final ApplicationContext context;
     final GardenService gardenService;
     final PlantService plantService;
+    private final UserService userService;
 
     @Autowired
     public GardenController(ApplicationContext context,
                             GardenService gardenService,
-                            PlantService plantService) {
+                            PlantService plantService, UserService userService) {
         this.context = context;
         this.gardenService = gardenService;
         this.plantService = plantService;
+        this.userService = userService;
     }
 
     // /////////////// //
@@ -43,9 +45,9 @@ public class GardenController {
     // 1. GET all gardens for the LOGGED-IN user
     @GetMapping
     public ResponseEntity<List<Garden>> getGardensForCurrentUser(Authentication authentication) {
-        // The 'authentication' object is provided by Spring Security. It's trustworthy.
         String currentUsername = authentication.getName();
         List<Garden> gardens = gardenService.findGardensByUsername(currentUsername);
+        System.out.println(gardens);
         return ResponseEntity.ok(gardens);
     }
 
@@ -64,7 +66,7 @@ public class GardenController {
     public ResponseEntity<Garden> addGarden(@RequestBody GardenDto newGardenDto,
                                             Authentication authentication) {
         String currentUsername = authentication.getName();
-        Garden createdGarden = gardenService.createGardenForUser(newGardenDto, currentUsername);
+        Garden createdGarden = userService.addGardenForUser(newGardenDto, currentUsername);
         return new ResponseEntity<>(createdGarden, HttpStatus.CREATED);
     }
 
@@ -107,7 +109,10 @@ public class GardenController {
                                                   Authentication authentication) {
         String currentUsername = authentication.getName();
         Plant newPlant = gardenService.addPlantToGarden(plant, gardenID, currentUsername);
-        return ResponseEntity.ok(newPlant);
+        if (newPlant != null) {
+            return ResponseEntity.ok(newPlant);
+        }
+        return ResponseEntity.noContent().build();
     }
 
     // 8. PUT (update) a plant for a specific garden
@@ -129,7 +134,7 @@ public class GardenController {
                                              Authentication authentication) {
         String currentUsername = authentication.getName();
         Plant plant = gardenService.getPlantById(gardenID, plantID, currentUsername);
-        plantService.deletePlant(plant.getId());
+        gardenService.deletePlantFromGarden(gardenID, plant.getId());
         return ResponseEntity.noContent().build();
     }
 
@@ -137,43 +142,25 @@ public class GardenController {
     @GetMapping("/plants")
     public ResponseEntity<List<Plant>> getGardenPlants(Authentication authentication) {
         String currentUsername = authentication.getName();
-        List<Garden> gardens = gardenService.findGardensByUsername(currentUsername);
-        List<Plant> plants = new ArrayList<>();
-        for (Garden garden : gardens) {
-            plants.addAll(garden.getPlantList());
-        }
+        List<Plant> plants = gardenService.allPlantsForUser(currentUsername);
         return ResponseEntity.ok(plants);
     }
 
-    // 11. GET a generated plant report object for the user
-    @GetMapping("plants/report")
-    public ResponseEntity<List<PlantReportDTO>> getPlantReport(Authentication authentication) {
-        String currentUsername = authentication.getName();
-        List<PlantReportDTO> report = gardenService.getPlantReport(currentUsername);
-        return ResponseEntity.ok(report);
-    }
 
-    // 12. GET a generated garden report object for the user
-    @GetMapping("/report")
-    public ResponseEntity<List<GardenReportDto>> getGardenReport(Authentication authentication) {
-        String currentUsername = authentication.getName();
-        List<GardenReportDto> report = gardenService.getGardenReport(currentUsername);
-        return ResponseEntity.ok(report);
-    }
 
-    // 12. Test POST
-    @PostMapping("/test")
-    public ResponseEntity<String> testGarden(@RequestBody GardenDto gardenDto) {
-        gardenService.addGarden(gardenDto);
-        return ResponseEntity.ok("success");
-    }
-
-    // 13. test GET
-    @GetMapping("/test")
-    public ResponseEntity<List<Garden>> testGardens() {
-        List<Garden> gardens = gardenService.getGardens();
-        return ResponseEntity.ok(gardens);
-    }
+//    // 12. Test POST
+//    @PostMapping("/test")
+//    public ResponseEntity<String> testGarden(@RequestBody GardenDto gardenDto) {
+//        gardenService.addGarden(gardenDto);
+//        return ResponseEntity.ok("success");
+//    }
+//
+//    // 13. test GET
+//    @GetMapping("/test")
+//    public ResponseEntity<List<Garden>> testGardens() {
+//        List<Garden> gardens = gardenService.getGardens();
+//        return ResponseEntity.ok(gardens);
+//    }
 }
 
 

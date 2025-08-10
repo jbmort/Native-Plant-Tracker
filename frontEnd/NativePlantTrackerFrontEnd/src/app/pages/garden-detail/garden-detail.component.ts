@@ -21,7 +21,7 @@ export class GardenDetailComponent implements OnInit{
   constructor(private modalService: NgbModal,
      private gardenService: GardenService,
      private route: ActivatedRoute,
-     private router: Router
+     private router: Router,
     ){}
 
   gardenId: number = 0;
@@ -46,16 +46,22 @@ export class GardenDetailComponent implements OnInit{
   }
 
   setGardenAge(): String{
+    let date = new Date;
+    if(this.garden != null ){
+      date = new Date(this.garden.created_on)
+    }
+    
     if(this.garden != null){
     const currentDate = Date.now();
-    const gardenEstab = this.garden.created_on.getTime();
-    const diff = gardenEstab - currentDate;
+
+    const gardenEstab = date.getTime();
+    const diff = currentDate - gardenEstab;
     let days = diff / (1000 * 60 * 60 * 24);
     if (days < 100){
-      return Math.ceil(days).toString()
+      return Math.ceil(days) + " Days"
     }
     else {
-      return (days/365).toFixed(2)
+      return (days/365).toFixed(2) + " Years"
     }
     }
     return 'Unknown';
@@ -84,9 +90,12 @@ export class GardenDetailComponent implements OnInit{
     this.gardenService.getGardenById(gardenID).subscribe({
       next: (garden) => {
         this.garden = garden;
-        this.plantList = garden.plantList;
+        if(garden.gardenPlants != undefined){
+          this.plantList = garden.gardenPlants;
+        }
         this.errorMessage = null;
         this.gardenAge = this.setGardenAge()
+        this.loadGardenData(this.gardenId);
       },
       error: (err) =>{
         this.errorMessage = 'Garden could not be loaded.'
@@ -108,7 +117,7 @@ export class GardenDetailComponent implements OnInit{
 
   openAddPlantModal(gardenID: number, plant: Plant | null): void {
       const modalRef = this.modalService.open(AddPlantModalComponent);
-      modalRef.componentInstance.gardenID = gardenID;
+      modalRef.componentInstance.gardenId = gardenID;
       modalRef.componentInstance.plant = plant;
   
       modalRef.componentInstance.plantAdded.subscribe(() => {

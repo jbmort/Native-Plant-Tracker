@@ -6,5 +6,5 @@ export class Garden {
     name: String = '';
     description: String = '';
     created_on: Date = new Date;
-    plantList: Array<Plant> = new Array;
+    gardenPlants: Array<Plant> = new Array;
 }

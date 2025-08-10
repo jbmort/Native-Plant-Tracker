@@ -8,4 +8,7 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
     Plant getPlantByCommonName(String name);
     Boolean existsPlantByCommonName(String name);
 
+    Plant getPlantBySciName(String name);
+
+    Boolean existsPlantBySciName(String name);
 }

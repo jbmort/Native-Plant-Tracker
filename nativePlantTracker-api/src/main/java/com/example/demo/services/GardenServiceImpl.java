@@ -5,8 +5,10 @@ import com.example.demo.dto.GardenReportDto;
 import com.example.demo.dto.PlantDto;
 import com.example.demo.dto.PlantReportDTO;
 import com.example.demo.entities.Garden;
+import com.example.demo.entities.GardenPlant;
 import com.example.demo.entities.Plant;
 import com.example.demo.entities.User;
+import com.example.demo.repository.GardenPlantRepository;
 import com.example.demo.repository.GardenRepository;
 import com.example.demo.repository.PlantRepository;
 import com.example.demo.repository.UserRepository;
@@ -20,6 +22,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 @Service
 public class GardenServiceImpl implements GardenService {
@@ -27,13 +30,16 @@ public class GardenServiceImpl implements GardenService {
     private final GardenRepository gardenRepository;
     private final PlantRepository plantRepository;
     private final UserService userService;
+    private final GardenPlantRepository gardenPlantRepository;
     private final UserRepository userRepository;
 
+
     @Autowired
-    GardenServiceImpl(GardenRepository gardenRepository, PlantRepository plantRepository, UserService userService, UserRepository userRepository) {
+    GardenServiceImpl(GardenRepository gardenRepository, PlantRepository plantRepository, UserService userService, GardenPlantRepository gardenPlantRepository, UserRepository userRepository) {
         this.gardenRepository = gardenRepository;
         this.plantRepository = plantRepository;
         this.userService = userService;
+        this.gardenPlantRepository = gardenPlantRepository;
         this.userRepository = userRepository;
     }
 
@@ -45,8 +51,26 @@ public class GardenServiceImpl implements GardenService {
     @Override
     public List<Plant> getAllPlantsForGarden(long gardenId, String currentUsername) {
         Garden garden = findGardenByIdAndUsername(gardenId, currentUsername);
+        List<Plant> plantList = new ArrayList<>();
+        List<GardenPlant> list = gardenPlantRepository.findByGardenId(garden.getId());
+        for (GardenPlant gardenPlant : list) {
+            plantList.add(gardenPlant.getPlant());
+        }
 
-        return garden.getPlantList();
+        return plantList;
+    }
+
+    @Override
+    public List<Plant> allPlantsForUser(String username){
+        List<Garden> gardens = findGardensByUsername(username);
+        List<Plant> plantList = new ArrayList<>();
+        for (Garden garden : gardens) {
+            List<GardenPlant> reflist = gardenPlantRepository.findByGardenId(garden.getId());
+            for (GardenPlant gardenPlant : reflist) {
+                plantList.add(gardenPlant.getPlant());
+            }
+        }
+        return plantList;
     }
 
 
@@ -67,33 +91,55 @@ public class GardenServiceImpl implements GardenService {
 
     }
 
+
     @Override
     @Transactional
     public Plant addPlantToGarden(PlantDto plant, long gardenId, String currentUsername) {
         Plant newPlant = new Plant();
         Garden garden = findGardenByIdAndUsername(gardenId, currentUsername);
-        if(garden.getUser().getUsername().equals(currentUsername)) {
-            if (!plantRepository.existsPlantByCommonName(plant.getCommon_name())) {
-                newPlant.setCommonName(plant.getCommon_name());
-                newPlant.setDescription(plant.getDescription());
-                newPlant.setSciName(plant.getSci_name());
-                plantRepository.save(newPlant);
-            }
-            newPlant = plantRepository.getPlantByCommonName(plant.getCommon_name());
-
-            if (gardenRepository.findById(gardenId).isPresent()) {
-                garden.getPlantList().add(newPlant);
-                gardenRepository.save(garden);
+        boolean exists = false;
+        for(GardenPlant gardenPlant : garden.getGardenPlants()){
+            if (gardenPlant.getPlant().getCommonName().equals(plant.getCommon_name())) {
+                exists = true;
+                break;
             }
         }
-        return newPlant;
+        if (!exists) {
+            if (garden.getUser().getUsername().equals(currentUsername)) {
+                if (!plantRepository.existsPlantByCommonName(plant.getCommon_name())) {
+                    newPlant.setCommonName(plant.getCommon_name());
+                    newPlant.setDescription(plant.getDescription());
+                    newPlant.setSciName(plant.getSci_name());
+                    newPlant.setCreated_on(LocalDateTime.now());
+                    plantRepository.save(newPlant);
+                } else {
+                    newPlant = plantRepository.getPlantByCommonName(plant.getCommon_name());
+                    if (newPlant == null) {
+                        newPlant = plantRepository.getPlantBySciName(plant.getSci_name());
+                    }
+                }
 
+                if (gardenRepository.findById(gardenId).isPresent()) {
+                    GardenPlant gardenPlant = new GardenPlant();
+                    gardenPlant.setGarden(garden);
+                    gardenPlant.setPlant(newPlant);
+                    garden.getGardenPlants().add(gardenPlant);
+                    gardenRepository.save(garden);
+                }
+            }
+            return newPlant;
+        }
+        return null;
     }
 
     @Override
+    @Transactional
     public void deleteGarden(long gardenId, String username) {
-        Garden gardenToDelete = findGardenByIdAndUsername(gardenId, username);
-        gardenRepository.delete(gardenToDelete);
+        Garden garden = findGardenByIdAndUsername(gardenId, username);
+        if(gardenRepository.findByIdWithPlants(garden.getId()).isPresent()) {
+            Garden gardenToDelete = gardenRepository.findByIdWithPlants(garden.getId()).get();
+            gardenRepository.delete(gardenToDelete);
+        }
     }
 
     @Override
@@ -108,11 +154,14 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     @Transactional
-    public void deletePlantFromGarden(long plantId, long gardenId) {
+    public void deletePlantFromGarden(long gardenId, long plantId) {
         if(gardenRepository.findById(gardenId).isPresent()){
             Garden garden = gardenRepository.findById(gardenId).get();
             if(plantRepository.findById(plantId).isPresent()){
-                garden.getPlantList().remove(plantRepository.findById(plantId).get());
+                List<GardenPlant> list = garden.getGardenPlants();
+                list.removeIf(gardenPlant -> gardenPlant.getPlant().getId() == plantId);
+                garden.setGardenPlants(list);
+                gardenRepository.save(garden);
             }
         }
     }
@@ -132,16 +181,17 @@ public class GardenServiceImpl implements GardenService {
     public Garden createGardenForUser(GardenDto newGardenDto, String currentUsername){
         User user = userService.getUserByUsername(currentUsername);
         Garden newGarden = new Garden();
-        List<Garden> gardenList = user.getGardenList();
+//        List<Garden> gardenList = user.getGardenList();
 
         newGarden.setName(newGardenDto.getName());
         newGarden.setDescription(newGardenDto.getDescription());
+        newGarden.setUser(user);
         Garden savedGarden = gardenRepository.save(newGarden);
-        if (gardenList != null) {
-            gardenList.add(savedGarden);
-            user.setGardenList(gardenList);
-            userRepository.save(user);
-        }
+//        if (gardenList != null) {
+//            gardenList.add(savedGarden);
+//            user.setGardenList(gardenList);
+//            userRepository.save(user);
+//        }
         return savedGarden;
     }
 
@@ -152,15 +202,15 @@ public class GardenServiceImpl implements GardenService {
     }
 
     @Override
-    public Plant getPlantById(long plantId, long gardenId, String username) {
+    public Plant getPlantById(long gardenId, long plantId, String username) {
         Garden garden = findGardenByIdAndUsername(gardenId, username);
-        Plant plant = new Plant();
         if(plantRepository.findById(plantId).isPresent()) {
-            if (garden.getPlantList().contains(plantRepository.findById(plantId).get())){
-                plant = plantRepository.findById(plantId).get();
-            }
+            Optional <GardenPlant> plantReference = gardenPlantRepository.findFirstByGardenIdAndPlantId(garden.getId(), plantId);
+            if(plantReference.isPresent()) {
+            GardenPlant gardenPlant = plantReference.get();
+            return gardenPlant.getPlant();}
         }
-        return plant;
+        return null;
     }
 
     @Override
@@ -172,13 +222,16 @@ public class GardenServiceImpl implements GardenService {
         names.add("");
         int i = 1;
         for (Garden garden : gardens) {
-            plants.addAll(garden.getPlantList());
+            List<GardenPlant> refList = gardenPlantRepository.findByGardenId(garden.getId());
+            for(GardenPlant ref : refList){
+                plants.add(ref.getPlant());
+            }
         }
         for (Plant plant : plants) {
             PlantReportDTO line = new PlantReportDTO();
             line.setId(i);
             i++;
-            if(plant.getCommonName() != null) {
+            if (plant.getCommonName() != null) {
                 line.setName(plant.getCommonName());
             } else if (plant.getSciName() != null) {
                 line.setName(plant.getSciName());
@@ -186,25 +239,23 @@ public class GardenServiceImpl implements GardenService {
             line.setDescription(plant.getDescription());
             LocalDateTime established = plant.getCreated_on();
 
-            double age = getAge(established);
-            line.setYears_present(age);
+//            double age = getAge(established);
+            line.setYears_present(established.getYear());
 
-            if(names.contains(plant.getCommonName()) || names.contains(plant.getSciName())) {
-                int index = report.indexOf(line);
-                int instances = report.get(index).getNum_instances();
-                report.get(index).setNum_instances(instances+1);
-                if (line.getYears_present() > report.get(index).getYears_present()){
-                    report.get(index).setYears_present(line.getYears_present());
-                }
-                continue;
-            }
-            else {
-                line.setNum_instances(1);
-            }
-            names.add(plant.getCommonName());
-            names.add(plant.getSciName());
-            report.add(line);
+            line.setNum_instances(1);
+
+            long count = plants.stream()
+                    .filter(p -> line.getName().equalsIgnoreCase(p.getCommonName()))
+                    .count();
+            line.setNum_instances((int) count);
+
+            if(!names.contains(plant.getCommonName().toLowerCase())) {
+
+            names.add(plant.getCommonName().toLowerCase());
+//            names.add(plant.getSciName().toLowerCase());
+            report.add(line);}
         }
+        System.out.println(report);
         return report;
     }
 
@@ -222,9 +273,9 @@ public class GardenServiceImpl implements GardenService {
             line.setDescription(garden.getDescription());
 
             double age = getAge(garden.getCreated_on());
-            line.setAge(age);
+            line.setAge(garden.getCreated_on().getYear());
 
-            line.setNum_plants(garden.getPlantList().size());
+            line.setNum_plants(garden.getGardenPlants().size());
             report.add(line);
         }
         return report;

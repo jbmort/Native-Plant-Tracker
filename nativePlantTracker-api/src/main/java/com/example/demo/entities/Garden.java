@@ -1,12 +1,16 @@
 package com.example.demo.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
 
 
 @Entity
@@ -26,14 +30,15 @@ public class Garden {
     @NotNull
     private LocalDateTime created_on;
 
-    @ManyToMany
-    @JoinTable(name="Garden_Plants",
-            joinColumns=
-            @JoinColumn(name="Garden_ID", referencedColumnName="id"),
-            inverseJoinColumns=
-            @JoinColumn(name="Plant_ID", referencedColumnName="id")
+    @OneToMany(
+            mappedBy = "garden",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
-    private List<Plant> plantList;
+    @JsonManagedReference("garden-gardenplant")
+    private List<GardenPlant> gardenPlants = new ArrayList<>();
+
 
     public User getUser() {
         return user;
@@ -43,17 +48,10 @@ public class Garden {
         this.user = user;
     }
 
-    @ManyToOne
-    @JoinColumn(name="garden_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false) // Defines the FK column in THIS table.
+    @JsonBackReference("user-garden")
     private User user;
-
-    public List<Plant> getPlantList() {
-        return plantList;
-    }
-
-    public void setPlantList(List<Plant> plantList) {
-        this.plantList = plantList;
-    }
 
 
 
@@ -100,5 +98,18 @@ public class Garden {
 
     public void setCreated_on(LocalDateTime created_on) {
         this.created_on = created_on;
+    }
+
+    public List<GardenPlant> getGardenPlants() {
+        return gardenPlants;
+    }
+
+    public void setGardenPlants(List<GardenPlant> gardenPlants) {
+        this.gardenPlants = gardenPlants;
+    }
+
+    public void removeGardenPlant(GardenPlant gardenPlant) {
+        gardenPlants.remove(gardenPlant);
+        gardenPlant.setGarden(null); // Remove the back-reference
     }
 }

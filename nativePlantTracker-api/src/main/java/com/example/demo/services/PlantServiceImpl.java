@@ -34,29 +34,24 @@ public class PlantServiceImpl implements PlantService {
         return plantRepository.findAll();
     }
 
-    @Override
-    public List<Garden> getAllGardensForPlant(long plantId) {
-        Plant plant = plantRepository.getPlantById(plantId);
-
-        return plant.getGardenList();
-    }
 
     @Override
     public Plant addPlant(PlantDto plant) {
-        if(!plantRepository.existsPlantByCommonName(plant.getCommon_name())){
+        if(!plantRepository.existsPlantByCommonName(plant.getCommon_name())
+                && !plantRepository.existsPlantBySciName(plant.getSci_name()) ){
             Plant newPlant = new Plant();
             newPlant.setCommonName(plant.getCommon_name());
             newPlant.setDescription(plant.getDescription());
             newPlant.setSciName(plant.getSci_name());
-            plantRepository.save(newPlant);
+           return plantRepository.save(newPlant);
         }
         return plantRepository.getPlantByCommonName(plant.getCommon_name());
     }
 
     public Plant addPlant(Plant plant) {
-        if(!plantRepository.existsPlantByCommonName(plant.getCommonName())){
-            plantRepository.save(plant);
-            return plantRepository.getPlantByCommonName(plant.getCommonName());
+        if(!plantRepository.existsPlantByCommonName(plant.getCommonName())
+                && !plantRepository.existsPlantBySciName(plant.getSciName()) ){
+            return plantRepository.save(plant);
         }
         return plantRepository.getPlantByCommonName(plant.getCommonName());
     }

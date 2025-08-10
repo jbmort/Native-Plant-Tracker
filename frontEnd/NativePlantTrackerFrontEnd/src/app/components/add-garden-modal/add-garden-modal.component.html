@@ -35,5 +35,5 @@
   <!-- The Cancel button -->
   <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss('Cancel click')">Cancel</button>
   <!-- The Add button (disabled if form is invalid) -->
-  <button type="submit" class="btn btn-primary" (click)="onSubmit()" [disabled]="gardenForm.invalid">Add Garden</button>
+  <button type="submit" class="btn btn-primary" (click)="onSubmit()" [disabled]="gardenForm.invalid">{{gardenToEdit != null? "Update Garden" : "Add Garden"}}</button>
 </div>

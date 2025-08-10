@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface GardenService {
 
+    List<Plant> allPlantsForUser(String username);
+
     Garden getGarden(long id);
     List<Garden> getGardens();
     List<Plant> getAllPlantsForGarden(long gardenId, String currentUsername);

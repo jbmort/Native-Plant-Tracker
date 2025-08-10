@@ -35,12 +35,12 @@ export const routes: Routes = [
     canActivate: [authGuard] 
   },
   { 
-    path: 'gardens/:id/report', 
+    path: 'report/garden', 
     component: GardenReportComponent, 
     canActivate: [authGuard] 
   },
   {
-    path: 'plants/report',
+    path: 'report/plant',
     component: PlantReportComponent,
     canActivate: [authGuard]
   },

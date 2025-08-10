@@ -1,37 +1,43 @@
 export class GardenReport {
-    private _id: number = 0;
-    public get id(): number {
-        return this._id;
+    public id: number = 0;
+    public getId(): number {
+        return this.id;
     }
-    public set id(value: number) {
-        this._id = value;
+    public setId(value: number) {
+        this.id = value;
     }
-    private _name: String = '';
-    public get name(): String {
-        return this._name;
+
+    public garden_name: String = '';
+    public getGarden_name(): String {
+        return this.garden_name;
     }
-    public set name(value: String) {
-        this._name = value;
+    public setGarden_name(value: String) {
+        this.garden_name = value;
     }
-    private _description: String = '';
-    public get description(): String {
-        return this._description;
+  
+
+    public description: String = '';
+    public getDescription(): String {
+        return this.description;
     }
-    public set description(value: String) {
-        this._description = value;
+    public setDescription(value: String) {
+        this.description = value;
     }
-    private _num_Plants: number = 0;
-    public get num_Plants(): number {
-        return this._num_Plants;
+
+    public num_plants: number = 0;
+    public getNum_plants(): number {
+        return this.num_plants;
     }
-    public set num_Plants(value: number) {
-        this._num_Plants = value;
+    public setNum_plants(value: number) {
+        this.num_plants = value;
     }
-    private _age: number = 0;
-    public get age(): number {
-        return this._age;
+ 
+    public age: number = 0;
+    public getAge(): number {
+        return this.age;
     }
-    public set age(value: number) {
-        this._age = value;
+    public setAge(value: number) {
+        this.age = value;
     }
+
 }

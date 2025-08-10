@@ -6,6 +6,7 @@ import com.example.demo.entities.Garden;
 import com.example.demo.entities.User;
 import com.example.demo.repository.GardenRepository;
 import com.example.demo.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -70,22 +71,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Garden addGardenForUser(GardenDto garden, long userID) {
-        Optional<User> user = userRepository.findById(userID);
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 
-        if(user.isPresent()) {
-            List<Garden> gardenList = user.get().getGardenList();
+    @Override
+    public List<Garden> getGardensForUsername(String username) {
+        User user = findByUsername(username); // Use the secure method
+        return user.getGardenList();
+    }
 
-            Garden newGarden = new Garden();
-            newGarden.setName(garden.getName());
-            newGarden.setDescription(garden.getDescription());
-            Garden savedGarden = gardenRepository.save(newGarden);
-            if (gardenList != null) {
-                gardenList.add(savedGarden);
-            }
-            return savedGarden;
-        }
-        return null;
+    @Transactional
+    @Override
+    public Garden addGardenForUser(GardenDto gardenDto, String username) {
+        User user = findByUsername(username);
+
+        Garden newGarden = new Garden();
+        newGarden.setName(gardenDto.getName());
+        newGarden.setDescription(gardenDto.getDescription());
+
+        newGarden.setUser(user);
+
+        return gardenRepository.save(newGarden);
     }
 
 

@@ -10,7 +10,6 @@ public interface PlantService {
     Plant getPlant(long id);
     Plant getPlantByName(String username);
     List<Plant> getAllPlants();
-    List<Garden> getAllGardensForPlant(long plantId);
     Plant addPlant(PlantDto plant);
     Plant addPlant(Plant plant);
     Plant updatePlant(long id, PlantDto plant);

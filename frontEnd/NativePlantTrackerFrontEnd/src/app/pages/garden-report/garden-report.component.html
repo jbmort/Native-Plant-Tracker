@@ -32,17 +32,20 @@
           <th scope="col">Garden Name</th>
           <th scope="col">Description</th>
           <th scope="col" class="text-center">Plant Species</th>
-          <th scope="col" class="text-center">Age (Years)</th>
+          <th scope="col" class="text-center">Year Established</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let garden of gardenReport">
-          <td><strong>{{ garden.name }}</strong></td>
-          <td class="truncate-text" [title]="garden.description">
+          <td><strong>{{ garden.garden_name }}</strong></td>
+          <td *ngIf="garden.description.length > 1; else noDescription" class="truncate-text" [title]="garden.description">
             {{ garden.description }}
           </td>
-          <td class="text-center">{{ garden.num_Plants }}</td>
+          <td class="text-center">{{ garden.num_plants }}</td>
           <td class="text-center">{{ garden.age }}</td>
+           <ng-template #noDescription>
+                      <td></td>
+          </ng-template>
         </tr>
       </tbody>
     </table>

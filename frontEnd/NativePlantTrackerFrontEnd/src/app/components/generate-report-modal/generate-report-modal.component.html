@@ -1,0 +1,43 @@
+<div class="modal-body">
+  <form [formGroup]="reportResponse" (ngSubmit)="onSubmit()">
+   
+    <fieldset class="mb-3">
+      <legend class="form-label">Report Type</legend>
+
+      <div class="form-check">
+        <input 
+          class="form-check-input" 
+          type="radio" 
+          id="reportTypeGarden"
+          formControlName="responseType" 
+          value="GARDEN"> 
+        <label class="form-check-label" for="reportTypeGarden">
+          Garden Summary Report
+        </label>
+      </div>
+
+      <div class="form-check">
+        <input 
+          class="form-check-input" 
+          type="radio" 
+          id="reportTypePlant"
+          formControlName="responseType" 
+          value="PLANT"> 
+        <label class="form-check-label" for="reportTypePlant">
+          All Plants Report
+        </label>
+      </div>
+
+    </fieldset>
+
+    <div *ngIf="reportResponse.get('responseType')?.invalid && reportResponse.get('responseType')?.touched" class="text-danger">
+      Please select a report type.
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="reportResponse.invalid">Generate Report</button>
+    </div>
+
+  </form>
+</div>

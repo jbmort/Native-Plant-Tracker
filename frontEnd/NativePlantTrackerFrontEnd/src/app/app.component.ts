@@ -10,9 +10,10 @@ import { NgIf } from '@angular/common';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent{
   title = 'NativePlantTrackerFrontEnd';
  constructor(public authService: AuthService, private router: Router) {}
+
 
   logout(): void {
     // Remove the token from storage
@@ -21,4 +22,7 @@ export class AppComponent {
     this.router.navigate(['/']);
     console.log('User logged out.');
   }
+
+
+
 }

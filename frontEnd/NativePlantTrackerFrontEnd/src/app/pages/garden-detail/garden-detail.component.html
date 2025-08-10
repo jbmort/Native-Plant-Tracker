@@ -20,9 +20,9 @@
       <p class="garden-description">{{ garden.description }}</p>
       
       <!-- Summary stats -->
-      <div class="garden-stats">
-        <span><strong>Age:</strong> {{ gardenAge }} years</span>
-        <span><strong>Plant Count:</strong> {{ plantList.length }}</span>
+      <div *ngIf="garden != null" class="garden-stats">
+        <span><strong>Age: </strong>{{ gardenAge }}</span>
+        <span ><strong>Plant Count: </strong>{{plantList.length > 0 ? plantList.length : "0" }}</span>
       </div>
       <button class="btn btn-secondary" (click)="openEditGardenModal()">Edit Garden</button>
     </header>
@@ -47,7 +47,7 @@
       <ul class="plant-list list-group mt-3">
         <li *ngFor="let plant of plantList" class="list-group-item d-flex justify-content-between align-items-center">
           
-          <span class="plant-name">{{plant.name.length > 0 ? plant.name : plant.sci_name }}</span>
+          <span class="plant-name">{{plant.commonName}}</span>
           
           <div *ngIf="editMode" class="plant-actions">
             <button class="btn btn-sm btn-primary me-2" (click)="openAddPlantModal(gardenId ,plant)">Update</button>
