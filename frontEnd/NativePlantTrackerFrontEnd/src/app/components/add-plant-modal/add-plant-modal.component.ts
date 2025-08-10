@@ -70,6 +70,7 @@ export class AddPlantModalComponent implements OnInit {
         sci_name: this.plantForm.value.sciName,
         description: this.plantForm.value.description
     } 
+    console.log(plantData)
 
     this.gardenService.addPlantToGarden(this.gardenId, plantData).subscribe({
       next: (newPlant) => {
@@ -84,23 +85,19 @@ export class AddPlantModalComponent implements OnInit {
     });
   }
   else if(this.plantForm.value.plantID > 0){
-    // const plantToUpdate: Plant = new Plant;
-    // plantToUpdate.id = this.plantForm.value.plantID;
-    // plantToUpdate.name = this.plantForm.value.name;
-    // plantToUpdate.sci_name = this.plantForm.value.sci_name;
-    // plantToUpdate.description = this.plantForm.value.description;
-    // plantToUpdate.gardens = this.plant.gardens;
-    // plantToUpdate.created_on = this.plant.created_on;
+    
      const plantData: PlantDto = {
         common_name: this.plantForm.value.name,
-        sci_name: this.plantForm.value.sci_name,
+        sci_name: this.plantForm.value.sciName,
         description: this.plantForm.value.description
     } 
+        console.log(plantData)
+
 
     if(this.plant != null)
     this.gardenService.updatePlant(this.gardenId, this.plant.id, plantData).subscribe({
       next: (newPlant) => {
-        console.log('Plant updated successfully:', newPlant);
+        // console.log('Plant updated successfully:', newPlant);
         this.plantAdded.emit();
         this.activeModal.close('Plant Updated');
       },

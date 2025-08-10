@@ -11,7 +11,6 @@ import com.example.demo.entities.User;
 import com.example.demo.repository.GardenPlantRepository;
 import com.example.demo.repository.GardenRepository;
 import com.example.demo.repository.PlantRepository;
-import com.example.demo.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,6 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 @Service
 public class GardenServiceImpl implements GardenService {
@@ -31,16 +29,14 @@ public class GardenServiceImpl implements GardenService {
     private final PlantRepository plantRepository;
     private final UserService userService;
     private final GardenPlantRepository gardenPlantRepository;
-    private final UserRepository userRepository;
 
 
     @Autowired
-    GardenServiceImpl(GardenRepository gardenRepository, PlantRepository plantRepository, UserService userService, GardenPlantRepository gardenPlantRepository, UserRepository userRepository) {
+    GardenServiceImpl(GardenRepository gardenRepository, PlantRepository plantRepository, UserService userService, GardenPlantRepository gardenPlantRepository) {
         this.gardenRepository = gardenRepository;
         this.plantRepository = plantRepository;
         this.userService = userService;
         this.gardenPlantRepository = gardenPlantRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -145,7 +141,7 @@ public class GardenServiceImpl implements GardenService {
     @Override
     @Transactional
     public Garden updateGarden(long gardenId, GardenDto gardenDto, String currentUsername) {
-        Garden garden = findGardenByIdAndUsername(gardenId, currentUsername);
+        Garden garden = this.findGardenByIdAndUsername(gardenId, currentUsername);
         garden.setDescription(gardenDto.getDescription());
         garden.setName(gardenDto.getName());
 
@@ -181,18 +177,12 @@ public class GardenServiceImpl implements GardenService {
     public Garden createGardenForUser(GardenDto newGardenDto, String currentUsername){
         User user = userService.getUserByUsername(currentUsername);
         Garden newGarden = new Garden();
-//        List<Garden> gardenList = user.getGardenList();
 
         newGarden.setName(newGardenDto.getName());
         newGarden.setDescription(newGardenDto.getDescription());
         newGarden.setUser(user);
-        Garden savedGarden = gardenRepository.save(newGarden);
-//        if (gardenList != null) {
-//            gardenList.add(savedGarden);
-//            user.setGardenList(gardenList);
-//            userRepository.save(user);
-//        }
-        return savedGarden;
+
+        return gardenRepository.save(newGarden);
     }
 
     @Override
