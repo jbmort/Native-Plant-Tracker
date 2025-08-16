@@ -4,12 +4,12 @@
 </div>
 
 <!-- Main Dashboard Content -->
-<div *ngIf="!isLoading" class="dashboard-container">
+<div *ngIf="!isLoading && authenticated()" class="dashboard-container">
   
   <!-- GREETING -->
   <header class="dashboard-header">
-    <h1>Welcome back, {{ username || 'Gardener' }}!</h1>
-    <p>Here's a snapshot of your vibrant, growing world.</p>
+    <h1 class="heading-font fs-1 text-center">Welcome back, {{ username || 'Gardener' }}!</h1>
+    <p class="body-font fs-5 text-center">Here's a snapshot of your vibrant, growing world.</p>
   </header>
 
   <!-- ========================================================== -->
@@ -18,57 +18,65 @@
   <div *ngIf="gardens.length > 0; else noGardensTemplate">
 
     <!-- STATS BAR -->
-    <section class="stats-bar">
-      <div class="stat-item">
-        <span class="stat-number">{{ gardens.length }}</span>
-        <span class="stat-label">Gardens</span>
+    <section class="stats-bar m-5 px-5 ">
+      <div class="stat-item m-2">
+        <span class="stat-number body-font fw-bold">{{ gardens.length }}</span>
+        <span class="stat-label body-font"> Gardens</span>
       </div>
-      <div class="stat-item">
-        <span class="stat-number">{{ totalPlants }}</span>
-        <span class="stat-label">Total Plants</span>
+      <div class="stat-item m-2">
+        <span class="stat-number body-font fw-bold">{{ totalPlants }}</span>
+        <span class="stat-label body-font"> Plants recorded</span>
       </div>
       <!-- This third stat could be the oldest garden's age -->
-      <div *ngIf="gardens.length >= 1" class="stat-item">
-        <span class="stat-number">Up to {{ getYearsEstablished(gardens[0].created_on) }}</span>
-        <span class="stat-label"> Established</span>
+      <div *ngIf="gardens.length >= 1" class="stat-item m-2">
+        <span class="stat-number body-font">Up to </span>
+        <span class="stat-number body-font fw-bold">{{ getYearsEstablished(gardens[0].created_on) }}</span>
+        <span class="stat-label body-font" > Established</span>
       </div>
 
-  <div class="search">
-    <form [formGroup]="searchBar" ngSubmit="searchGardens()">
+  <div class="search mt-4">
+    <form class="container" [formGroup]="searchBar" ngSubmit="searchGardens()">
+    <div class="row justify-content-center">
+    <div class="col-md-8">
     <input type="search" formControlName="search" id="search" class="form-control" (blur)="searchBlur()" (input)="updateList()" placeholder="Search for a garden">
-    <button type="submit" (click)="searchGardens()">Search</button>
-    <p *ngIf="searchError != null" class="text-danger">{{searchError}}</p>
+    </div>
+    <button type="submit" class="btn stand-button col-sm-2 m-1 mt-0 " (click)="searchGardens()">Search</button>
+    </div>
+    <p *ngIf="searchError != null" class="text-danger body-font">{{searchError}}</p>
     </form>
   </div>
     </section>
 
     <!-- GARDEN LIST -->
     <section class="garden-list-section">
-      <div class="section-header">
-        <h2>Your Gardens</h2>
-        <div class="gardenButtons">
-        <button class="btn btn-primary" (click)="openAddGardenModal()">+ Add New Garden</button>
-        <button class="btn btn-primary" (click)="openReportModal()">Generate Report</button>
+      <div class="section-header mx-5">
+        <h2 class="heading-font m-3 fs-2">Your Gardens</h2>
+        <div class="gardenButtons text-center">
+        <button class="btn stand-button button-font" (click)="openAddGardenModal()">+ Add New Garden</button>
+        <button class="btn stand-button button-font" (click)="openReportModal()">Generate Report</button>
         </div>
       </div>
 
-      <div class="garden-list">
+      <div class="garden-list mt-4 container">
 
 <!-- GARDEN CARDS -->
-
-        <div *ngFor="let garden of filteredGardens" class="garden-card" >
-            <div class="garden-card-body" [routerLink]="['/gardens', garden.id]">
-                <h3>{{ garden.name }}</h3>
-                <p class="garden-description">{{ garden.description || 'No description provided.' }}</p>
-                <div class="garden-card-footer">
-                    <span>{{ garden.gardenPlants.length || 0 }} Plants</span>
-                    <span>Est. {{ getYearsEstablished(garden.created_on) }} ago</span>
+ <div class="row justify-content-center">
+        <div *ngFor="let garden of filteredGardens" class="garden-card container" >
+            <div class="row justify-content-start m-2" [routerLink]="['/gardens', garden.id]">
+                <div class="card-content m-2">
+                    <h3 class="heading-font">{{ garden.name }}</h3>
+                    <p class="garden-description body-font pl-2">{{ garden.description || 'No description provided.' }}</p>
+                    <div class="garden-card-footer container ml-2">
+                        <span class="body-font row">{{ garden.gardenPlants.length || 0 }} Plants</span>
+                        <span class="body-font row">Est. {{ getYearsEstablished(garden.created_on) }} ago</span>
+                    </div>
                 </div>
             </div>
-            <div>
-                <button (click)="onDelete(garden.id)">Delete</button>
+            <div class="row justify-content-end col-md-4 offset-md-8 ">
+                <button class="btn button-font delete-button m-2" (click)="onDelete(garden.id)">Delete</button>
             </div>
         </div>
+ </div>
       </div>
     </section>
   </div>
@@ -77,8 +85,8 @@
   <!-- VIEW 2: USER HAS NO GARDENS (The "Get Started" message)    -->
   <!-- ========================================================== -->
   <ng-template #noGardensTemplate>
-    <div class="get-started-container">
-      <h2>Let's Start Your Rewilding Adventure!</h2>
+    <div class="get-started-container body-font">
+      <h2 class="heading-font">Let's Start Your Rewilding Adventure!</h2>
       <p>
         Your dashboard is ready and waiting. The first step to creating a vibrant habitat is to define your first garden. 
         This could be a small patch in your front yard, a series of pots on your balcony, or a whole backyard meadow!
@@ -91,4 +99,10 @@
     </div>
   </ng-template>
 
+</div>
+
+<div *ngIf="!authenticated()" class="text-center">
+  <h1>🌱</h1> 
+  <p class="heading-font fs-3">Please Log In to manage your gardens!</p>
+  <p class="body-font">You need to be logged in to access that page. Your session may have timed out.</p>
 </div>

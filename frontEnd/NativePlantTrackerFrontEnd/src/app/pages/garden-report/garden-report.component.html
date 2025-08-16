@@ -1,11 +1,10 @@
-<div class="container mt-4">
-  <div class="report-header mb-3">
-    <h2>Garden Summary Report</h2>
-    <p class="text-muted">An overview of all your registered garden plots.</p>
+<div class="container">
+  <div class="report-header mb-3 text-center">
+    <h2 class="heading-font">Garden Summary Report</h2>
+    <p class="text-muted body-font">An overview of all your registered garden plots.</p>
   </div>
 
-  <hr>
-
+<div>
   <!-- Loading State: Show a spinner or message while data is being fetched -->
   <div *ngIf="isLoading" class="text-center mt-5">
     <div class="spinner-border" role="status">
@@ -26,18 +25,18 @@
 
   <!-- Data Table: Show the table only if data exists and is not loading -->
   <div *ngIf="!isLoading && !errorMessage && gardenReport.length > 0" class="table-responsive">
-    <table class="table table-striped table-hover">
+    <table class="table table-striped table-hover mt-4">
       <thead class="table-dark">
-        <tr>
-          <th scope="col">Garden Name</th>
-          <th scope="col">Description</th>
-          <th scope="col" class="text-center">Plant Species</th>
-          <th scope="col" class="text-center">Year Established</th>
+        <tr class="heading-font">
+          <th scope="col" class="text-center table-top">Garden Name</th>
+          <th scope="col" class=" text-center table-top">Description</th>
+          <th scope="col" class="text-center table-top">Plant Species</th>
+          <th scope="col" class="text-center table-top">Year Established</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let garden of gardenReport">
-          <td><strong>{{ garden.garden_name }}</strong></td>
+          <td><strong class="m-1">{{ garden.garden_name }}</strong></td>
           <td *ngIf="garden.description.length > 1; else noDescription" class="truncate-text" [title]="garden.description">
             {{ garden.description }}
           </td>
@@ -49,5 +48,6 @@
         </tr>
       </tbody>
     </table>
+  </div>
   </div>
 </div>

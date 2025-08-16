@@ -1,7 +1,12 @@
 <div>
-    <div>
-        <h1>Welcome to The Native Plant Tracker!</h1>
-<p>Ready to turn your yard into a vibrant, thriving ecosystem? Whether you're just starting your native gardening adventure or you're a seasoned pro, you've come to the right place. The Native Plant Tracker is your personal log for every wildflower, grass, and shrub, helping you visualize your garden's growth and celebrate the pollinators you attract. Let's dig in and watch your habitat come to life!</p>
-<p>Log in to view your gardens, or create an account to start your journey today!</p>
+    <div class="text-center p-2 ">
+        <h1 class="heading-font p-4">Welcome to The Native Plant Tracker!</h1>
+<p class="body-font mt-4">Ready to turn your yard into a vibrant, thriving ecosystem? Whether you're just starting your native gardening adventure or you're a seasoned pro, you've come to the right place. The Native Plant Tracker is your personal log for every wildflower, grass, and shrub, helping you visualize your garden's growth and celebrate the pollinators you attract. Let's dig in and watch your habitat come to life!</p>
+<p class="body-font mt-4">Log in to view your gardens, or create an account to start your journey today!</p>
+    </div>
+    <div class="text-center mt-3 body-font">
+        <a *ngIf="!authService.isAuthenticated()" routerLink="/login" class="btn stand-button button-font">Log In</a>
+        <span> or </span>
+    <a *ngIf="!authService.isAuthenticated()" routerLink="/register" class="btn stand-button button-font">Sign Up</a>
     </div>
 </div>

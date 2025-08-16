@@ -59,9 +59,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // Allow unauthenticated access to login and register endpoints
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/gardens/**").permitAll()
+                        .requestMatchers("/api/gardens/**").authenticated()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/reports/**").permitAll()
+                        .requestMatchers("/api/reports/**").authenticated()
                         // Require authentication for all other requests
                         .anyRequest().authenticated()
                 )

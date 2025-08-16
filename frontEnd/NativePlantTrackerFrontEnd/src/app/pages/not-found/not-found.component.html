@@ -1,4 +1,34 @@
-<p>Page not Found</p>
-<br/>
-<a routerLink="">Return Home</a>
+<div class="not-found-container text-center">
 
+  <!-- 
+    Optional: You can place an illustration here.
+    Using an SVG is recommended for scalability and quality.
+    For now, a placeholder div or a simple emoji can work.
+  -->
+
+  <div class="not-found-illustration">
+    <!-- Example with an emoji -->
+    <h1>🌱</h1> 
+    
+    <!-- Or an SVG image -->
+    <!-- <img src="assets/images/lost-plant-illustration.svg" alt="A wilting plant"> -->
+  </div>
+
+  <div class="not-found-content text-center m-4">
+    <h1 class="heading-font">Oops! It seems you've wandered off the path.</h1>
+    
+    <p class="body-font m-4">
+      Even the most dedicated gardeners get lost in the weeds sometimes. The page you were looking for might have been moved, replanted, or never existed in the first place.
+    </p>
+
+    <p class="body-font m-5">
+      Let's get you back to your garden.
+    </p>
+
+
+    <a *ngIf="authService.isAuthenticated()" routerLink="/dashboard" class="btn stand-button button-font">Return to Dashboard</a>
+    <a *ngIf="!authService.isAuthenticated()" routerLink="" class="btn stand-button button-font">Return Home</a>
+
+  </div>
+
+</div>

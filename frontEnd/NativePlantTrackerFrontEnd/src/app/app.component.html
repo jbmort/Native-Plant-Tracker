@@ -1,20 +1,68 @@
-<nav class="navbar">
-  <a class="navbar-brand" routerLink="/">Native Plant Tracker</a>
+<nav class="navbar" style="background-color: var(--background-color);">
+  <div class="row justify-content-between nav-box">
+    <div class="col-md-7">
+  <a class="navbar-brand" routerLink="/">
+    <img class="logo" src="../assets/images/logoNoBackground.png" alt="Native plant tracker logo">
+  </a>
+  </div>
   
-  <div class="nav-links">
+  <div class="col-md-4 nav-links m-3 container align-content-center">
     <!-- Use routerLink for internal navigation -->
-    <a routerLink="/dashboard">Dashboard</a>
+   
+    <a *ngIf="authService.isAuthenticated()" routerLink="/dashboard">
+      <button type="button" class="btn stand-button btn-lg button-font m-2">Dashboard</button>
+    </a>
 
     <!-- You can use *ngIf to show/hide links based on login status -->
-    <a *ngIf="!authService.isAuthenticated()" routerLink="/login">Log In</a>
-    <a *ngIf="!authService.isAuthenticated()" routerLink="/register">Sign Up</a>
+    <a *ngIf="!authService.isAuthenticated()" routerLink="/login">
+      <button class="btn stand-button btn-lg button-font m-2">Log In</button>
+    </a>
+    <a *ngIf="!authService.isAuthenticated()" routerLink="/register">
+      <button class="btn stand-button btn-lg button-font m-2">Sign-up</button>
+    </a>
     
     <!-- A logout button -->
      
-    <a *ngIf="authService.isAuthenticated()" (click)="logout()">Log Out</a>
+    <a *ngIf="authService.isAuthenticated()" (click)="logout()">
+      <button class="btn stand-button btn-lg button-font m-2">Log Out</button>
+    </a>
   </div>
+   <hr>
+  </div>
+ 
 </nav>
 
 <main class="container">
   <router-outlet></router-outlet>
 </main>
+
+<footer>
+  <div class="footer-image-frame">
+    <img class="footer-image" src="../assets/images/Garden_Tracker_bottom_border.png" alt="Wildflowers">
+  </div>
+  <div class="footer-box">
+    <div class="footer-links fs-5 container mt-3">
+      <div class="row">
+      <div *ngIf="authService.isAuthenticated()" class="col-md-4 mt-2 row m-0">
+        <div class="col-sm-6">
+        <a class="body-font" routerLink="dashboard"><span>Dashboard</span></a>
+        </div>
+        <div class="col-sm-6">
+        <a class="body-font" (click)="logout()"><span>Log Out</span></a>
+        </div>
+      </div>
+      <div *ngIf="!authService.isAuthenticated()" class="col-md-4 mt-2 row m-0 justify-content-start">
+        <div class="col-sm-6">
+      <a class="body-font" routerLink="login"><span>Log In</span></a>
+        </div>
+        <div class="col-sm-6">
+      <a class="body-font" routerLink="register"><span>Sign Up</span></a>
+        </div>
+      </div>
+      <div class="page-title text-center mt-2 p-0 col-md-4">
+        <p class="body-font">The Native Plant Tracker  &copy; 2025</p>
+      </div>
+      </div>
+    </div>
+  </div>
+</footer>

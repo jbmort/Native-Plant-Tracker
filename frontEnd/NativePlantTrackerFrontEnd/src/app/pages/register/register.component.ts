@@ -35,6 +35,11 @@ export class RegisterComponent {
   }
 
   onRegister() {
+    if(!this.matchPasswords()){
+
+      return
+    }
+
     console.log(this.registrationData);
     const registration: UserRegistration = {
       username: this.registrationData.username,
@@ -48,8 +53,7 @@ export class RegisterComponent {
             username: this.registrationData.username,
             password: this.registrationData.password
           }
-
-          this.authService.login(loginCreds)
+          this.router.navigate(['login'])
       },
       error: (err) => {
         console.error('Login failed:', err);

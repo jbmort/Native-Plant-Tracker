@@ -1,1 +1,66 @@
-/* You can add global styles to this file, and also import other style files */
+html{
+  --background-color: #F9F9F7;
+  --primary-green: #3A5F46;
+  --border-green: #2e4c38;
+  --lighter-green: #4C7A5A;
+  --accent-orange: #F26C2A;
+  --text-color: #333D36;
+  --secondary-pink: #C88EAC;
+  --secondary-blue: #6c8bc1;
+  --delete-orange: #C15B5B;
+  --garden-green: #6b7547;
+  background-color: var(--background-color);
+}
+
+body{
+   background-color: var(--background-color);
+   width: 100vm;
+}
+
+main{
+    background-color: var(--background-color);
+
+}
+
+.heading-font {
+ font-family: "Lora", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  color: var(--text-color);
+}
+
+.body-font {
+  font-family: "Nunito Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100,
+    "YTLC" 500;
+  color: var(--text-color);
+}
+
+
+.footer-box{
+  background-color: var(--garden-green);
+  -webkit-mask-image: linear-gradient(to top, black 80%, transparent 100%);
+  mask-image: linear-gradient(to top, black 80%, transparent 100%);
+  height: fit-content;
+  min-height: 120px;
+  width: 100%;
+  margin-top: -29px;
+  
+}
+
+.footer-image{
+  max-width: 100vw;
+  min-width: 100vw;
+  height: 500px;
+  z-index: -100;
+}
+
+.footer-image-frame{
+    margin-top: -150px;
+    z-index: -100;
+}

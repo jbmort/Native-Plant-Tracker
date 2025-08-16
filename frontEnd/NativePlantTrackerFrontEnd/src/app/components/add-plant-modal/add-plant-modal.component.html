@@ -41,7 +41,7 @@
 
 <!-- Modal Footer -->
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancel</button>
-  <button type="submit" class="btn btn-primary" (click)="onSubmit()" [disabled]="plantForm.invalid">{{(plant == null) ? "Add Plant" : "Update Plant"}}</button>
+  <button type="button" class="btn cancel-button button-font" (click)="activeModal.dismiss()">Cancel</button>
+  <button type="submit" class="btn update-button button-font" (click)="onSubmit()" [disabled]="plantForm.invalid">{{(plant == null) ? "Add Plant" : "Update Plant"}}</button>
 
 </div>

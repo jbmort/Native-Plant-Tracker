@@ -1,0 +1,28 @@
+.button-font {
+ font-family: "Lora", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  color: var(--background-color);
+}
+
+.stand-button{
+  background-color: var(--primary-green);
+  color: var(--background-color); 
+  border-color: var(--primary-green);
+  border-radius: 14px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s, box-shadow 0.2s;
+  margin: 0 10px 0 10px;
+}
+
+.stand-button:hover{
+    background-color: var(--lighter-green);
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.25);
+    transition: background-color 0.2s, box-shadow 0.2s;
+    border-color: var(--lighter-green);
+}
+
+.stand-button:active{
+  color: var(--secondary-pink);
+}

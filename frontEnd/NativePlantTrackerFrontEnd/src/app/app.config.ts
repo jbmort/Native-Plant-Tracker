@@ -12,5 +12,5 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([authInterceptor]),
     ),
     provideHttpClient(withFetch())
-  ],
+  ]
 };

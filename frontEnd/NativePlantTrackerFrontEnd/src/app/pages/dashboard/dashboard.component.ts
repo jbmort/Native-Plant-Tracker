@@ -173,15 +173,16 @@ updateList(){
     return g.name.toLowerCase().trim().includes(searchTerm)
   })
   this.searchError = null
-  console.log(this.searchBar.value.search)
-    console.log(this.filteredGardens)
-
 }
 
 searchBlur(){
   if(this.searchBar.value.search.length < 1){
     this.filteredGardens = this.gardens;
   }
+}
+
+authenticated(){
+  return this.authService.isAuthenticated()
 }
   
 }

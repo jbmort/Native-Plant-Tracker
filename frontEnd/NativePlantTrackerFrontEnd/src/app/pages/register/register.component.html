@@ -1,6 +1,6 @@
-<form (ngSubmit)="onRegister()" #registerForm="ngForm" autocomplete="off">
-  <div>
-    <label for="username">Username:</label>
+<form (ngSubmit)="onRegister()" #registerForm="ngForm" autocomplete="off" class="container  heading-font">
+  <div class="row">
+    <label class="col-sm-3 text-end" for="username">Username:</label>
     <input
       type="text"
       id="username"
@@ -8,19 +8,21 @@
       [(ngModel)]="registrationData.username"
       minlength="6"
       required
+      class="col-md-6"
       #username="ngModel" />
     <div *ngIf="username.invalid && username.touched" style="color:red">
       Username is required and must be at least 6 characters.
     </div>
   </div>
 
-  <div>
-    <label for="email">Email:</label>
+  <div class="row mt-2">
+    <label class="col-sm-3 text-end" for="email">Email:</label>
     <input
       type="email"
       id="email"
       name="email"
       [(ngModel)]="registrationData.email"
+      class="col-md-6"
       required
       email
       #email="ngModel" />
@@ -29,13 +31,14 @@
     </div>
   </div>
 
-  <div>
-    <label for="password">Password:</label>
+  <div class="row mt-2">
+    <label class="col-sm-3 text-end" for="password">Password:</label>
     <input
       type="password"
       id="password"
       name="password"
       [(ngModel)]="registrationData.password"
+      class="col-md-6"
       required
       minlength="6"
       #password="ngModel" />
@@ -44,13 +47,14 @@
     </div>
   </div>
 
-    <div>
-    <label for="password2">Re-Enter Password:</label>
+    <div class="row mt-2">
+    <label class="col-sm-3 text-end" for="password2">Re-Enter Password:</label>
     <input
       type="password"
       id="password2"
       name="password2"
       [(ngModel)]="registrationData.password2"
+      class="col-md-6"
       required
       minlength="6"
       #password2="ngModel" />
@@ -59,5 +63,7 @@
     </div>
   </div>
 
-  <button type="submit" [disabled]="registerForm.invalid">Register</button>
+  <div class="row-reverse m-4 text-center">
+  <button class="col-lg-5 m-3" type="submit" class="btn stand-button button-font" [disabled]="registerForm.invalid">Register</button>
+  </div>
 </form>

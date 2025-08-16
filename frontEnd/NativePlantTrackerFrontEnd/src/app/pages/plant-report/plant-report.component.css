@@ -1,9 +1,14 @@
 .truncate-text {
-  display: -webkit-box;
+  /* display: -webkit-box; */
   line-clamp: 2;
-  -webkit-line-clamp: 2; 
-  -webkit-box-orient: vertical;
+  /* -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;  */
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 400px; 
+}
+
+.table-top{
+  background-color: var(--primary-green);
+  border: 1px solid var(--border-green);
 }

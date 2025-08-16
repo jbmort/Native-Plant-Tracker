@@ -7,3 +7,8 @@
   text-overflow: ellipsis;
   max-width: 400px; 
 }
+
+.table-top{
+  background-color: var(--primary-green);
+  border: 1px solid var(--border-green);
+}

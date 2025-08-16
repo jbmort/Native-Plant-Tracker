@@ -3,7 +3,7 @@ import { AddPlantModalComponent } from '../../components/add-plant-modal/add-pla
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Plant } from '../../models/plant';
 import { GardenService } from '../../services/garden.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Garden } from '../../models/garden';
 import { NgFor, NgIf } from '@angular/common';
 import { AddGardenModalComponent } from '../../components/add-garden-modal/add-garden-modal.component';
@@ -12,7 +12,7 @@ import { AddGardenModalComponent } from '../../components/add-garden-modal/add-g
 @Component({
   selector: 'app-garden-detail',
   standalone: true,
-  imports: [NgIf, NgFor],
+  imports: [NgIf, NgFor, RouterLink],
   templateUrl: './garden-detail.component.html',
   styleUrl: './garden-detail.component.css'
 })

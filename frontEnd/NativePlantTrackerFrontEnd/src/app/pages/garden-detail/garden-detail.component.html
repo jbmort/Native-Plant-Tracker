@@ -15,51 +15,61 @@
   <div *ngIf="garden">
 
     <!-- Section 1: Garden Header Information -->
-    <header class="garden-header">
-      <h1>{{ garden.name }}</h1>
-      <p class="garden-description">{{ garden.description }}</p>
-      
-      <!-- Summary stats -->
-      <div *ngIf="garden != null" class="garden-stats">
-        <span><strong>Age: </strong>{{ gardenAge }}</span>
-        <span ><strong>Plant Count: </strong>{{plantList.length > 0 ? plantList.length : "0" }}</span>
+    <header class="garden-header container">
+      <a routerLink="/dashboard" class="row body-font back-arrow">
+        <button type="button" class="back-arrow btn"> &lt; Back</button>
+      </a>
+      <div class="row">
+        <h1 class="offset-md-1 col-md-8 fs-1 ml-1 heading-font">{{ garden.name }}</h1>
+        <button class="btn stand-button button-font col-md-3 editGarden" (click)="openEditGardenModal()">Edit Garden</button>
       </div>
-      <button class="btn btn-secondary" (click)="openEditGardenModal()">Edit Garden</button>
+        <!-- Summary stats -->
+      <div *ngIf="garden != null" class=" body-font offset-md-1 row">
+        <span class="col-md-3"><strong>Age: </strong>{{ gardenAge }}</span>
+        <span class="col-md-3 "><strong>  Plant Count: </strong>{{plantList.length > 0 ? plantList.length : "0" }}</span>
+      </div>
+      <p class="garden-description body-font row col-md-12 mt-2 fs-4">{{ garden.description }}</p>
+      
     </header>
 
     <hr>
 
     <section class="plant-section">
-      <div class="plant-controls">
-        <h2>Plants in this Garden</h2>
-        <div class="button-group">
+      <div class="plant-controls container">
+        <h2 class="heading-font row justify-content-center">Plants in this Garden</h2>
+        <div  class="button-group row justify-content-center">
           <!-- The "Add Plant" button is always visible -->
-          <button class="btn btn-success" (click)="openAddPlantModal(gardenId, null)">+ Add Plant</button>
+          <button class="btn stand-button button-font" (click)="openAddPlantModal(gardenId, null)">+ Add Plant</button>
           
           <!-- The "Edit Plants" button toggles the editMode flag -->
-          <button class="btn btn-secondary" (click)="toggleEditMode()">
+          <button *ngIf="plantList != null && plantList.length > 0" class="btn stand-button button-font" (click)="toggleEditMode()">
             {{ editMode ? 'Done Editing' : 'Edit Plants' }}
           </button>
         </div>
       </div>
 
       <!-- Plant list -->
-      <ul class="plant-list list-group mt-3">
-        <li *ngFor="let plant of plantList" class="list-group-item d-flex justify-content-between align-items-center">
+      <ul class="plant-list list-group mt-3 container">
+        <div class="row justify-content-between">
+        <li *ngFor="let plant of plantList" class="list-group-item col-md-3 m-1 mt-5 container">
           
-          <span class="plant-name">{{plant.commonName}}</span>
-          
-          <div *ngIf="editMode" class="plant-actions">
-            <button class="btn btn-sm btn-primary me-2" (click)="openAddPlantModal(gardenId ,plant)">Update</button>
-            <button class="btn btn-sm btn-danger" (click)="deletePlant(plant.id)">Delete</button>
+          <span class="plant-name heading-font row fs-5">{{plant.commonName}}</span>
+          <span *ngIf="plant.sciName != null" class="body-font row fst-italic">{{plant.sciName}}</span>
+          <hr>
+          <span *ngIf="plant.description != null" class="body-font row">{{plant.description}}</span>
+
+          <div *ngIf="editMode" class="plant-actions row align-self-end">
+            <button class="btn btn-sm update-button me-2" (click)="openAddPlantModal(gardenId ,plant)">Update</button>
+            <button class="btn btn-sm delete-button" (click)="deletePlant(plant.id)">Delete</button>
           </div>
 
         </li>
+        </div>
       </ul>
 
       <!-- Message to show if the garden has no plants -->
-      <div *ngIf="plantList.length === 0" class="no-plants-message mt-3">
-        <p>This garden doesn't have any plants yet. Click "Add Plant" to get started!</p>
+      <div *ngIf="plantList.length === 0" class="no-plants-message mt-3 text-center">
+        <p class="body-font">This garden doesn't have any plants yet. Click "Add Plant" to get started!</p>
       </div>
     </section>
 
