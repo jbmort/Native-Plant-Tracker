@@ -1,11 +1,9 @@
 package com.example.demo.rest;
 
-import com.example.demo.dto.GardenDto;
-import com.example.demo.dto.GardenReportDto;
-import com.example.demo.dto.PlantDto;
-import com.example.demo.dto.PlantReportDTO;
+import com.example.demo.dto.*;
 import com.example.demo.entities.Garden;
 import com.example.demo.entities.Plant;
+import com.example.demo.entities.PlantType;
 import com.example.demo.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -19,8 +17,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/gardens")
-@CrossOrigin(origins="*")
-//@CrossOrigin("http://localhost:4200")
+//@CrossOrigin(origins="*")
+@CrossOrigin("http://localhost:4200")
 public class GardenController {
 
     final ApplicationContext context;
@@ -56,7 +54,6 @@ public class GardenController {
     public ResponseEntity<Garden> getGardenById(@PathVariable long gardenId,
                                                 Authentication authentication) {
         String currentUsername = authentication.getName();
-        // The service layer will be responsible for checking ownership
         Garden garden = gardenService.findGardenByIdAndUsername(gardenId, currentUsername);
         return ResponseEntity.ok(garden);
     }
@@ -67,7 +64,9 @@ public class GardenController {
                                             Authentication authentication) {
         String currentUsername = authentication.getName();
         Garden createdGarden = userService.addGardenForUser(newGardenDto, currentUsername);
-        return new ResponseEntity<>(createdGarden, HttpStatus.CREATED);
+        ResponseEntity<Garden> gardenResponseEntity;
+        gardenResponseEntity = new ResponseEntity<>(createdGarden, HttpStatus.CREATED);
+        return gardenResponseEntity;
     }
 
     // 4. PUT (update) an existing garden
@@ -95,10 +94,10 @@ public class GardenController {
 
     // 6. GET plants for a specific garden
     @GetMapping("/{gardenId}/plants")
-    public ResponseEntity<List<Plant>> getGardenPlants(@PathVariable long gardenId,
+    public ResponseEntity<List<PlantDto>> getGardenPlants(@PathVariable long gardenId,
                                                        Authentication authentication) {
         String currentUsername = authentication.getName();
-        List<Plant> plants = gardenService.getAllPlantsForGarden(gardenId, currentUsername);
+        List<PlantDto> plants = gardenService.getAllPlantsForGarden(gardenId, currentUsername);
         return ResponseEntity.ok(plants);
     }
 
@@ -144,6 +143,26 @@ public class GardenController {
         String currentUsername = authentication.getName();
         List<Plant> plants = gardenService.allPlantsForUser(currentUsername);
         return ResponseEntity.ok(plants);
+    }
+
+    @GetMapping("/types")
+    public ResponseEntity<List<PlantType>> getPlantTypes(Authentication authentication) {
+        String currentUsername = authentication.getName();
+        List<PlantType> types = new ArrayList<>();
+        if(currentUsername != null) {
+            types = plantService.getTypes();
+        }
+        return ResponseEntity.ok(types);
+    }
+
+    @PostMapping("/types")
+    public ResponseEntity<PlantType> addPlantType(@RequestBody PlantTypeDto plantTypeDto, Authentication authentication) {
+        String currentUsername = authentication.getName();
+        PlantType plantType = new PlantType();
+        if(currentUsername != null) {
+            plantType = plantService.addPlantType(plantTypeDto);
+        }
+        return ResponseEntity.ok(plantType);
     }
 
 

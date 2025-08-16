@@ -26,3 +26,8 @@
 .stand-button:active{
   color: var(--secondary-pink);
 }
+
+.home-page{
+  background-color: transparent;
+  margin-bottom: -28%;
+}

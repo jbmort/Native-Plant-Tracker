@@ -7,6 +7,8 @@ import { Plant } from '../models/plant';
 import { PlantDto } from '../models/plant-dto';
 import { PlantReport } from '../models/plant-report';
 import { GardenReport } from '../models/garden-report';
+import { PlantType } from '../models/plant-type';
+import { PlantTypeDto } from '../models/plant-type-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -49,9 +51,9 @@ export class GardenService {
   }
 
   // Get plants for a specific garden
-  getGardenPlants(id: number): Observable<Array<Plant>> {
+  getGardenPlants(id: number): Observable<Array<PlantDto>> {
     const url = `${this.apiUrl}/${id}/plants`;
-    return this.http.get<Array<Plant>>(url);
+    return this.http.get<Array<PlantDto>>(url);
   }
 
   // 7. POST (add) a new plant to a garden
@@ -89,6 +91,16 @@ export class GardenService {
     const url = `${this.reportUrl}/garden`;
     return this.http.get<Array<GardenReport>>(url);
 
+  }
+
+  getTypes(): Observable<Array<PlantType>>{
+    const url = `${this.apiUrl}/types`;
+    return this.http.get<Array<PlantType>>(url);
+  }
+
+  addType(type: PlantTypeDto): Observable<PlantType>{
+    const url = `${this.apiUrl}/types`;
+    return this.http.post<PlantType>(url, type)
   }
 
 

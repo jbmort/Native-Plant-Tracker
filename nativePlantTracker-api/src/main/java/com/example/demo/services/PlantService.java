@@ -1,8 +1,9 @@
 package com.example.demo.services;
 
 import com.example.demo.dto.PlantDto;
-import com.example.demo.entities.Garden;
+import com.example.demo.dto.PlantTypeDto;
 import com.example.demo.entities.Plant;
+import com.example.demo.entities.PlantType;
 
 import java.util.List;
 
@@ -14,4 +15,8 @@ public interface PlantService {
     Plant addPlant(Plant plant);
     Plant updatePlant(long id, PlantDto plant);
     void deletePlant(long id);
+
+    List<PlantType> getTypes();
+
+    PlantType addPlantType(PlantTypeDto plantTypeDto);
 }

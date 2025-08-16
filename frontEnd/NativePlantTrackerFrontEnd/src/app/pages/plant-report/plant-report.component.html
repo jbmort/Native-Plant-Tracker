@@ -27,17 +27,19 @@
       <thead class="table-dark">
         <tr class="fs-5">
           <th scope="col" class="text-center table-top heading-font">Plant Name</th>
+          <th scope="col" class="text-center table-top heading-font">Plant Type</th>         
           <th scope="col" class="text-center table-top heading-font">Description</th>
           <th scope="col" class="text-center table-top heading-font">Total Instances</th>
-          <th scope="col" class="text-center table-top heading-font">Year Planted</th>
+          <th scope="col" class="text-center table-top heading-font">Date Planted</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let plant of plantReport">
           <td ><strong class="m-2">{{ plant.name }}</strong></td>
+          <td class="text-center">{{ plant.type }}</td>
           <td *ngIf="plant.description.length > 0; else noDescription" class="truncate-text " [title]="plant.description">{{ plant.description }}</td>
           <td class="text-center">{{ plant.num_instances }}</td>
-          <td class="text-center">{{ plant.years_present }}</td>
+          <td class="text-center">{{ plant.datePlanted }}</td>
           <ng-template #noDescription>
                       <td></td>
           </ng-template>

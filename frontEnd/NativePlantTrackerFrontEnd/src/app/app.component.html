@@ -1,7 +1,7 @@
-<nav class="navbar" style="background-color: var(--background-color);">
+<nav class="navbar">
   <div class="row justify-content-between nav-box">
     <div class="col-md-7">
-  <a class="navbar-brand" routerLink="/">
+  <a class="navbar-brand" (click)="logoNavigate()">
     <img class="logo" src="../assets/images/logoNoBackground.png" alt="Native plant tracker logo">
   </a>
   </div>
@@ -32,7 +32,7 @@
  
 </nav>
 
-<main class="container">
+<main>
   <router-outlet></router-outlet>
 </main>
 

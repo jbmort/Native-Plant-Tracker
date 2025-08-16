@@ -4,13 +4,11 @@ import com.example.demo.dto.GardenDto;
 import com.example.demo.dto.GardenReportDto;
 import com.example.demo.dto.PlantDto;
 import com.example.demo.dto.PlantReportDTO;
-import com.example.demo.entities.Garden;
-import com.example.demo.entities.GardenPlant;
-import com.example.demo.entities.Plant;
-import com.example.demo.entities.User;
+import com.example.demo.entities.*;
 import com.example.demo.repository.GardenPlantRepository;
 import com.example.demo.repository.GardenRepository;
 import com.example.demo.repository.PlantRepository;
+import com.example.demo.repository.TypesRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,14 +27,16 @@ public class GardenServiceImpl implements GardenService {
     private final PlantRepository plantRepository;
     private final UserService userService;
     private final GardenPlantRepository gardenPlantRepository;
+    private final TypesRepository typesRepository;
 
 
     @Autowired
-    GardenServiceImpl(GardenRepository gardenRepository, PlantRepository plantRepository, UserService userService, GardenPlantRepository gardenPlantRepository) {
+    GardenServiceImpl(GardenRepository gardenRepository, PlantRepository plantRepository, UserService userService, GardenPlantRepository gardenPlantRepository, TypesRepository typesRepository) {
         this.gardenRepository = gardenRepository;
         this.plantRepository = plantRepository;
         this.userService = userService;
         this.gardenPlantRepository = gardenPlantRepository;
+        this.typesRepository = typesRepository;
     }
 
     @Override
@@ -45,12 +45,27 @@ public class GardenServiceImpl implements GardenService {
     }
 
     @Override
-    public List<Plant> getAllPlantsForGarden(long gardenId, String currentUsername) {
+    @Transactional
+    public List<PlantDto> getAllPlantsForGarden(long gardenId, String currentUsername) {
         Garden garden = findGardenByIdAndUsername(gardenId, currentUsername);
-        List<Plant> plantList = new ArrayList<>();
+        List<PlantDto> plantList = new ArrayList<>();
         List<GardenPlant> list = gardenPlantRepository.findByGardenId(garden.getId());
         for (GardenPlant gardenPlant : list) {
-            plantList.add(gardenPlant.getPlant());
+            PlantDto plant = new PlantDto();
+
+            plant.setId(gardenPlant.getPlant().getId());
+            plant.setDescription(gardenPlant.getPlant().getDescription());
+            plant.setType(gardenPlant.getPlant().getPlantType().getId());
+            plant.setTypeName(gardenPlant.getPlant().getPlantType().getName());
+            plant.setSci_name(gardenPlant.getPlant().getSciName());
+            plant.setCommon_name(gardenPlant.getPlant().getCommonName());
+            if(gardenPlant.getPlant() instanceof Forb forb) {
+                plant.setFlowerColor(forb.getFlowerColor());
+            }
+
+
+            plantList.add(plant);
+            System.out.println(gardenPlant.getPlant().getPlantType().getValue());
         }
 
         return plantList;
@@ -103,10 +118,37 @@ public class GardenServiceImpl implements GardenService {
         if (!exists) {
             if (garden.getUser().getUsername().equals(currentUsername)) {
                 if (!plantRepository.existsPlantByCommonName(plant.getCommon_name())) {
+                    PlantType plantType = new PlantType();
+                    if(typesRepository.findById(plant.getType()).isPresent()){
+                        plantType = typesRepository.findById(plant.getType()).get();
+                    }
+
+                    switch (plantType.getValue()) {
+                        case "FORB":
+                        case "FLOWERING PERENNIAL":
+                            Forb newForb = new Forb();
+                            newForb.setFlowerColor(plant.getFlowerColor());
+                            newPlant = newForb;
+                            break;
+
+                        case "GRASS":
+                        case "NATIVE GRASS":
+                            newPlant = new Grass();
+                            break;
+
+                        case "TREE":
+                            newPlant = new Tree();
+                            break;
+
+                        default:
+                            newPlant = new Plant();
+                            break;
+                    }
                     newPlant.setCommonName(plant.getCommon_name());
                     newPlant.setDescription(plant.getDescription());
                     newPlant.setSciName(plant.getSci_name());
                     newPlant.setCreated_on(LocalDateTime.now());
+                    newPlant.setPlantType(plantType);
                     plantRepository.save(newPlant);
                 } else {
                     newPlant = plantRepository.getPlantByCommonName(plant.getCommon_name());
@@ -226,11 +268,13 @@ public class GardenServiceImpl implements GardenService {
             } else if (plant.getSciName() != null) {
                 line.setName(plant.getSciName());
             }
+            line.setType(plant.getPlantType().getName());
             line.setDescription(plant.getDescription());
             LocalDateTime established = plant.getCreated_on();
 
 //            double age = getAge(established);
-            line.setYears_present(established.getYear());
+            line.setDatePlanted(established.toLocalDate().toString());
+            line.setType(plant.getPlantType().getName());
 
             line.setNum_instances(1);
 
@@ -263,7 +307,8 @@ public class GardenServiceImpl implements GardenService {
             line.setDescription(garden.getDescription());
 
             double age = getAge(garden.getCreated_on());
-            line.setAge(garden.getCreated_on().getYear());
+            String date = garden.getCreated_on().toLocalDate().toString();
+            line.setDate_started(date);
 
             line.setNum_plants(garden.getGardenPlants().size());
             report.add(line);

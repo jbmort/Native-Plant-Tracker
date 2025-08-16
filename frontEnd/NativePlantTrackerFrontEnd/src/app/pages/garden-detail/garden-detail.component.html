@@ -28,8 +28,9 @@
         <span class="col-md-3"><strong>Age: </strong>{{ gardenAge }}</span>
         <span class="col-md-3 "><strong>  Plant Count: </strong>{{plantList.length > 0 ? plantList.length : "0" }}</span>
       </div>
-      <p class="garden-description body-font row col-md-12 mt-2 fs-4">{{ garden.description }}</p>
-      
+      <div class="row offset-md-1">
+      <p class="garden-description body-font col-md-10 mt-2 fs-4 p-0">{{ garden.description }}</p>
+      </div>
     </header>
 
     <hr>
@@ -53,14 +54,14 @@
         <div class="row justify-content-between">
         <li *ngFor="let plant of plantList" class="list-group-item col-md-3 m-1 mt-5 container">
           
-          <span class="plant-name heading-font row fs-5">{{plant.commonName}}</span>
-          <span *ngIf="plant.sciName != null" class="body-font row fst-italic">{{plant.sciName}}</span>
-          <hr>
+          <span class="plant-name heading-font row fs-5">{{plant.common_name}}</span>
+          <span *ngIf="plant.sci_name != null" class="body-font row fst-italic">{{plant.sci_name}}</span>
+          <hr *ngIf="plant.description !=null && plant.description.length > 0">
           <span *ngIf="plant.description != null" class="body-font row">{{plant.description}}</span>
 
           <div *ngIf="editMode" class="plant-actions row align-self-end">
-            <button class="btn btn-sm update-button me-2" (click)="openAddPlantModal(gardenId ,plant)">Update</button>
-            <button class="btn btn-sm delete-button" (click)="deletePlant(plant.id)">Delete</button>
+            <button class="btn btn-sm update-button m-1" (click)="openAddPlantModal(gardenId ,plant)">Update</button>
+            <button class="btn btn-sm delete-button m-1" (click)="deletePlant(plant.id)">Delete</button>
           </div>
 
         </li>

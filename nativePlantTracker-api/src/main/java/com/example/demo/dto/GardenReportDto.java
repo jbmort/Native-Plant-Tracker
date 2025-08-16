@@ -6,7 +6,16 @@ public class GardenReportDto {
     private String garden_name;
     private String description;
     private int num_plants;
-    private double age;
+
+    public String getDate_started() {
+        return date_started;
+    }
+
+    public void setDate_started(String date_started) {
+        this.date_started = date_started;
+    }
+
+    private String date_started;
 
     public GardenReportDto() {
     }
@@ -43,11 +52,4 @@ public class GardenReportDto {
         this.num_plants = num_plants;
     }
 
-    public double getAge() {
-        return age;
-    }
-
-    public void setAge(double age) {
-        this.age = age;
-    }
 }

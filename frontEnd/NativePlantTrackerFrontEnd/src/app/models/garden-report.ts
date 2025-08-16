@@ -32,12 +32,12 @@ export class GardenReport {
         this.num_plants = value;
     }
  
-    public age: number = 0;
-    public getAge(): number {
-        return this.age;
+    public date_started: String = '';
+    public getDate_Starten(){
+        return this.date_started
     }
-    public setAge(value: number) {
-        this.age = value;
+    public setDate_Started(date: String){
+        this.date_started = date
     }
 
 }

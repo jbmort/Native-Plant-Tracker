@@ -58,9 +58,9 @@
     transform: scale(1.03);
 }
 
-.dashboard-container{
+/* .dashboard-container{
     background-color: var(--background-color);
-}
+} */
 
 .stats-bar{
     border: 2px solid var(--lighter-green);

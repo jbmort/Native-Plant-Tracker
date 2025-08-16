@@ -7,6 +7,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Garden } from '../../models/garden';
 import { NgFor, NgIf } from '@angular/common';
 import { AddGardenModalComponent } from '../../components/add-garden-modal/add-garden-modal.component';
+import { PlantDto } from '../../models/plant-dto';
 
 
 @Component({
@@ -26,7 +27,7 @@ export class GardenDetailComponent implements OnInit{
 
   gardenId: number = 0;
   garden: Garden | null = null;
-  plantList: Array<Plant> = new Array();
+  plantList: Array<PlantDto> = new Array();
   errorMessage: String | null = null;
   editMode: boolean = false;
   gardenAge: String = '';
@@ -90,9 +91,6 @@ export class GardenDetailComponent implements OnInit{
     this.gardenService.getGardenById(gardenID).subscribe({
       next: (garden) => {
         this.garden = garden;
-        if(garden.gardenPlants != undefined){
-          this.plantList = garden.gardenPlants;
-        }
         this.errorMessage = null;
         this.gardenAge = this.setGardenAge()
         this.loadGardenData(this.gardenId);
@@ -107,6 +105,7 @@ export class GardenDetailComponent implements OnInit{
     this.gardenService.getGardenPlants(gardenID).subscribe({
       next: (plants) => {
         this.plantList = plants;
+        console.log(plants)
         this.errorMessage = null;
       },
       error: (err) => {
@@ -115,7 +114,7 @@ export class GardenDetailComponent implements OnInit{
     })
   }
 
-  openAddPlantModal(gardenID: number, plant: Plant | null): void {
+  openAddPlantModal(gardenID: number, plant: PlantDto | null): void {
       const modalRef = this.modalService.open(AddPlantModalComponent);
       modalRef.componentInstance.gardenId = gardenID;
       modalRef.componentInstance.plant = plant;

@@ -31,7 +31,7 @@
           <th scope="col" class="text-center table-top">Garden Name</th>
           <th scope="col" class=" text-center table-top">Description</th>
           <th scope="col" class="text-center table-top">Plant Species</th>
-          <th scope="col" class="text-center table-top">Year Established</th>
+          <th scope="col" class="text-center table-top">Date Established</th>
         </tr>
       </thead>
       <tbody>
@@ -41,7 +41,7 @@
             {{ garden.description }}
           </td>
           <td class="text-center">{{ garden.num_plants }}</td>
-          <td class="text-center">{{ garden.age }}</td>
+          <td class="text-center">{{ garden.date_started }}</td>
            <ng-template #noDescription>
                       <td></td>
           </ng-template>

@@ -11,6 +11,7 @@ import { NgIf } from '@angular/common';
   styleUrl: './app.component.css'
 })
 export class AppComponent{
+
   title = 'NativePlantTrackerFrontEnd';
  constructor(public authService: AuthService, private router: Router) {}
 
@@ -23,6 +24,14 @@ export class AppComponent{
     console.log('User logged out.');
   }
 
+  logoNavigate() {
+    if(this.authService.isAuthenticated()){
+      this.router.navigate(['dashboard'])
+    }
+    else{
+      this.router.navigate([''])
+    }
+}
 
 
 }

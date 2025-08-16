@@ -11,6 +11,8 @@ export class PlantReport {
     public num_instances: number = 0;
   
 
-    public years_present: number = 0;
+    public datePlanted: String = "";
+
+    public type: String = "";
   
 }

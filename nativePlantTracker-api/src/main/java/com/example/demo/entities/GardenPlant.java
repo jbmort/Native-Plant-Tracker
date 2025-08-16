@@ -18,7 +18,7 @@ public class GardenPlant {
     private Garden garden;
 
     // --- Relationship to Plant (The "Many" side) ---
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "plant_id", nullable = false) // Foreign key column in this table
     private Plant plant;
 

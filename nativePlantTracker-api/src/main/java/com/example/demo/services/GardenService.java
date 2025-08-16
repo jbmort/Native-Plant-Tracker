@@ -15,7 +15,7 @@ public interface GardenService {
 
     Garden getGarden(long id);
     List<Garden> getGardens();
-    List<Plant> getAllPlantsForGarden(long gardenId, String currentUsername);
+    List<PlantDto> getAllPlantsForGarden(long gardenId, String currentUsername);
     void addGarden(GardenDto garden);
     Plant addPlantToGarden(PlantDto plant, long gardenId, String currentUsername);
     void deleteGarden(long id, String username);

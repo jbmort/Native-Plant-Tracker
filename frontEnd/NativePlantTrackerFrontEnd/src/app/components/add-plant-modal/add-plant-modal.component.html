@@ -9,6 +9,23 @@
 <!-- Modal Body -->
 <div class="modal-body">
   <form [formGroup]="plantForm" (ngSubmit)="onSubmit()">
+    <div *ngIf="!showNewType" class="mb-3">
+      <label for="plantType" class="form-label">Plant Type</label>
+      <select formControlName="plantType">
+        <option value="">Select a type</option>
+        <option *ngFor="let type of types" value="{{ type.id }}">{{ type.name }}</option>
+      </select>
+      <div *ngIf="plantForm.get('type')?.invalid && plantForm.get('type')?.touched" class="text-danger">
+        Plant type is required.
+      </div>
+    </div>
+      <button *ngIf="this.types.length > 0" type="button" class="btn stand-button" (click)="addType()">{{showNewType ? "Select Type" : "+ Add Type"}}</button>
+
+     <div *ngIf="showNewType" class="mb-3">
+      <label for="newType" class="form-label">New Type</label>
+      <input type="text" id="newType" class="form-control" formControlName="newType" placeholder="Forb, Tree, Shrub...">
+    </div>
+
     <div class="mb-3">
       <label for="commonName" class="form-label">Plant Name</label>
       <input type="text" id="name" class="form-control" formControlName="name" placeholder="e.g., Common Milkweed">
@@ -26,6 +43,12 @@
         <label for="date-planted" class="form-label">Date Planted</label>
         <input type="date" id="date-planted" class="form-control" formControlName="datePlanted">
       </div> -->
+
+    </div>
+
+    <div *ngIf="showFlowerColor" class="mb-3">
+      <label for="flowerColor" class="form-label">Flower Color</label>
+      <input type="text" id="flowerColor" class="form-control" formControlName="flowerColor">
     </div>
 
      <div class="mb-3">

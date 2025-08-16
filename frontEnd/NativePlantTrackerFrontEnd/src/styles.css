@@ -9,16 +9,17 @@ html{
   --secondary-blue: #6c8bc1;
   --delete-orange: #C15B5B;
   --garden-green: #6b7547;
-  background-color: var(--background-color);
+  background-color: #F9F9F7;
 }
 
 body{
-   background-color: var(--background-color);
+   background-color: #F9F9F7 !important;
    width: 100vm;
 }
 
 main{
-    background-color: var(--background-color);
+    /* background-color: var(--background-color); */
+    background-color: transparent;
 
 }
 

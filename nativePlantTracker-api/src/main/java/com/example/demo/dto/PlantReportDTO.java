@@ -3,9 +3,19 @@ package com.example.demo.dto;
 public class PlantReportDTO {
     private int id;
     private String name;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    private String type;
     private String description;
     private int num_instances;
-    private double years_present;
+    private String datePlanted;
 
     public PlantReportDTO() {
     }
@@ -42,11 +52,12 @@ public class PlantReportDTO {
         this.num_instances = num_instances;
     }
 
-    public double getYears_present() {
-        return years_present;
+    public String getDatePlanted() {
+        return datePlanted;
     }
 
-    public void setYears_present(double years_present) {
-        this.years_present = years_present;
+    public void setDatePlanted(String datePlanted) {
+        this.datePlanted = datePlanted;
     }
 }
+

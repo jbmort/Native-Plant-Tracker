@@ -6,10 +6,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name="Plants")
+@Table(name = "plants")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "plant_category", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("PLANT")
 public class Plant {
 
     @Id
@@ -28,9 +30,18 @@ public class Plant {
     @NotNull
     private LocalDateTime created_on;
 
-//    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "plantList")
-//    @JsonBackReference
-//    private List<Garden> gardenList;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "plant_type_id", nullable = false)
+    @JsonBackReference
+    private PlantType plantType;
+
+    public PlantType getPlantType() {
+        return plantType;
+    }
+
+    public void setPlantType(PlantType plantType) {
+        this.plantType = plantType;
+    }
 
 
     public long getId() {
@@ -73,6 +84,15 @@ public class Plant {
 
     public void setCreated_on(LocalDateTime created_on) {
         this.created_on = created_on;
+    }
+
+    public String summary(){
+        String mainString = "This plant is commonly called " + this.getCommonName() + ".";
+        if(this.getDescription() != null && !this.getDescription().isEmpty()){
+            return mainString + " Description: " + this.getDescription();
+        }else{
+            return mainString;
+        }
     }
 
 //    public List<Garden> getGardenList() {
