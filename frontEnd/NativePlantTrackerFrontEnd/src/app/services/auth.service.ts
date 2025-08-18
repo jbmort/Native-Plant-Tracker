@@ -4,16 +4,19 @@ import { Router } from '@angular/router';
 import { LoginCredentials, UserRegistration, JwtAuthResponse } from '../models/auth';
 import { Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  
+   private apiUrl = environment.apiUrl;
 
   constructor(private router: Router, private http: HttpClient) { }
 
-  private apiUrl = 'http://localhost:8080/api/auth';
+  // private apiUrl = 'http://localhost:8080/api/auth';
 
 
   public isAuthenticated(): boolean {
@@ -72,12 +75,12 @@ export class AuthService {
   }
 
   register(registrationData: UserRegistration): Observable<any> {
-    const registerUrl = `${this.apiUrl}/register`;
+    const registerUrl = `${this.apiUrl}/auth/register`;
     return this.http.post(registerUrl, registrationData, { responseType: 'text' });
   }
 
   login(credentials: LoginCredentials): Observable<JwtAuthResponse> {
-    const loginUrl = `${this.apiUrl}/login`;
+    const loginUrl = `${this.apiUrl}/auth/login`;
     return this.http.post<JwtAuthResponse>(loginUrl, credentials).pipe(
       tap(response => {
         console.log('Login successful, storing token.');

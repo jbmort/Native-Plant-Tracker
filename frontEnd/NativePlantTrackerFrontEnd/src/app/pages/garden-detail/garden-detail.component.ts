@@ -105,7 +105,6 @@ export class GardenDetailComponent implements OnInit{
     this.gardenService.getGardenPlants(gardenID).subscribe({
       next: (plants) => {
         this.plantList = plants;
-        console.log(plants)
         this.errorMessage = null;
       },
       error: (err) => {
@@ -125,10 +124,8 @@ export class GardenDetailComponent implements OnInit{
   
       modalRef.result.then(
         (result) => {
-          console.log(`Plant Modal closed with: ${result}`);
         },
         (reason) => {
-          console.log(`Plant Modal dismissed with: ${reason}`);
         }
       );
     }
@@ -144,10 +141,8 @@ export class GardenDetailComponent implements OnInit{
         // You can also handle the result when the modal is closed
         modalRef.result.then(
           (result) => {
-            console.log(`Modal closed with: ${result}`);
           },
           (reason) => {
-            console.log(`Modal dismissed with: ${reason}`);
           }
         );
       }

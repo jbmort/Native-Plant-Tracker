@@ -8,7 +8,6 @@ import com.example.demo.services.PlantService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +18,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/reports")
-//@CrossOrigin(origins="*")
-@CrossOrigin("http://localhost:4200")
 public class ReportController {
 
     final ApplicationContext context;

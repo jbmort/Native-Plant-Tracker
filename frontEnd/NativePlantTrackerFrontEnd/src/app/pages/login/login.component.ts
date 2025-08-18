@@ -28,8 +28,6 @@ export class LoginComponent {
 
   onSubmit() {
 
-    console.log(this.loginData);
-
     this.errorMessage = null; 
 
     const creds: LoginCredentials = {
@@ -39,8 +37,7 @@ export class LoginComponent {
 
     this.authService.login(creds).subscribe({
 
-      next: (response) => {
-              console.log('Login successful!', response);
+      next: () => {
 
             },
       error: (err) => {

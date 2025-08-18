@@ -119,10 +119,8 @@ openAddGardenModal(): void {
     // You can also handle the result when the modal is closed
     modalRef.result.then(
       (result) => {
-        console.log(`Modal closed with: ${result}`);
       },
       (reason) => {
-        console.log(`Modal dismissed with: ${reason}`);
       }
     );
   }

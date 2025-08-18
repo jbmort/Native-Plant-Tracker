@@ -5,8 +5,8 @@
 <p class="body-font mt-4">Log in to view your gardens, or create an account to start your journey today!</p>
     </div>
     <div class="text-center mt-3 body-font">
-        <a *ngIf="!authService.isAuthenticated()" routerLink="/login" class="btn stand-button button-font">Log In</a>
+        <a routerLink="/login" class="btn stand-button button-font">Log In</a>
         <span> or </span>
-    <a *ngIf="!authService.isAuthenticated()" routerLink="/register" class="btn stand-button button-font">Sign Up</a>
+        <a routerLink="/register" class="btn stand-button button-font">Sign Up</a>
     </div>
 </div>

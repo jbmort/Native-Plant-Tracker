@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { PlantReport } from '../../models/plant-report';
 import { GardenService } from '../../services/garden.service';
 import { NgFor, NgIf } from '@angular/common';
-// import { NgbSlide } from "../../../../node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel";
 
 @Component({
   selector: 'app-plant-report',
@@ -34,7 +33,6 @@ export class PlantReportComponent implements OnInit  {
         this.errorMessage = null;
         this.plantReport = report;
         this.isLoading = false;
-        console.log(report)
       },
       error: (err) => {
         console.log("error loading report: " + err)

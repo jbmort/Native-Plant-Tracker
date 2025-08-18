@@ -53,7 +53,7 @@ export class AddGardenModalComponent implements OnInit{
     if(this.gardenToEdit == null){
       this.gardenService.createGarden(gardenData).subscribe({
         next: (newGarden) => {
-          console.log('Garden created successfully:', newGarden);
+          console.log('Garden created successfully:');
           this.gardenCreated.emit();
           this.activeModal.close('Garden Created');
         },
@@ -67,7 +67,6 @@ export class AddGardenModalComponent implements OnInit{
       this.gardenService.updateGarden(this.gardenToEdit.id, gardenData).subscribe({
           next: (updatedGarden) => { 
             this.gardenCreated.emit();
-            console.log('Garden updated: ' + updatedGarden.name)
             this.activeModal.close('Garden Updated');
           },
           error: (err) => {

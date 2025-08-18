@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PlantDto } from '../../models/plant-dto';
 import { GardenService } from '../../services/garden.service'; 
-import { Plant } from '../../models/plant';
 import { NgFor, NgIf } from '@angular/common';
 import { PlantType } from '../../models/plant-type';
 import { PlantTypeDto } from '../../models/plant-type-dto';
@@ -65,7 +64,6 @@ export class AddPlantModalComponent implements OnInit {
         plantType: [this.plant.type],
         newType: ['']
       });
-      console.log(this.plant.type)
     } else {
       // ADD MODE: Create an empty form
       this.plantForm = this.fb.group({
@@ -78,8 +76,9 @@ export class AddPlantModalComponent implements OnInit {
         newType: ['']
       });
     }
-
-    this.checkName(this.plant!.typeName)
+    if(this.plant != null){
+      this.checkName(this.plant.typeName)
+    }
 
     this.plantForm.get('plantType')?.valueChanges.subscribe(selectedTypeId => {
       this.updateConditionalFields(selectedTypeId);
@@ -144,7 +143,6 @@ export class AddPlantModalComponent implements OnInit {
         typeName: name,
         flowerColor: this.plantForm.value.flowerColor,
     } 
-    console.log(plantData)
 
     this.gardenService.addPlantToGarden(this.gardenId, plantData).subscribe({
       next: (newPlant) => {
@@ -169,8 +167,6 @@ export class AddPlantModalComponent implements OnInit {
        typeName: name,
        flowerColor: this.plantForm.value.flowerColor,
      } 
-        console.log(plantData)
-
 
     if(this.plant != null)
     this.gardenService.updatePlant(this.gardenId, this.plant.id, plantData).subscribe({

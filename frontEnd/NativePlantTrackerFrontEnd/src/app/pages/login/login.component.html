@@ -3,7 +3,7 @@
 <br/>
 <form (ngSubmit)="onSubmit()" #loginForm="ngForm" autocomplete="off" class="container">
   <div class="row m-1">
-    <label for="username" class="col-md-3 text-end">Username:</label>
+    <label for="username" class="col-sm-3 text-end">Username:</label>
     <input 
       type="text" 
       id="username" 
@@ -11,14 +11,14 @@
       [(ngModel)]="loginData.username" 
       required
       #username="ngModel"
-      class="col-md-6"/>
+      class="col-lg-6"/>
     <div *ngIf="username.invalid && username.touched" style="color:red">
       Username is required.
     </div>
   </div>
 
   <div class="row m-1">
-    <label for="password" class="col-md-3 text-end">Password:</label>
+    <label for="password" class="col-sm-3 text-end">Password:</label>
     <input 
       type="password" 
       id="password" 
@@ -26,7 +26,7 @@
       [(ngModel)]="loginData.password" 
       required
       #password="ngModel"
-      class="col-md-6"/>
+      class="col-lg-6"/>
     <div *ngIf="password.invalid && password.touched" style="color:red">
       Password is required.
     </div>

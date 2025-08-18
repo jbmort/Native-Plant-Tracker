@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,19 +23,21 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final UserDetailsService userDetailsService;
+//    private final UserDetailsService userDetailsService;
+
+    @Value("${app.cors.allowed-origins}")
+    private String allowedOrigins;
 
     //    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
 //        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
 //    }
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserDetailsService userDetailsService) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.userDetailsService = userDetailsService;
+//        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -65,7 +68,7 @@ public class SecurityConfig {
                         // Require authentication for all other requests
                         .anyRequest().authenticated()
                 )
-                .authenticationProvider(authenticationProvider(this.userDetailsService))
+//                .authenticationProvider(authenticationProvider(this.userDetailsService))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -74,9 +77,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        // Specify allowed origins
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        // Read the allowed origins from the properties file
+        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
 
         // Specify allowed HTTP methods
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -99,5 +101,9 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
+//    @Value("${app.cors.allowed-origins}")
+//    private String allowedOrigins;
+
 
 }

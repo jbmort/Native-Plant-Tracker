@@ -9,13 +9,15 @@ import { PlantReport } from '../models/plant-report';
 import { GardenReport } from '../models/garden-report';
 import { PlantType } from '../models/plant-type';
 import { PlantTypeDto } from '../models/plant-type-dto';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GardenService {
-  private apiUrl = 'http://localhost:8080/api/gardens';
-  private reportUrl = 'http://localhost:8080/api/reports'
+  private envUrl = environment.apiUrl
+  private apiUrl = `${this.envUrl}/gardens`;
+  private reportUrl = `${this.envUrl}/reports`;
 
   constructor(private http: HttpClient) { }
 

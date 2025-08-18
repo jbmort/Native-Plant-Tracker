@@ -17,8 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/gardens")
-//@CrossOrigin(origins="*")
-@CrossOrigin("http://localhost:4200")
 public class GardenController {
 
     final ApplicationContext context;

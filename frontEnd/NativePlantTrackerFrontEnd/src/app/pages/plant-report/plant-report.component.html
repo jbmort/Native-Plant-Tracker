@@ -35,7 +35,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let plant of plantReport">
-          <td ><strong class="m-2">{{ plant.name }}</strong></td>
+          <td class=""><strong class="m-1">{{ plant.name }}</strong></td>
           <td class="text-center">{{ plant.type }}</td>
           <td *ngIf="plant.description.length > 0; else noDescription" class="truncate-text " [title]="plant.description">{{ plant.description }}</td>
           <td class="text-center">{{ plant.num_instances }}</td>

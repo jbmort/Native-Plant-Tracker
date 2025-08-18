@@ -36,11 +36,9 @@ export class RegisterComponent {
 
   onRegister() {
     if(!this.matchPasswords()){
-
       return
     }
 
-    console.log(this.registrationData);
     const registration: UserRegistration = {
       username: this.registrationData.username,
       email: this.registrationData.email,
@@ -48,7 +46,6 @@ export class RegisterComponent {
     }
     this.authService.register(registration).subscribe({
       next: (response) => {
-          console.log(response)
           const loginCreds: LoginCredentials = {
             username: this.registrationData.username,
             password: this.registrationData.password
