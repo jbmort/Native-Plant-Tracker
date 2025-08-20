@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private gardenService: GardenService,
-    private authService: AuthService,
+    public authService: AuthService,
     private modalService: NgbModal,
     private router: Router,
     private fb: FormBuilder
@@ -177,10 +177,6 @@ searchBlur(){
   if(this.searchBar.value.search.length < 1){
     this.filteredGardens = this.gardens;
   }
-}
-
-authenticated(){
-  return this.authService.isAuthenticated()
 }
   
 }

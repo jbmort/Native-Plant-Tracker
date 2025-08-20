@@ -1,10 +1,10 @@
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component';
 import { GardenService } from '../../services/garden.service';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { of, throwError, timeout } from 'rxjs';
+import { of, throwError} from 'rxjs';
 import { Garden } from '../../models/garden';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing'; 
@@ -17,14 +17,18 @@ const MOCK_GARDENS: Garden[] = [
     sciName: '',
     description: '',
     created_on: new Date(),
-    gardens: []
+    gardens: [],
+    flowerColor: null,
+    type: 0
   }, {
     id: 0,
     commonName: '',
     sciName: '',
     description: '',
     created_on: new Date(),
-    gardens: []
+    gardens: [],
+    flowerColor: null,
+    type: 0
   }], created_on: new Date() },
   { id: 2, name: 'Backyard Meadow', description: 'Shady area', gardenPlants: [{
     id: 0,
@@ -32,7 +36,9 @@ const MOCK_GARDENS: Garden[] = [
     sciName: '',
     description: '',
     created_on: new Date(),
-    gardens: []
+    gardens: [],
+    flowerColor: null,
+    type: 0
   }], created_on: new Date() }
 ];
 
@@ -79,10 +85,10 @@ describe('DashboardComponent', () => {
     beforeEach(() => {
       // prep for api call on garden data
       gardenServiceSpy.getGardensForCurrentUser.and.returnValue(of(MOCK_GARDENS));
-      
       // trigger oninit
       fixture.detectChanges(); 
     });
+ 
 
     it('should set isLoading to false', () => {
       // ASSERT
@@ -94,8 +100,8 @@ describe('DashboardComponent', () => {
       expect(component.gardens.length).toBe(2);
       expect(component.filteredGardens.length).toBe(2);
       expect(component.gardens[0].name).toBe('Front Yard Bed');
-      expect(component.filteredGardens[1].name).toBe('Backyard Meadow')
-      ;
+      expect(component.filteredGardens[1].name).toBe('Backyard Meadow');
+
     });
 
 
@@ -109,7 +115,7 @@ describe('DashboardComponent', () => {
       expect(component.error).toBeNull();
     });
 
-    
+  // })
   });
 
 

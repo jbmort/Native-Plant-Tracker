@@ -146,7 +146,6 @@ export class AddPlantModalComponent implements OnInit {
 
     this.gardenService.addPlantToGarden(this.gardenId, plantData).subscribe({
       next: (newPlant) => {
-        console.log('Plant added successfully:', newPlant);
         this.plantAdded.emit();
         this.activeModal.close('Plant Added');
       },

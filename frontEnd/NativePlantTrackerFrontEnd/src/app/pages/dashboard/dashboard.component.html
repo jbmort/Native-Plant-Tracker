@@ -4,7 +4,7 @@
 </div>
 
 <!-- Main Dashboard Content -->
-<div *ngIf="!isLoading && authenticated()" class="dashboard-container">
+<div *ngIf="!isLoading && authService.isAuthenticated()" class="dashboard-container">
   
   <!-- GREETING -->
   <header class="dashboard-header">
@@ -85,7 +85,7 @@
   <!-- VIEW 2: USER HAS NO GARDENS (The "Get Started" message)    -->
   <!-- ========================================================== -->
   <ng-template #noGardensTemplate>
-    <div class="get-started-container body-font">
+    <div class="get-started-container body-font text-center">
       <h2 class="heading-font">Let's Start Your Rewilding Adventure!</h2>
       <p>
         Your dashboard is ready and waiting. The first step to creating a vibrant habitat is to define your first garden. 
@@ -101,7 +101,7 @@
 
 </div>
 
-<div *ngIf="!authenticated()" class="text-center">
+<div *ngIf="!authService.isAuthenticated()" class="text-center">
   <h1>🌱</h1> 
   <p class="heading-font fs-3">Please Log In to manage your gardens!</p>
   <p class="body-font">You need to be logged in to access that page. Your session may have timed out.</p>

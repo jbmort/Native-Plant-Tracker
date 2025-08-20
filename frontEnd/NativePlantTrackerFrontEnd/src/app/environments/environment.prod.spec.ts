@@ -1,7 +1,2 @@
-import { EnvironmentProd } from './environment.prod';
+import { environment } from './environment.prod';
 
-describe('EnvironmentProd', () => {
-  it('should create an instance', () => {
-    expect(new EnvironmentProd()).toBeTruthy();
-  });
-});
