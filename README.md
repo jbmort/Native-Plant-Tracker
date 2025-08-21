@@ -8,3 +8,6 @@
 
 
 - Requirement D: Describe testing strategy Complete
+
+
+- Requirement E: Application functionality Video Complete
