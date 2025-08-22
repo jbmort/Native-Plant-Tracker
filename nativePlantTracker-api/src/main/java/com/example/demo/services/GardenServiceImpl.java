@@ -13,9 +13,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+// import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
+// import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -306,7 +306,7 @@ public class GardenServiceImpl implements GardenService {
             line.setGarden_name(garden.getName());
             line.setDescription(garden.getDescription());
 
-            double age = getAge(garden.getCreated_on());
+            // double age = getAge(garden.getCreated_on());
             String date = garden.getCreated_on().toLocalDate().toString();
             line.setDate_started(date);
 
@@ -316,14 +316,14 @@ public class GardenServiceImpl implements GardenService {
         return report;
     }
 
-    private double getAge(LocalDateTime date) {
-        Period period = Period.between(LocalDate.from(date), LocalDate.now());
-        int years = period.getYears();
-        int months = period.getMonths();
-        double fractionalMonths = months / 12.0;
+    // private double getAge(LocalDateTime date) {
+    //     Period period = Period.between(LocalDate.from(date), LocalDate.now());
+    //     int years = period.getYears();
+    //     int months = period.getMonths();
+    //     double fractionalMonths = months / 12.0;
 
-        return fractionalMonths + years;
+    //     return fractionalMonths + years;
 
-    }
+    // }
 
 }

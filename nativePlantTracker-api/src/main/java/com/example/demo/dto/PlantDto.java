@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import com.example.demo.repository.TypesRepository;
+// import com.example.demo.repository.TypesRepository;
 
 public class PlantDto {
 

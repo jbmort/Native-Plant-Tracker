@@ -7,9 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.lang.reflect.Array;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Repository

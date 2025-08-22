@@ -3,7 +3,6 @@ package com.example.demo.rest;
 import com.example.demo.dto.JWTAuthResponse;
 import com.example.demo.dto.LoginRequestDto;
 import com.example.demo.dto.UserRegistrationDto;
-import com.example.demo.entities.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserRegistrationDto registrationDto) {
         try {
-            User registeredUser = userService.registerUser(registrationDto);
+            userService.registerUser(registrationDto);
             // You can return a simple success message or the user object (without password)
             return new ResponseEntity<>("User registered successfully!", HttpStatus.CREATED);
         } catch (IllegalStateException e) {
