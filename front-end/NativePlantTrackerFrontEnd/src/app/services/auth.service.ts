@@ -16,8 +16,6 @@ export class AuthService {
 
   constructor(private router: Router, private http: HttpClient) { }
 
-  // private apiUrl = 'http://localhost:8080/api/auth';
-
 
   public isAuthenticated(): boolean {
     const token = this.getToken();
