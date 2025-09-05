@@ -114,7 +114,6 @@ public class GardenServiceImpl implements GardenService {
                     newPlant.setCommonName(plant.getCommon_name());
                     newPlant.setDescription(plant.getDescription());
                     newPlant.setSciName(plant.getSci_name());
-                    newPlant.setCreated_on(LocalDateTime.now());
 
                     plantRepository.save(newPlant);
                 } else {
@@ -236,10 +235,9 @@ public class GardenServiceImpl implements GardenService {
                 line.setName(plant.getSciName());
             }
             line.setDescription(plant.getDescription());
-            LocalDateTime established = plant.getCreated_on();
 
 //            double age = getAge(established);
-            line.setDatePlanted(established.toLocalDate().toString());
+//            line.setDatePlanted(established.toLocalDate().toString());
 
 
             line.setNum_instances(1);

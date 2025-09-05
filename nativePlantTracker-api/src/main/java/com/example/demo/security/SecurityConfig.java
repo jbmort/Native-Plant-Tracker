@@ -102,8 +102,7 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-//    @Value("${app.cors.allowed-origins}")
-//    private String allowedOrigins;
+
 
 
 }
