@@ -8,7 +8,6 @@ import com.example.demo.entities.*;
 import com.example.demo.repository.GardenPlantRepository;
 import com.example.demo.repository.GardenRepository;
 import com.example.demo.repository.PlantRepository;
-import com.example.demo.repository.TypesRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,16 +26,14 @@ public class GardenServiceImpl implements GardenService {
     private final PlantRepository plantRepository;
     private final UserService userService;
     private final GardenPlantRepository gardenPlantRepository;
-    private final TypesRepository typesRepository;
 
 
     @Autowired
-    GardenServiceImpl(GardenRepository gardenRepository, PlantRepository plantRepository, UserService userService, GardenPlantRepository gardenPlantRepository, TypesRepository typesRepository) {
+    GardenServiceImpl(GardenRepository gardenRepository, PlantRepository plantRepository, UserService userService, GardenPlantRepository gardenPlantRepository) {
         this.gardenRepository = gardenRepository;
         this.plantRepository = plantRepository;
         this.userService = userService;
         this.gardenPlantRepository = gardenPlantRepository;
-        this.typesRepository = typesRepository;
     }
 
     @Override
@@ -55,17 +52,10 @@ public class GardenServiceImpl implements GardenService {
 
             plant.setId(gardenPlant.getPlant().getId());
             plant.setDescription(gardenPlant.getPlant().getDescription());
-            plant.setType(gardenPlant.getPlant().getPlantType().getId());
-            plant.setTypeName(gardenPlant.getPlant().getPlantType().getName());
             plant.setSci_name(gardenPlant.getPlant().getSciName());
             plant.setCommon_name(gardenPlant.getPlant().getCommonName());
-            if(gardenPlant.getPlant() instanceof Forb forb) {
-                plant.setFlowerColor(forb.getFlowerColor());
-            }
-
 
             plantList.add(plant);
-            System.out.println(gardenPlant.getPlant().getPlantType().getValue());
         }
 
         return plantList;
@@ -118,37 +108,14 @@ public class GardenServiceImpl implements GardenService {
         if (!exists) {
             if (garden.getUser().getUsername().equals(currentUsername)) {
                 if (!plantRepository.existsPlantByCommonName(plant.getCommon_name())) {
-                    PlantType plantType = new PlantType();
-                    if(typesRepository.findById(plant.getType()).isPresent()){
-                        plantType = typesRepository.findById(plant.getType()).get();
-                    }
 
-                    switch (plantType.getValue()) {
-                        case "FORB":
-                        case "FLOWERING PERENNIAL":
-                            Forb newForb = new Forb();
-                            newForb.setFlowerColor(plant.getFlowerColor());
-                            newPlant = newForb;
-                            break;
+                    newPlant = new Plant();
 
-                        case "GRASS":
-                        case "NATIVE GRASS":
-                            newPlant = new Grass();
-                            break;
-
-                        case "TREE":
-                            newPlant = new Tree();
-                            break;
-
-                        default:
-                            newPlant = new Plant();
-                            break;
-                    }
                     newPlant.setCommonName(plant.getCommon_name());
                     newPlant.setDescription(plant.getDescription());
                     newPlant.setSciName(plant.getSci_name());
                     newPlant.setCreated_on(LocalDateTime.now());
-                    newPlant.setPlantType(plantType);
+
                     plantRepository.save(newPlant);
                 } else {
                     newPlant = plantRepository.getPlantByCommonName(plant.getCommon_name());
@@ -268,13 +235,12 @@ public class GardenServiceImpl implements GardenService {
             } else if (plant.getSciName() != null) {
                 line.setName(plant.getSciName());
             }
-            line.setType(plant.getPlantType().getName());
             line.setDescription(plant.getDescription());
             LocalDateTime established = plant.getCreated_on();
 
 //            double age = getAge(established);
             line.setDatePlanted(established.toLocalDate().toString());
-            line.setType(plant.getPlantType().getName());
+
 
             line.setNum_instances(1);
 

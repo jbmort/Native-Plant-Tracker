@@ -30,18 +30,6 @@ public class Plant {
     @NotNull
     private LocalDateTime created_on;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "plant_type_id", nullable = false)
-    @JsonBackReference
-    private PlantType plantType;
-
-    public PlantType getPlantType() {
-        return plantType;
-    }
-
-    public void setPlantType(PlantType plantType) {
-        this.plantType = plantType;
-    }
 
 
     public long getId() {

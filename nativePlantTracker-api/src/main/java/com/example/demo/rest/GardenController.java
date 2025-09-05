@@ -3,7 +3,6 @@ package com.example.demo.rest;
 import com.example.demo.dto.*;
 import com.example.demo.entities.Garden;
 import com.example.demo.entities.Plant;
-import com.example.demo.entities.PlantType;
 import com.example.demo.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -141,26 +139,6 @@ public class GardenController {
         String currentUsername = authentication.getName();
         List<Plant> plants = gardenService.allPlantsForUser(currentUsername);
         return ResponseEntity.ok(plants);
-    }
-
-    @GetMapping("/types")
-    public ResponseEntity<List<PlantType>> getPlantTypes(Authentication authentication) {
-        String currentUsername = authentication.getName();
-        List<PlantType> types = new ArrayList<>();
-        if(currentUsername != null) {
-            types = plantService.getTypes();
-        }
-        return ResponseEntity.ok(types);
-    }
-
-    @PostMapping("/types")
-    public ResponseEntity<PlantType> addPlantType(@RequestBody PlantTypeDto plantTypeDto, Authentication authentication) {
-        String currentUsername = authentication.getName();
-        PlantType plantType = new PlantType();
-        if(currentUsername != null) {
-            plantType = plantService.addPlantType(plantTypeDto);
-        }
-        return ResponseEntity.ok(plantType);
     }
 
 
