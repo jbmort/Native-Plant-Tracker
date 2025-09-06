@@ -104,6 +104,7 @@ public class PermaPeopleApiServiceImpl implements PermaPeopleApiService {
             resultList.add(resultDto);
         });
         return resultList;
+
     }
 
     private Plant ApiResponseToPlantConverter(apiResponsePlantDto apiResponsePlantDto){
