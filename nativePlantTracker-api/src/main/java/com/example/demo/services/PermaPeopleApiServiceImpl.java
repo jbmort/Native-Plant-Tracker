@@ -116,7 +116,6 @@ public class PermaPeopleApiServiceImpl implements PermaPeopleApiService {
 
         // Create Switch case to inside loop to handle grabbing all data points such as moisture requirements and edibility
         return plant;
-
     }
 
 }
