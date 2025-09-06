@@ -20,11 +20,10 @@ public class Plant {
     @Column(unique = true, name = "trefle_id")
     private long trefleId;
 
-    @NotNull
+    @Nullable
     private String commonName;
 
-    @Nullable
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String sciName;
 
     @Nullable
