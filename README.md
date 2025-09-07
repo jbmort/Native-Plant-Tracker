@@ -12,3 +12,5 @@ gardens.
 > I am currently working on expanding this project to utilize the Permapeople API to integrate their plant data
  for more accurate plant information and deeper insight into users gardens to provide more useful feedback and value to 
 users.
+
+>As of September 7th, 2025 the application is still live on AWS and can be visited at http://jm-capstone-front-end-2025.s3-website-us-east-1.amazonaws.com/
