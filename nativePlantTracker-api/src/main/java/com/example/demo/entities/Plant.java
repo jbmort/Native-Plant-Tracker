@@ -1,11 +1,8 @@
 package com.example.demo.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +14,8 @@ public class Plant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true, name = "trefle_id")
-    private long trefleId;
+    @Column(unique = true, name = "api_id")
+    private long apiId;
 
     @Nullable
     private String commonName;
@@ -99,12 +96,12 @@ public class Plant {
         this.description = description;
     }
 
-    public long getTrefleId() {
-        return trefleId;
+    public long getApiId() {
+        return apiId;
     }
 
-    public void setTrefleId(long trefleId) {
-        this.trefleId = trefleId;
+    public void setApiId(long trefleId) {
+        this.apiId = trefleId;
     }
 
     @Nullable
