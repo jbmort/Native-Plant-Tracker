@@ -10,12 +10,13 @@ import java.util.List;
 @Table(name = "plants")
 public class Plant {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private long id;
 
-    @Column(unique = true, name = "api_id")
-    private long apiId;
+    @Id
+    @Column(unique = true, name = "id")
+    private long id;
 
     @Nullable
     private String commonName;
@@ -28,7 +29,7 @@ public class Plant {
 
     private String plantType;
     private Double averageHeight;
-    private String toxicity;
+//    private String toxicity;
     private String description;
 
 
@@ -39,21 +40,40 @@ public class Plant {
     @Column(name = "part")
     private List<String> edibleParts = new ArrayList<>();
 
-    @ElementCollection
-    @CollectionTable(name = "plant_flower_colors", joinColumns = @JoinColumn(name = "plant_id"))
-    @Column(name = "color")
-    private List<String> flowerColors = new ArrayList<>();
+//    @ElementCollection
+//    @CollectionTable(name = "plant_flower_colors", joinColumns = @JoinColumn(name = "plant_id"))
+//    @Column(name = "color")
+//    private List<String> flowerColors = new ArrayList<>();
 
-    @Column(name = "ph_min")
-    private Double phMinimum;
-    private Double phMaximum;
-    private Double lightRequirement;
-    private Integer soil_moisture;
+    public void setLightRequirement(List<String> lightRequirement) {
+        this.lightRequirement = lightRequirement;
+    }
+
+    //    @Column(name = "ph_min")
+//    private Double phMinimum;
+//    private Double phMaximum;
+    @ElementCollection
+    @CollectionTable(name="light_requirement", joinColumns = @JoinColumn(name="plant_id"))
+    @Column(name="light_requirement")
+    private List<String> lightRequirement = new ArrayList<>();
+
+    public void setSoil_moisture(List<String> soil_moisture) {
+        this.soil_moisture = soil_moisture;
+    }
+
+    public List<String> getLightRequirement() {
+        return lightRequirement;
+    }
 
     @ElementCollection
-    @CollectionTable(name = "plant_bloom_months", joinColumns = @JoinColumn(name = "plant_id"))
-    @Column(name = "month")
-    private List<String> bloomMonths = new ArrayList<>();
+    @CollectionTable(name="moisture_requirement", joinColumns = @JoinColumn(name="plant_id"))
+    @Column(name="moisture_requirement")
+    private List<String> soil_moisture = new ArrayList<>();
+
+//    @ElementCollection
+//    @CollectionTable(name = "plant_bloom_months", joinColumns = @JoinColumn(name = "plant_id"))
+//    @Column(name = "month")
+//    private List<String> bloomMonths = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "plant_native_zones", joinColumns = @JoinColumn(name = "plant_id"))
@@ -62,28 +82,21 @@ public class Plant {
 
 
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
+    @Nullable
     public String getCommonName() {
         return commonName;
     }
 
-    public void setCommonName(String common_name) {
+    public void setCommonName(@Nullable String common_name) {
         this.commonName = common_name;
     }
 
-    @Nullable
+
     public String getSciName() {
         return sciName;
     }
 
-    public void setSciName(@Nullable String sci_name) {
+    public void setSciName(String sci_name) {
         this.sciName = sci_name;
     }
 
@@ -96,12 +109,12 @@ public class Plant {
         this.description = description;
     }
 
-    public long getApiId() {
-        return apiId;
+    public long getId() {
+        return id;
     }
 
-    public void setApiId(long trefleId) {
-        this.apiId = trefleId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Nullable
@@ -129,13 +142,6 @@ public class Plant {
         this.averageHeight = averageHeight;
     }
 
-    public String getToxicity() {
-        return toxicity;
-    }
-
-    public void setToxicity(String toxicity) {
-        this.toxicity = toxicity;
-    }
 
     public boolean isEdible() {
         return isEdible;
@@ -151,54 +157,6 @@ public class Plant {
 
     public void setEdibleParts(List<String> edibleParts) {
         this.edibleParts = edibleParts;
-    }
-
-    public List<String> getFlowerColors() {
-        return flowerColors;
-    }
-
-    public void setFlowerColors(List<String> flowerColors) {
-        this.flowerColors = flowerColors;
-    }
-
-    public Double getPhMinimum() {
-        return phMinimum;
-    }
-
-    public void setPhMinimum(Double phMinimum) {
-        this.phMinimum = phMinimum;
-    }
-
-    public Double getPhMaximum() {
-        return phMaximum;
-    }
-
-    public void setPhMaximum(Double phMaximum) {
-        this.phMaximum = phMaximum;
-    }
-
-    public Double getLightRequirement() {
-        return lightRequirement;
-    }
-
-    public void setLightRequirement(Double lightRequirement) {
-        this.lightRequirement = lightRequirement;
-    }
-
-    public Integer getSoil_moisture() {
-        return soil_moisture;
-    }
-
-    public void setSoil_moisture(Integer soil_moisture) {
-        this.soil_moisture = soil_moisture;
-    }
-
-    public List<String> getBloomMonths() {
-        return bloomMonths;
-    }
-
-    public void setBloomMonths(List<String> bloomMonths) {
-        this.bloomMonths = bloomMonths;
     }
 
     public List<String> getNativeZones() {
@@ -218,11 +176,4 @@ public class Plant {
         }
     }
 
-//    public List<Garden> getGardenList() {
-//        return gardenList;
-//    }
-//
-//    public void setGardenList(List<Garden> gardenList) {
-//        this.gardenList = gardenList;
-//    }
 }
