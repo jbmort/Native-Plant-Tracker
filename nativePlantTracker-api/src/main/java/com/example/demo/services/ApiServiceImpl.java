@@ -75,6 +75,29 @@ public class ApiServiceImpl  implements ApiService {
     @Override
     public apiResponsePlantDto getPlant(long id) {
         //create get request with "plant/<id>"
+        String url = baseUrl + "plants/" + id;
+
+        // Add authentication headers
+        HttpEntity<Void> requestEntity = headers();
+
+        try {
+            ResponseEntity<ApiResponseDto> responseEntity = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    requestEntity,
+                    ApiResponseDto.class
+            );
+
+            // Collect API Response
+            ApiResponseDto response = responseEntity.getBody();
+
+            if (response != null && response.getPlants() != null) {
+                return response.getPlants().getFirst();
+            }
+        }
+        catch (Exception e){
+            System.err.println("Error calling Permapeople API: Could not retrieve plant by id" + e.getMessage());
+        }
         return null;}
 
 
