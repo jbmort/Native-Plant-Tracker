@@ -1,5 +1,5 @@
 # Native Plant Tracker
-## SOFTWARE ENGINEERING CAPSTONE PROJECT
+
 
 This application started as a capstone project for my degree program. For this project i was
 required to create a full-stack project utilizing a front-end, back-end, and database that had CRUD capabilities. 
@@ -13,4 +13,10 @@ gardens.
  for more accurate plant information and deeper insight into users gardens to provide more useful feedback and value to 
 users.
 
->As of September 7th, 2025 the application is still live on AWS and can be visited at http://jm-capstone-front-end-2025.s3-website-us-east-1.amazonaws.com/
+>As of September 26th, 2025 the application is still live on AWS and can be visited at http://jm-capstone-front-end-2025.s3-website-us-east-1.amazonaws.com/
+
+## Upcoming Features
++ Add Api integration for full spectrum plant data (currently working on)
++ Implement search functionality on the front end when a user wants to add a plant to their garden
++ Add optional conditions for gardens such as location, amount of sunlight and soil moisture.
++ Add AI-powered plant recommendations for users gardens based on conditions and plants that already exist in that garden
