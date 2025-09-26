@@ -6,6 +6,7 @@ import com.example.demo.repository.PlantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -73,6 +74,16 @@ public class PlantServiceImpl implements PlantService {
         plantRepository.delete(plant);
     }
 
+    @Override
+    public List<Plant> getPlantsByName(String name) {
+        List<Plant> commonNameList = plantRepository.searchPlantsByCommonNameContainingIgnoreCase(name);
+        List<Plant> sciNameList = plantRepository.searchPlantsBySciNameContainingIgnoreCase(name);
+
+        List<Plant> plantList = new ArrayList<>();
+        plantList.addAll(commonNameList);
+        plantList.addAll(sciNameList);
+        return plantList;
+    }
 
 
 }

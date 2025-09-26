@@ -1,0 +1,106 @@
+package com.example.demo.rest;
+
+import com.example.demo.dto.ApiResultsDto;
+import com.example.demo.entities.Plant;
+import com.example.demo.services.ApiService;
+import com.example.demo.services.PlantService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@RestController
+@RequestMapping("/api/search")
+public class ApiDataController{
+    final ApplicationContext context;
+    final ApiService apiService;
+    private final PlantService plantService;
+
+    public ApiDataController(ApplicationContext context, ApiService apiService, PlantService plantService) {
+        this.context = context;
+        this.apiService = apiService;
+        this.plantService = plantService;
+    }
+
+    @GetMapping("/{searchName}")
+    public ResponseEntity<List<ApiResultsDto>> searchPlantsApiByName(
+            @PathVariable String searchName,
+            Authentication authentication) {
+
+        // Verify authentication
+        String currentUsername = authentication.getName();
+        if(currentUsername == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        // Check database for search term
+        List<Plant> plantList = plantService.getPlantsByName(searchName);
+
+        // Totally new plant with no similarity in database
+        if(plantList.isEmpty()) {
+            List<ApiResultsDto> response = apiService.searchPlantsApi(searchName);
+            return ResponseEntity.ok(response);
+        }
+
+        // Few responses from database and search finished with API
+        if(plantList.size() <= 10) {
+            Set<ApiResultsDto> responseSet = new HashSet<>();
+
+            plantList.forEach(plant -> {
+                ApiResultsDto convertedPlant = convertToApiResultDto(plant);
+                responseSet.add(convertedPlant);
+            });
+
+            List<ApiResultsDto> apiPlants = apiService.searchPlantsApi(searchName);
+            responseSet.addAll(apiPlants);
+            List<ApiResultsDto> response = responseSet.stream().toList();
+            if(response.size() <= 10) {
+                return ResponseEntity.ok(response);
+            }
+            return ResponseEntity.ok(response.subList(0, 10));
+        }
+
+        // Search populated completely from database
+        List<ApiResultsDto> response = new ArrayList<>();
+        plantList.subList(0,10).forEach(plant->{
+            ApiResultsDto plantResult = convertToApiResultDto(plant);
+            response.add(plantResult);
+        });
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Plant> searchPlantById(@PathVariable String id, Authentication authentication) {
+        // Verify Authentication
+        String currentUsername = authentication.getName();
+        if(currentUsername == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        // Check database for plant by id
+        Plant databasePlant = plantService.getPlant(Long.parseLong(id));
+        if(databasePlant == null) {
+            // Pull full plant data from api and save plant to database for future reference
+            Plant apiPlant = apiService.getPlant(Long.parseLong(id));
+            plantService.addPlant(apiPlant);
+            return ResponseEntity.ok(apiPlant);
+        }
+        return ResponseEntity.ok(databasePlant);
+    }
+
+
+    private ApiResultsDto convertToApiResultDto(Plant plant) {
+        ApiResultsDto response = new ApiResultsDto();
+
+        response.setExternalId(plant.getId());
+        response.setCommonName(plant.getCommonName());
+        response.setScientificName(plant.getSciName());
+        response.setImageUrl(plant.getImageUrl());
+        return  response;
+    }
+}

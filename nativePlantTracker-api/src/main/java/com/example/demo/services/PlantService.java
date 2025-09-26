@@ -14,4 +14,6 @@ public interface PlantService {
     Plant addPlant(Plant plant);
     Plant updatePlant(long id, PlantDto plant);
     void deletePlant(long id);
+
+    List<Plant> getPlantsByName(String name);
 }
