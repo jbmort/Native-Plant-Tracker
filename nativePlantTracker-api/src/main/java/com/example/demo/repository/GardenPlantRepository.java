@@ -16,7 +16,7 @@ public interface GardenPlantRepository extends JpaRepository<GardenPlant, Long> 
 
     List<GardenPlant> findByGardenId(Long gardenId);
 
-    Optional<GardenPlant> findFirstByGardenIdAndPlantIdAndDateAbsentIsNull(long gardenId, long plantId, LocalDate dateAbsent);
+    Optional<GardenPlant> findFirstByGardenIdAndPlantId(long gardenId, long plantId);
     Optional<GardenPlant> findByIdAndGardenId(Long gardenPlantId, Long gardenId);
 
     @Query("SELECT COUNT(gp.plant) " +

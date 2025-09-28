@@ -202,7 +202,7 @@ public class GardenServiceImpl implements GardenService {
     public Plant getPlantById(long gardenId, long plantId, String username) {
         Garden garden = findGardenByIdAndUsername(gardenId, username);
         if(plantRepository.findById(plantId).isPresent()) {
-            Optional <GardenPlant> plantReference = gardenPlantRepository.findFirstByGardenIdAndPlantIdAndDateAbsentIsNull(garden.getId(), plantId, null);
+            Optional <GardenPlant> plantReference = gardenPlantRepository.findFirstByGardenIdAndPlantId(garden.getId(), plantId);
             if(plantReference.isPresent()) {
             GardenPlant gardenPlant = plantReference.get();
             return gardenPlant.getPlant();}
