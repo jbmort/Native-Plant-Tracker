@@ -1,7 +1,10 @@
 package com.example.demo.entities; // Or your 'entities' package
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 
 
 @Entity
@@ -28,8 +31,13 @@ public class GardenPlant {
 //    @Column(name = "quantity")
 //    private Integer quantity;
 //
-//    @Column(name = "date_planted")
-//    private LocalDate datePlanted;
+    @Nullable
+    @Column(name = "date_planted")
+    private LocalDate datePlanted;
+
+    @Nullable
+    @Column(name = "date_absent")
+    private LocalDate dateAbsent;
 //
 //    @Lob // Use @Lob for potentially long text fields
 //    @Column(name = "notes")

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 // import java.time.LocalDate;
-import java.time.LocalDateTime;
 // import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +99,7 @@ public class GardenServiceImpl implements GardenService {
         Garden garden = findGardenByIdAndUsername(gardenId, currentUsername);
         boolean exists = false;
         for(GardenPlant gardenPlant : garden.getGardenPlants()){
-            if (gardenPlant.getPlant().getCommonName().equals(plant.getCommon_name())) {
+            if (gardenPlant.getPlant().getCommonName() != null && gardenPlant.getPlant().getCommonName().equals(plant.getCommon_name())) {
                 exists = true;
                 break;
             }
@@ -203,7 +202,7 @@ public class GardenServiceImpl implements GardenService {
     public Plant getPlantById(long gardenId, long plantId, String username) {
         Garden garden = findGardenByIdAndUsername(gardenId, username);
         if(plantRepository.findById(plantId).isPresent()) {
-            Optional <GardenPlant> plantReference = gardenPlantRepository.findFirstByGardenIdAndPlantId(garden.getId(), plantId);
+            Optional <GardenPlant> plantReference = gardenPlantRepository.findFirstByGardenIdAndPlantIdAndDateAbsentIsNull(garden.getId(), plantId, null);
             if(plantReference.isPresent()) {
             GardenPlant gardenPlant = plantReference.get();
             return gardenPlant.getPlant();}
