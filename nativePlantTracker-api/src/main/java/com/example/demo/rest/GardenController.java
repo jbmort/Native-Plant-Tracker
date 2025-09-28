@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -100,10 +101,12 @@ public class GardenController {
     // 7. POST (add) a new plant to a garden
     @PostMapping("/{gardenID}/plants")
     public ResponseEntity<Plant> addPlantToGarden(@PathVariable long gardenID,
-                                                  @RequestBody PlantDto plant,
+                                                  @RequestBody long plantId,
+                                                  @RequestBody String date,
                                                   Authentication authentication) {
         String currentUsername = authentication.getName();
-        Plant newPlant = gardenService.addPlantToGarden(plant, gardenID, currentUsername);
+        LocalDate dateAdded = date.length() == 10 ? LocalDate.parse(date) : LocalDate.now();
+        Plant newPlant = gardenService.addPlantToGarden(plantId, gardenID, currentUsername, dateAdded);
         if (newPlant != null) {
             return ResponseEntity.ok(newPlant);
         }
@@ -111,25 +114,27 @@ public class GardenController {
     }
 
     // 8. PUT (update) a plant for a specific garden
-    @PutMapping("/{gardenID}/{plantID}")
-    public ResponseEntity<Plant> updatePlant(@PathVariable long gardenID,
-                                             @PathVariable long plantID,
-                                             @RequestBody PlantDto plantDTO,
-                                             Authentication authentication) {
-        String currentUsername = authentication.getName();
-        Plant plant = gardenService.getPlantById(gardenID, plantID, currentUsername);
-        Plant updatedPlant = plantService.updatePlant(plant.getId(), plantDTO);
-        return ResponseEntity.ok(updatedPlant);
-    }
+//    @PutMapping("/{gardenID}/{plantID}")
+//    public ResponseEntity<Plant> updatePlant(@PathVariable long gardenID,
+//                                             @PathVariable long plantID,
+//                                             @RequestBody PlantDto plantDTO,
+//                                             Authentication authentication) {
+//        String currentUsername = authentication.getName();
+//        Plant plant = gardenService.getPlantById(gardenID, plantID, currentUsername);
+//        Plant updatedPlant = plantService.updatePlant(plant.getId(), plantDTO);
+//        return ResponseEntity.ok(updatedPlant);
+//    }
 
     // 9. DELETE a plant from a garden
     @DeleteMapping("/{gardenID}/{plantID}")
     public ResponseEntity<Void> deletePlant(@PathVariable long gardenID,
                                              @PathVariable long plantID,
+                                             @RequestBody String date,
                                              Authentication authentication) {
         String currentUsername = authentication.getName();
         Plant plant = gardenService.getPlantById(gardenID, plantID, currentUsername);
-        gardenService.deletePlantFromGarden(gardenID, plant.getId());
+        LocalDate dateAbsent = date.length() == 10 ? LocalDate.parse(date) : LocalDate.now();
+        gardenService.deletePlantFromGarden(gardenID, plant.getId(), dateAbsent);
         return ResponseEntity.noContent().build();
     }
 

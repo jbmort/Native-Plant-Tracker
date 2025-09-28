@@ -36,6 +36,24 @@ public class GardenPlant {
     private LocalDate datePlanted;
 
     @Nullable
+    public LocalDate getDateAbsent() {
+        return dateAbsent;
+    }
+
+    public void setDateAbsent(@Nullable LocalDate dateAbsent) {
+        this.dateAbsent = dateAbsent;
+    }
+
+    @Nullable
+    public LocalDate getDatePlanted() {
+        return datePlanted;
+    }
+
+    public void setDatePlanted(@Nullable LocalDate datePlanted) {
+        this.datePlanted = datePlanted;
+    }
+
+    @Nullable
     @Column(name = "date_absent")
     private LocalDate dateAbsent;
 //

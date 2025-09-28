@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 // import java.time.LocalDate;
 // import java.time.Period;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -92,40 +93,74 @@ public class GardenServiceImpl implements GardenService {
     }
 
 
-    @Override
+//    @Transactional
+//    @Override
+//    public Plant addPlantToGarden(PlantDto plant, long gardenId, String currentUsername, LocalDate dateAdded) {
+//        Plant newPlant = new Plant();
+//        Garden garden = findGardenByIdAndUsername(gardenId, currentUsername);
+//        boolean exists = false;
+//        for(GardenPlant gardenPlant : garden.getGardenPlants()){
+//            if (gardenPlant.getPlant().getCommonName() != null && gardenPlant.getPlant().getCommonName().equals(plant.getCommon_name())) {
+//                exists = true;
+//                break;
+//            }
+//        }
+//        if (!exists) {
+//            if (garden.getUser().getUsername().equals(currentUsername)) {
+//                if (!plantRepository.existsPlantByCommonName(plant.getCommon_name())) {
+//
+//                    newPlant = new Plant();
+//
+//                    newPlant.setCommonName(plant.getCommon_name());
+//                    newPlant.setDescription(plant.getDescription());
+//                    newPlant.setSciName(plant.getSci_name());
+//
+//                    plantRepository.save(newPlant);
+//                } else {
+//                    newPlant = plantRepository.getPlantByCommonName(plant.getCommon_name());
+//                    if (newPlant == null) {
+//                        newPlant = plantRepository.getPlantBySciName(plant.getSci_name());
+//                    }
+//                }
+//
+//                if (gardenRepository.findById(gardenId).isPresent()) {
+//                    GardenPlant gardenPlant = new GardenPlant();
+//                    gardenPlant.setGarden(garden);
+//                    gardenPlant.setPlant(newPlant);
+//                    garden.getGardenPlants().add(gardenPlant);
+//                    gardenRepository.save(garden);
+//                }
+//            }
+//            return newPlant;
+//        }
+//        return null;
+//    }
+
     @Transactional
-    public Plant addPlantToGarden(PlantDto plant, long gardenId, String currentUsername) {
-        Plant newPlant = new Plant();
+    @Override
+    public Plant addPlantToGarden(Long plantId, long gardenId, String currentUsername, LocalDate dateAdded) {
         Garden garden = findGardenByIdAndUsername(gardenId, currentUsername);
-        boolean exists = false;
+        boolean existsInGarden = false;
         for(GardenPlant gardenPlant : garden.getGardenPlants()){
-            if (gardenPlant.getPlant().getCommonName() != null && gardenPlant.getPlant().getCommonName().equals(plant.getCommon_name())) {
-                exists = true;
+            if (gardenPlant.getPlant().getCommonName() != null && gardenPlant.getPlant().getId() == plantId) {
+                existsInGarden = true;
                 break;
             }
         }
-        if (!exists) {
+        Plant newPlant = new Plant();
+        if (!existsInGarden) {
             if (garden.getUser().getUsername().equals(currentUsername)) {
-                if (!plantRepository.existsPlantByCommonName(plant.getCommon_name())) {
-
-                    newPlant = new Plant();
-
-                    newPlant.setCommonName(plant.getCommon_name());
-                    newPlant.setDescription(plant.getDescription());
-                    newPlant.setSciName(plant.getSci_name());
-
-                    plantRepository.save(newPlant);
+                if (!plantRepository.existsById(plantId)) {
+                    newPlant = null;
                 } else {
-                    newPlant = plantRepository.getPlantByCommonName(plant.getCommon_name());
-                    if (newPlant == null) {
-                        newPlant = plantRepository.getPlantBySciName(plant.getSci_name());
-                    }
+                    newPlant = plantRepository.getPlantById(plantId);
                 }
 
                 if (gardenRepository.findById(gardenId).isPresent()) {
                     GardenPlant gardenPlant = new GardenPlant();
                     gardenPlant.setGarden(garden);
                     gardenPlant.setPlant(newPlant);
+                    gardenPlant.setDatePlanted(dateAdded);
                     garden.getGardenPlants().add(gardenPlant);
                     gardenRepository.save(garden);
                 }
@@ -155,14 +190,18 @@ public class GardenServiceImpl implements GardenService {
         return gardenRepository.save(garden);
     }
 
-    @Override
     @Transactional
-    public void deletePlantFromGarden(long gardenId, long plantId) {
+    @Override
+    public void deletePlantFromGarden(long gardenId, long plantId, LocalDate date) {
         if(gardenRepository.findById(gardenId).isPresent()){
             Garden garden = gardenRepository.findById(gardenId).get();
             if(plantRepository.findById(plantId).isPresent()){
                 List<GardenPlant> list = garden.getGardenPlants();
-                list.removeIf(gardenPlant -> gardenPlant.getPlant().getId() == plantId);
+                garden.getGardenPlants().forEach(gardenPlant -> {
+                    if(gardenPlant.getPlant().getId() == plantId && gardenPlant.getGarden().getId() == gardenId){
+                        gardenPlant.setDateAbsent(date);
+                    }
+                });
                 garden.setGardenPlants(list);
                 gardenRepository.save(garden);
             }
