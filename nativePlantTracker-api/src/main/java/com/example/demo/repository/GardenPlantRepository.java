@@ -24,5 +24,5 @@ public interface GardenPlantRepository extends JpaRepository<GardenPlant, Long> 
             "WHERE gp.plant.id = :plantId AND gp.garden.user.id = :userId")
     Long countOccurrencesByPlantIdAndUserId(@Param("plantId") Long plantId, @Param("userId") Long userId);
 
-    List<GardenPlant> getGardenPlantByGarden_IdAndDateAbsentIsNull(long gardenId, LocalDate dateAbsent);
+//    List<GardenPlant> getGardenPlantByGarden_IdAndDateAbsentIsNull(long gardenId, LocalDate dateAbsent);
 }
