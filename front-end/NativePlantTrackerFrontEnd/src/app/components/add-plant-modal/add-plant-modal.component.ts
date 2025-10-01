@@ -57,12 +57,18 @@ export class AddPlantModalComponent implements OnInit {
       // EDIT MODE: Populate form with existing plant data
       this.plantForm = this.fb.group({
         plantID: [this.plant.id], 
-        name: [this.plant.common_name, [Validators.required]],
-        sciName: [this.plant.sci_name],
+        name: [this.plant.commonName],
+        sciName: [this.plant.sciName],
+        imageUrl: [this.plant.imageUrl],
+        plantType: [this.plant.plantType],
+        averageHeight: [this.plant.averageHeight],
         description: [this.plant.description],
-        flowerColor: [this.plant.flowerColor],
-        plantType: [this.plant.type],
-        newType: ['']
+        edible: [this.plant.edible],
+        edibleParts: [this.plant.edibleParts],
+        lightRequirement: [this.plant.lightRequirement],
+        soil_moisture: [this.plant.soil_moisture],
+        nativeZones: [this.plant.nativeZones],
+        
       });
     } else {
       // ADD MODE: Create an empty form
@@ -73,7 +79,7 @@ export class AddPlantModalComponent implements OnInit {
         description: [''],
         flowerColor: [null],
         plantType: [null],
-        newType: ['']
+        
       });
     }
     if(this.plant != null){

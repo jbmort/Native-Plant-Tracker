@@ -21,7 +21,7 @@ public class GardenController {
     final ApplicationContext context;
     final GardenService gardenService;
     final PlantService plantService;
-    private final UserService userService;
+    final UserService userService;
 
     @Autowired
     public GardenController(ApplicationContext context,
