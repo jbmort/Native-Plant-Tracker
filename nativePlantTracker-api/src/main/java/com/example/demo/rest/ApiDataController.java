@@ -30,7 +30,7 @@ public class ApiDataController{
     @GetMapping("/{searchName}")
     public ResponseEntity<List<ApiResultsDto>> searchPlantsApiByName(
             @PathVariable String searchName,
-            Authentication authentication
+            @RequestBody Authentication authentication
     ) {
 
         // Verify authentication

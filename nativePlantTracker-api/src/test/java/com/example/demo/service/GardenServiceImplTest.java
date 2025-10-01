@@ -3,6 +3,7 @@ package com.example.demo.service;
 
 import com.example.demo.entities.GardenPlant;
 import com.example.demo.repository.GardenRepository;
+import com.example.demo.services.GardenService;
 import com.example.demo.services.GardenServiceImpl;
 import com.example.demo.dto.GardenDto;
 import com.example.demo.entities.Garden;
@@ -37,7 +38,7 @@ class GardenServiceImplTest {
 
 
     @InjectMocks
-    private GardenServiceImpl gardenService;
+    private GardenService gardenService;
 
     // Test Data
     private User testUser;
