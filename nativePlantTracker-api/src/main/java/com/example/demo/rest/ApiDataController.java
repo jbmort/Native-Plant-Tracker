@@ -29,15 +29,8 @@ public class ApiDataController{
 
     @GetMapping("/{searchName}")
     public ResponseEntity<List<ApiResultsDto>> searchPlantsApiByName(
-            @PathVariable String searchName,
-            @RequestBody Authentication authentication
+            @PathVariable String searchName
     ) {
-
-        // Verify authentication
-        String currentUsername = authentication.getName();
-        if(currentUsername == null){
-            return ResponseEntity.badRequest().build();
-        }
 
         // Check database for search term
         List<Plant> plantList = plantService.getPlantsByName(searchName);
@@ -75,7 +68,7 @@ public class ApiDataController{
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/plant/{id}")
     public ResponseEntity<Plant> searchPlantById(@PathVariable String id, Authentication authentication) {
         // Verify Authentication
         String currentUsername = authentication.getName();

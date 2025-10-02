@@ -21,39 +21,41 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ApiDataController.class)
 @Import(SecurityConfig.class)
+@WithMockUser("admin")
 public class ApiDataControllerTest {
 
-    @Autowired
+
     private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-
-
     @MockitoBean
     private PlantService plantService;
-
-    @MockitoBean
-    private ApiDataController apiDataController;
-
-    @MockitoBean
-    private Authentication authentication;
 
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
@@ -68,20 +70,14 @@ public class ApiDataControllerTest {
     private ApiService apiService;
 
 
+    List<ApiResultsDto> expectedContent = new ArrayList<>();
+
+    List<Plant> databaseContent = new ArrayList<>();
+
     @BeforeEach
     public void setup() {
-//        ApiResultsDto apiResultsDto = new ApiResultsDto();
-//        apiResultsDto.setCommonName("Common Milkweed");
-//        apiResultsDto.setScientificName("Asclepias syriaca");
-//        apiResultsDto.setImageUrl("www.example.com");
-//        apiResultsDto.setExternalId(100L);
-    }
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
-    @Test
-    void shouldReturnPlantSearchData() throws Exception {
-//        when(apiDataController.searchPlantsApiByName("milkweed", authentication))
-//                .thenReturn();
-        List<ApiResultsDto> expectedContent = new ArrayList<>();
         ApiResultsDto apiResultsDto = new ApiResultsDto();
         apiResultsDto.setCommonName("Common Milkweed");
         apiResultsDto.setScientificName("Asclepias syriaca");
@@ -89,13 +85,47 @@ public class ApiDataControllerTest {
         apiResultsDto.setExternalId(100L);
         expectedContent.add(apiResultsDto);
 
+        Plant apiResultsDto2 = new Plant();
+        apiResultsDto2.setCommonName("Ironweed");
+        apiResultsDto2.setId(200L);
+        Plant apiResultsDto3 = new Plant();
+        apiResultsDto3.setCommonName("Goldenrod");
+        apiResultsDto3.setId(300L);
+        Plant apiResultsDto4 = new Plant();
+        apiResultsDto4.setCommonName("Sky Blue Aster");
+        apiResultsDto4.setId(400L);
 
-        when(authentication.getName()).thenReturn("admin");
-        when(plantService.getPlantsByName("milkweed")).thenReturn(Collections.emptyList());
-        when(apiService.searchPlantsApi("milkweed")).thenReturn(expectedContent);
+        databaseContent.add(apiResultsDto2);
+        databaseContent.add(apiResultsDto3);
+        databaseContent.add(apiResultsDto4);
+
+    }
+
+    @Test
+    void shouldReturnPlantSearchData_whenDbIsEmpty() throws Exception {
+        String searchTerm = "milkweed";
+
+        when(plantService.getPlantsByName(searchTerm)).thenReturn(Collections.emptyList());
+        when(apiService.searchPlantsApi(searchTerm)).thenReturn(expectedContent);
 
 
-        this.mockMvc.perform(get("/api/search/milkweed", authentication).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+        this.mockMvc.perform(get("/api/search/{searchName}", searchTerm).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(objectMapper.writeValueAsString(expectedContent)))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].commonName", hasToString("Common Milkweed")))
+        ;
+    }
+
+    @Test
+    void shouldReturnPlantSearchData_whenDbIsNotEmpty() throws Exception {
+        String searchTerm = "e";
+        when(plantService.getPlantsByName(searchTerm)).thenReturn(databaseContent);
+        when(apiService.searchPlantsApi(searchTerm)).thenReturn(expectedContent);
+
+        this.mockMvc.perform(get("/api/search/{searchName}", searchTerm).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(4)));
+
     }
 }
