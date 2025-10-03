@@ -74,6 +74,8 @@ public class ApiDataControllerTest {
 
     List<Plant> databaseContent = new ArrayList<>();
 
+    Plant plant1 = new Plant();
+
     @BeforeEach
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
@@ -85,9 +87,9 @@ public class ApiDataControllerTest {
         apiResultsDto.setExternalId(100L);
         expectedContent.add(apiResultsDto);
 
-        Plant apiResultsDto2 = new Plant();
-        apiResultsDto2.setCommonName("Ironweed");
-        apiResultsDto2.setId(200L);
+        plant1.setCommonName("Ironweed");
+        plant1.setId(200L);
+        plant1.setSciName("Scientific name");
         Plant apiResultsDto3 = new Plant();
         apiResultsDto3.setCommonName("Goldenrod");
         apiResultsDto3.setId(300L);
@@ -95,7 +97,7 @@ public class ApiDataControllerTest {
         apiResultsDto4.setCommonName("Sky Blue Aster");
         apiResultsDto4.setId(400L);
 
-        databaseContent.add(apiResultsDto2);
+        databaseContent.add(plant1);
         databaseContent.add(apiResultsDto3);
         databaseContent.add(apiResultsDto4);
 
@@ -127,5 +129,19 @@ public class ApiDataControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(4)));
 
+    }
+
+    @Test
+    void shouldReturnPlantData_whenSearchingPlantById() throws Exception {
+        long searchId = 200L;
+
+        when(plantService.getPlant(searchId)).thenReturn(null);
+        when(apiService.getPlant(searchId)).thenReturn(plant1);
+        when(plantService.addPlant(plant1)).thenReturn(plant1);
+
+        this.mockMvc.perform(get("/api/search/plant/{searchId}", searchId).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.commonName", hasToString("Ironweed")));
     }
 }

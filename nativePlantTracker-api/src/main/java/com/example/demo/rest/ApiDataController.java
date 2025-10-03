@@ -69,12 +69,12 @@ public class ApiDataController{
     }
 
     @GetMapping("/plant/{id}")
-    public ResponseEntity<Plant> searchPlantById(@PathVariable String id, Authentication authentication) {
+    public ResponseEntity<Plant> searchPlantById(@PathVariable String id) {
         // Verify Authentication
-        String currentUsername = authentication.getName();
-        if(currentUsername == null){
-            return ResponseEntity.badRequest().build();
-        }
+//        String currentUsername = authentication.getName();
+//        if(currentUsername == null){
+//            return ResponseEntity.badRequest().build();
+//        }
 
         // Check database for plant by id
         Plant databasePlant = plantService.getPlant(Long.parseLong(id));
