@@ -8,15 +8,15 @@ for the back-end and RDS for the postgreSQL database.
 
 The Native Plant Tracker is meant to be a tool for those who manage native gardens or butterfly gardens. It is a way
 to track what has been planted, when it was planted, track changes in species composition from year to year, and compare 
-gardens. 
-> I am currently working on expanding this project to utilize the Permapeople API to integrate their plant data
- for more accurate plant information and deeper insight into users gardens to provide more useful feedback and value to 
-users.
+gardens. The application now also pulls data from the Permapeople API to integrate their plant data to provide a rich user
+experience. This data will provide greater insight into the user's garden and improve the value provided beyond just tracking
+plants
 
->As of September 26th, 2025 the application is still live on AWS and can be visited at http://jm-capstone-front-end-2025.s3-website-us-east-1.amazonaws.com/
+> I am currently working to expand garden data options to provide the user with feedback on what plants work well
+for their garden and for future plant suggestions based on garden conditions.
+
+>As of September 26th, 2025 the original version of the application is still live on AWS and can be visited at http://jm-capstone-front-end-2025.s3-website-us-east-1.amazonaws.com/
 
 ## Upcoming Features
-+ Add Api integration for full spectrum plant data (currently working on)
-+ Implement search functionality on the front end when a user wants to add a plant to their garden
-+ Add optional conditions for gardens such as location, amount of sunlight and soil moisture.
++ Add optional conditions for gardens such as location, amount of sunlight and soil moisture. (Currently working on)
 + Add AI-powered plant recommendations for users gardens based on conditions and plants that already exist in that garden
