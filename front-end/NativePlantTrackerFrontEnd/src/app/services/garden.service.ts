@@ -59,9 +59,9 @@ export class GardenService {
   }
 
   // 7. POST (add) a new plant to a garden
-  addPlantToGarden(id: number, plantData: PlantDto): Observable<Plant> {
-    const url = `${this.apiUrl}/${id}/plants`;
-    return this.http.post<Plant>(url, plantData)
+  addPlantToGarden(plantId: Number, gardenId: Number, date: String): Observable<String> {
+    const url = `${this.apiUrl}/${gardenId}/plants/${plantId}`;
+    return this.http.post<String>(url, date)
   }
 
     // 8. PUT (update) a plant for a specific garden

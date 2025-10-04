@@ -4,45 +4,70 @@
   <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
 </div>
 
-<!-- Modal Body -->
-<div class="modal-body">
-  <form [formGroup]="plantForm" (ngSubmit)="onSubmit()">
+<!-- Search for Plant -->
+<div *ngIf="selectPlant == null">
+    <!-- Modal Body -->
+    <div class="modal-body">
+    <form [formGroup]="plantForm">
+
+        
+        
+        <div class="mb-3">
+        <label for="commonName" class="form-label">Look up your new plant by name</label>
+        <input type="text" id="name" class="form-control" formControlName="name" placeholder="e.g., Common Milkweed">
+        <div *ngIf="plantForm.get('name')?.invalid && plantForm.get('name')?.touched" class="text-danger">
+            Plant name is required.
+        </div>
+        <button type="button" id="plantSearchButton" (click)="searchForPlant()" [disabled]="plantForm.invalid">Search</button>
+        </div>
     
-    <div class="mb-3">
-      <label for="commonName" class="form-label">Look up your new plant by name</label>
-      <input type="text" id="name" class="form-control" formControlName="name" placeholder="e.g., Common Milkweed">
-      <div *ngIf="plantForm.get('name')?.invalid && plantForm.get('name')?.touched" class="text-danger">
-        Plant name is required.
-      </div>
-      <button type="button" id="plantSearchButton" (click)="searchForPlant()">Search</button>
+        <!-- May add date to a separate modal -->
+        <!-- <div class="row">
+        
+        <div class="col-md-6 mb-3">
+            <label for="date-planted" class="form-label">Date Planted</label>
+            <input type="date" id="date-planted" class="form-control" formControlName="datePlanted">
+        </div>
+
+        </div> -->
+
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+        {{ errorMessage }}
+        </div>
+
+    </form>
+        
+    <div *ngIf="plantData">
+            <h5>Search Results:</h5>
+            <ul class="scrollable-list search-results">
+            <li *ngFor="let plant of plantData">
+                {{ plant.commonName }} ({{ plant.sciName }})
+                <button type="button" (click)="selectPlant(plant)">Select</button>
+                <br/>
+                <hr/>
+            </li>
+            </ul>
+        </div>
+
     </div>
-   
-    <!-- May add date to a separate modal -->
-    <!-- <div class="row">
-    
-      <div class="col-md-6 mb-3">
-        <label for="date-planted" class="form-label">Date Planted</label>
-        <input type="date" id="date-planted" class="form-control" formControlName="datePlanted">
-      </div>
-
-    </div> -->
-
-    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
-      {{ errorMessage }}
-    </div>
-
-  </form>
-    
-  <div *ngIf="plantData">
-        <h5>Search Results:</h5>
-        <ul class="scrollable-list search-results">
-        <li *ngFor="let plant of plantData">
-            {{ plant.commonName }} ({{ plant.sciName }})
-            <button type="button" (click)="selectPlant(plant)">Select</button>
-        </li>
-        </ul>
-    </div>
-
+</div>
+<!-- Selected Plant Details -->
+<div *ngIf="selectedPlant">
+    <div class="modal-body">
+    <button type="button" class="btn btn-secondary mb-3" (click)="backToSearch()">Back to Search</button>
+    <h5>You have selected:</h5>
+    <p><strong>Common Name:</strong> {{ selectedPlant.commonName }}</p>
+    <p><strong>Scientific Name:</strong> {{ selectedPlant.sciName }}</p>
+    <hr/>
+    <p>When was this plant added to your garden?</p>
+    <form [formGroup]="dateForm" (ngSubmit)="onSubmit()">
+        <label for="todayCheckbox" class="form-label"><input type="checkbox" id="todayCheckbox" class="form-control">Today</label>
+        <div *ngIf="dateForm.get('todayCheckbox')?.value == false" class="mb-3">
+            <label for="date-planted" class="form-label">Date Planted</label>
+            <input type="date" id="date-planted" class="form-control" formControlName="datePlanted">
+        </div>
+        <button type="submit" class="btn update-button button-font" [disabled]="dateForm.invalid">Add Plant</button>
+    </form>
 </div>
 
 <!-- Modal Footer -->
@@ -50,4 +75,5 @@
   <button type="button" class="btn cancel-button button-font" (click)="activeModal.dismiss()">Cancel</button>
   <!-- <button type="submit" class="btn update-button button-font" (click)="onSubmit()" [disabled]="plantForm.invalid">{{(plant == null) ? "Add Plant" : "Update Plant"}}</button> -->
 
+</div>
 </div>

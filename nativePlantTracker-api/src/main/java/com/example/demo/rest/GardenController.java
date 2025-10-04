@@ -94,14 +94,14 @@ public class GardenController {
     public ResponseEntity<List<PlantDto>> getGardenPlants(@PathVariable long gardenId,
                                                        Authentication authentication) {
         String currentUsername = authentication.getName();
-        List<PlantDto> plants = gardenService.getAllPlantsForGarden(gardenId, currentUsername);
+        List<PlantDto> plants = gardenService.getAllPresentPlantsForGarden(gardenId, currentUsername);
         return ResponseEntity.ok(plants);
     }
 
     // 7. POST (add) a new plant to a garden
-    @PostMapping("/{gardenID}/plants")
+    @PostMapping("/{gardenID}/plants/{plantId}")
     public ResponseEntity<Plant> addPlantToGarden(@PathVariable long gardenID,
-                                                  @RequestBody long plantId,
+                                                  @PathVariable long plantId,
                                                   @RequestBody String date,
                                                   Authentication authentication) {
         String currentUsername = authentication.getName();

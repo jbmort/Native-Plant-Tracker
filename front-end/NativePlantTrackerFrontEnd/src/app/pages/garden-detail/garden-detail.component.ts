@@ -8,6 +8,7 @@ import { Garden } from '../../models/garden';
 import { NgFor, NgIf } from '@angular/common';
 import { AddGardenModalComponent } from '../../components/add-garden-modal/add-garden-modal.component';
 import { PlantDto } from '../../models/plant-dto';
+import { AddPlantApiModalComponent } from '../../components/add-plant-api-modal/add-plant-api-modal.component';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class GardenDetailComponent implements OnInit{
   errorMessage: String | null = null;
   editMode: boolean = false;
   gardenAge: String = '';
+  presentId: Set<Number> = new Set();
 
 
   ngOnInit(): void {
@@ -105,6 +107,9 @@ export class GardenDetailComponent implements OnInit{
     this.gardenService.getGardenPlants(gardenID).subscribe({
       next: (plants) => {
         this.plantList = plants;
+        for(let plant of this.plantList){
+          this.presentId.add(plant.id);
+        }
         this.errorMessage = null;
       },
       error: (err) => {
@@ -113,10 +118,10 @@ export class GardenDetailComponent implements OnInit{
     })
   }
 
-  openAddPlantModal(gardenID: number, plant: PlantDto | null): void {
-      const modalRef = this.modalService.open(AddPlantModalComponent);
+  openAddPlantModal(gardenID: number): void {
+      const modalRef = this.modalService.open(AddPlantApiModalComponent);
       modalRef.componentInstance.gardenId = gardenID;
-      modalRef.componentInstance.plant = plant;
+      modalRef.componentInstance.Ids = this.presentId;
   
       modalRef.componentInstance.plantAdded.subscribe(() => {
         this.loadGardenData(this.gardenId);

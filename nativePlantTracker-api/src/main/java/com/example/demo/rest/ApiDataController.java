@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -69,22 +70,21 @@ public class ApiDataController{
     }
 
     @GetMapping("/plant/{id}")
-    public ResponseEntity<Plant> searchPlantById(@PathVariable String id) {
-        // Verify Authentication
-//        String currentUsername = authentication.getName();
-//        if(currentUsername == null){
-//            return ResponseEntity.badRequest().build();
-//        }
+    public ResponseEntity<String> searchPlantById(
+            @PathVariable String id) {
 
         // Check database for plant by id
         Plant databasePlant = plantService.getPlant(Long.parseLong(id));
         if(databasePlant == null) {
             // Pull full plant data from api and save plant to database for future reference
             Plant apiPlant = apiService.getPlant(Long.parseLong(id));
-            plantService.addPlant(apiPlant);
-            return ResponseEntity.ok(apiPlant);
+            if(apiPlant == null) {
+                plantService.addPlant(apiPlant);
+                return ResponseEntity.ok("Plant added to database");
+            }
+            else{ return ResponseEntity.internalServerError().build();}
         }
-        return ResponseEntity.ok(databasePlant);
+        return ResponseEntity.ok("Plant already exists in database");
     }
 
 

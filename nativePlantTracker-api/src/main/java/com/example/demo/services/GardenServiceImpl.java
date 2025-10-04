@@ -41,25 +41,43 @@ public class GardenServiceImpl implements GardenService {
         return gardenRepository.findAll();
     }
 
-    @Override
     @Transactional
-    public List<PlantDto> getAllPlantsForGarden(long gardenId, String currentUsername) {
+    @Override
+    public List<PlantDto> getAllPresentPlantsForGarden(long gardenId, String currentUsername) {
         Garden garden = findGardenByIdAndUsername(gardenId, currentUsername);
         List<PlantDto> plantList = new ArrayList<>();
         List<GardenPlant> list = gardenPlantRepository.findByGardenId(garden.getId());
         for (GardenPlant gardenPlant : list) {
-            PlantDto plant = new PlantDto();
+            if(gardenPlant.getDateAbsent() == null){
+                PlantDto plant = new PlantDto();
+                plant.setId(gardenPlant.getPlant().getId());
+                plant.setDescription(gardenPlant.getPlant().getDescription());
+                plant.setSci_name(gardenPlant.getPlant().getSciName());
+                plant.setCommon_name(gardenPlant.getPlant().getCommonName());
 
-            plant.setId(gardenPlant.getPlant().getId());
-            plant.setDescription(gardenPlant.getPlant().getDescription());
-            plant.setSci_name(gardenPlant.getPlant().getSciName());
-            plant.setCommon_name(gardenPlant.getPlant().getCommonName());
-
-            plantList.add(plant);
+                plantList.add(plant);
+            }
         }
-
         return plantList;
     }
+
+//    @Transactional
+//    @Override
+//    public List<PlantDto> getAllPlantsForGarden(long gardenId, String currentUsername){
+//        Garden garden = findGardenByIdAndUsername(gardenId, currentUsername);
+//        List<PlantDto> plantList = new ArrayList<>();
+//        List<GardenPlant> list = gardenPlantRepository.findByGardenId(garden.getId());
+//        for (GardenPlant gardenPlant : list) {
+//                PlantDto plant = new PlantDto();
+//                plant.setId(gardenPlant.getPlant().getId());
+//                plant.setDescription(gardenPlant.getPlant().getDescription());
+//                plant.setSci_name(gardenPlant.getPlant().getSciName());
+//                plant.setCommon_name(gardenPlant.getPlant().getCommonName());
+//
+//                plantList.add(plant);
+//        }
+//        return plantList;
+//    }
 
     @Override
     public List<Plant> allPlantsForUser(String username){

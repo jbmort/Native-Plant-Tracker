@@ -13,11 +13,12 @@ import java.util.List;
 
 public interface GardenService {
 
+
     List<Plant> allPlantsForUser(String username);
 
     Garden getGarden(long id);
     List<Garden> getGardens();
-    List<PlantDto> getAllPlantsForGarden(long gardenId, String currentUsername);
+    List<PlantDto> getAllPresentPlantsForGarden(long gardenId, String currentUsername);
     void addGarden(GardenDto garden);
 //    Plant addPlantToGarden(PlantDto plant, long gardenId, String currentUsername, LocalDate dateAdded);
 
