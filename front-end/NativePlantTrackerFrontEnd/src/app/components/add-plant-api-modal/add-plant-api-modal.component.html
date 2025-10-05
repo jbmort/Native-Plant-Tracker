@@ -42,6 +42,7 @@
             <ul class="scrollable-list search-results">
             <li *ngFor="let plant of plantData">
                 {{ plant.commonName }} ({{ plant.sciName }})
+                <img src={{ plant.imageUrl }} alt="Image of {{ plant.commonName }}" width="100" height="100"/>
                 <button type="button" (click)="selectPlant(plant)">Select</button>
                 <br/>
                 <hr/>
