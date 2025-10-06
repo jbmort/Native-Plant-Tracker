@@ -39,6 +39,7 @@
         
     <div *ngIf="plantData">
             <h5>Search Results:</h5>
+            <p *ngIf="plantData.length === 0">No plants found. Please try a different name.</p>
             <ul class="scrollable-list search-results">
             <li *ngFor="let plant of plantData">
                 {{ plant.commonName }} ({{ plant.sciName }})
