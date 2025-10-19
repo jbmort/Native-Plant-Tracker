@@ -11,8 +11,10 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,11 +62,29 @@ public class ApiServiceImpl  implements ApiService {
 
             // Collect API Response
             ApiResponseDto response = responseEntity.getBody();
+            JaroWinklerSimilarity sim = new JaroWinklerSimilarity();
+            String normalizedSearch = name.toLowerCase().trim();
 
             if (response != null && response.getPlants() != null) {
                 return response.getPlants().stream()
                         .filter(plant -> plant.scientificName() != null && !plant.scientificName().isEmpty())
                         .map(this::toApiResultsDto) // Translate response into simple version to list on front end
+                        .sorted(Comparator.comparingDouble(
+                                (ApiResultsDto dto) -> {
+                                    double commonNameScore = 0.0;
+                                    if (dto.getCommonName() != null) {
+                                        commonNameScore = sim.apply(normalizedSearch, dto.getCommonName().toLowerCase());
+                                    }
+
+                                    // Calculate similarity for the scientific name
+                                    double scientificNameScore = 0.0;
+                                    if (dto.getScientificName() != null) {
+                                        scientificNameScore = sim.apply(normalizedSearch, dto.getScientificName().toLowerCase());
+                                    }
+
+                                    // Use the HIGHER of the two scores as the final relevance score for this item
+                                    return Math.max(commonNameScore, scientificNameScore);
+                                }).reversed())
                         .collect(Collectors.toList());
             }
         }

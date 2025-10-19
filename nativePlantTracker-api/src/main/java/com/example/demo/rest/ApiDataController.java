@@ -38,7 +38,14 @@ public class ApiDataController{
         // Totally new plant with no similarity in database
         if(plantList.isEmpty()) {
             System.out.println("plantList is empty");
-            List<ApiResultsDto> response = apiService.searchPlantsApi(searchName);
+            List<ApiResultsDto> response = new ArrayList<>();
+            List<ApiResultsDto> searchResults = apiService.searchPlantsApi(searchName);
+            if(searchResults.size() <= 10) {
+                response =  searchResults;
+            }
+            else {
+                response = searchResults.subList(0, 10);
+            }
             return ResponseEntity.ok(response);
         }
 
