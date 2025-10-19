@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AddPlantModalComponent } from '../../components/add-plant-modal/add-plant-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Plant } from '../../models/plant';
 import { GardenService } from '../../services/garden.service';

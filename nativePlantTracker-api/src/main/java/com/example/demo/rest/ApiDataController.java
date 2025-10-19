@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,16 +27,17 @@ public class ApiDataController{
         this.plantService = plantService;
     }
 
-    @GetMapping("/{searchName}")
+    @GetMapping
     public ResponseEntity<List<ApiResultsDto>> searchPlantsApiByName(
-            @PathVariable String searchName
+            @RequestParam("q") String searchName
     ) {
-
+        System.out.println("call for plant search received");
         // Check database for search term
-        List<Plant> plantList = plantService.getPlantsByName(searchName);
+        List<Plant> plantList = plantService.findPlantsByName(searchName);
 
         // Totally new plant with no similarity in database
         if(plantList.isEmpty()) {
+            System.out.println("plantList is empty");
             List<ApiResultsDto> response = apiService.searchPlantsApi(searchName);
             return ResponseEntity.ok(response);
         }
@@ -69,7 +69,7 @@ public class ApiDataController{
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/plant/{id}")
+    @PostMapping("/plant/{id}")
     public ResponseEntity<String> searchPlantById(
             @PathVariable String id) {
 

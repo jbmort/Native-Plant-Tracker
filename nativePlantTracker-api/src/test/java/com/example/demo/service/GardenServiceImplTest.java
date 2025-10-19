@@ -4,7 +4,6 @@ package com.example.demo.service;
 import com.example.demo.entities.GardenPlant;
 import com.example.demo.repository.GardenRepository;
 import com.example.demo.services.GardenService;
-import com.example.demo.services.GardenServiceImpl;
 import com.example.demo.dto.GardenDto;
 import com.example.demo.entities.Garden;
 import com.example.demo.entities.User;

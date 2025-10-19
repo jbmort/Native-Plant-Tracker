@@ -30,6 +30,20 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
+    public List<Plant> findPlantsByName(String name){
+        List<Plant> results = new ArrayList<>();
+        results = plantRepository.searchPlantsByCommonNameContainingIgnoreCase(name);
+        if(results.isEmpty() || results.size() < 10){
+            results.addAll(plantRepository.searchPlantsBySciNameContainingIgnoreCase(name));
+        }
+        if(results.size() <= 10){
+            return results;
+        };
+        return results.subList(0,10);
+
+    }
+
+    @Override
     public List<Plant> getAllPlants() {
         return plantRepository.findAll();
     }

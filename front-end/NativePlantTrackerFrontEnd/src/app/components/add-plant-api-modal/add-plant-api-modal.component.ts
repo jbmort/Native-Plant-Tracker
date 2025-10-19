@@ -21,6 +21,7 @@ export class AddPlantApiModalComponent implements OnInit {
   dateForm!: FormGroup;
   errorMessage: string | null = null;
   plantData: Array<PlantSearchDto> = [];
+  searchPerformed: boolean = false;
 
 // This will be passed in from the GardenDetailComponent
   @Input() gardenId: Number = 0;
@@ -107,9 +108,11 @@ searchForPlant() {
     this.errorMessage = null;
   }
   this.isLoadingPlants = true;
+  this.searchPerformed = true;
 
   this.apiService.searchPlantsByName(plantName.trim()).subscribe({
     next: (data: PlantSearchDto[]) => {
+      console.log('Plant search results:', data);
       this.plantData = data;
       this.isLoadingPlants = false;
     },
