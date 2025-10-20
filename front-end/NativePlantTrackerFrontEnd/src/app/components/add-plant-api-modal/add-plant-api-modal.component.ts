@@ -30,7 +30,7 @@ export class AddPlantApiModalComponent implements OnInit {
   // To notify the parent component that a plant was added
   @Output() plantAdded = new EventEmitter<void>();
 
-  isLoadingPlants = true; // For a loading indicator while waiting for API response
+  isLoadingPlants = false; 
   selectedPlant: PlantSearchDto | null = null;
 
   constructor(
@@ -47,10 +47,12 @@ export class AddPlantApiModalComponent implements OnInit {
 
     this.dateForm = this.fb.group({
       todayCheckbox: [false],
-      plantedDate: [''],
+      datePlanted: [''],
     });
   }
-
+isChecked(): boolean {
+  return this.dateForm.get('todayCheckbox')?.value;
+}
 
 onSubmit() {
   let today: String;
@@ -67,12 +69,12 @@ onSubmit() {
 
   if(this.selectedPlant) {
     const plantToAdd = {
-      plantId: this.selectedPlant.id,
+      plantId: this.selectedPlant.externalId,
       datePlanted: this.dateForm.get('todayCheckbox')?.value ? today : this.dateForm.get('plantedDate')?.value
     };
     
     // Call the service to add the plant to the garden
-    this.apiService.getPlantById(this.selectedPlant.id).subscribe({
+    this.apiService.getPlantById(plantToAdd.plantId).subscribe({
       next: () => {
         if(!(this.gardenId === 0)) {
         this.gardenService.addPlantToGarden(plantToAdd.plantId, this.gardenId, plantToAdd.datePlanted).subscribe({
@@ -108,33 +110,33 @@ searchForPlant() {
     this.errorMessage = null;
   }
   this.isLoadingPlants = true;
-  this.searchPerformed = true;
 
   this.apiService.searchPlantsByName(plantName.trim()).subscribe({
     next: (data: PlantSearchDto[]) => {
       console.log('Plant search results:', data);
       this.plantData = data;
       this.isLoadingPlants = false;
+      this.searchPerformed = true;
+
     },
     error: (error) => {
       console.error('Error fetching plant data:', error);
       this.errorMessage = 'An error occurred while searching for plants. Please try again later.';
       this.isLoadingPlants = false;
+      this.searchPerformed = true;
     }
-  });
+});
 
 
 }
 
 selectPlant(plant: PlantSearchDto) {
-  if(this.Ids.has(plant.id)) {
+  if(this.Ids.has(plant.externalId)) {
     alert('This plant is already in your garden.');
     return;
   }
   this.errorMessage = null;
   this.selectedPlant = plant;
-
-
 }
 
 backToSearch() {

@@ -12,7 +12,7 @@ import { PlantDto } from '../models/plant-dto';
 export class ApiService {
   private envUrl = environment.apiUrl
   private searchUrl = `${this.envUrl}/search`;
-  private plantUrl = `${this.envUrl}/plants`;
+  private plantUrl = `${this.envUrl}/search/plant`;
 
   constructor(private http: HttpClient) { }
 

@@ -36,7 +36,13 @@
         </div>
 
     </form>
-        
+
+    <!-- Loading indicator -->
+    <div *ngIf="isLoadingPlants" class="mt-3">
+        <p>Loading plant data...</p>
+    </div>
+
+    <!-- Search Results -->
     <div *ngIf="searchPerformed">
             <h5>Search Results:</h5>
             <p *ngIf="plantData.length === 0">No plants found. Please try a different name.</p>
@@ -53,22 +59,26 @@
 
     </div>
 </div>
+
 <!-- Selected Plant Details -->
 <div *ngIf="selectedPlant">
     <div class="modal-body">
     <button type="button" class="btn btn-secondary mb-3" (click)="backToSearch()">Back to Search</button>
     <h5>You have selected:</h5>
     <p><strong>Common Name:</strong> {{ selectedPlant.commonName }}</p>
-    <p><strong>Scientific Name:</strong> {{ selectedPlant.scientificName }}</p>
+    <p><strong>Scientific Name:</strong> {{ selectedPlant.scientificName }}{{ selectedPlant.externalId}}</p>
+    <div *ngIf="selectedPlant.imageUrl">
+        <img src="{{ selectedPlant.imageUrl }}" alt="Image of {{ selectedPlant.commonName }}" width="150" height="150"/>
+    </div>
     <hr/>
     <p>When was this plant added to your garden?</p>
     <form [formGroup]="dateForm" (ngSubmit)="onSubmit()">
-        <label for="todayCheckbox" class="form-label"><input type="checkbox" id="todayCheckbox" class="form-control">Today</label>
-        <div *ngIf="dateForm.get('todayCheckbox')?.value == false" class="mb-3">
+        <label for="todayCheckbox" class="form-label"><input formControlName="todayCheckbox" type="checkbox" id="todayCheckbox" class="form-check-input" >Today</label>
+        <div *ngIf="isChecked() == false" class="mb-3">
             <label for="date-planted" class="form-label">Date Planted</label>
             <input type="date" id="date-planted" class="form-control" formControlName="datePlanted">
         </div>
-        <button type="submit" class="btn update-button button-font" [disabled]="dateForm.invalid">Add Plant</button>
+        <button type="submit" class="btn update-button button-font">Add Plant</button>
     </form>
 </div>
 

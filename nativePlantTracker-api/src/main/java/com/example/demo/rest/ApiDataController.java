@@ -76,7 +76,7 @@ public class ApiDataController{
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/plant/{id}")
+    @GetMapping("/plant/{id}")
     public ResponseEntity<String> searchPlantById(
             @PathVariable String id) {
 
