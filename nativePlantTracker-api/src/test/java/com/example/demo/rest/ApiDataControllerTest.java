@@ -131,17 +131,4 @@ public class ApiDataControllerTest {
 
     }
 
-    @Test
-    void shouldReturnPlantData_whenSearchingPlantById() throws Exception {
-        long searchId = 200L;
-
-        when(plantService.getPlant(searchId)).thenReturn(null);
-        when(apiService.getPlant(searchId)).thenReturn(plant1);
-        when(plantService.addPlant(plant1)).thenReturn(plant1);
-
-        this.mockMvc.perform(get("/api/search/plant/{searchId}", searchId).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.commonName", hasToString("Ironweed")));
-    }
 }

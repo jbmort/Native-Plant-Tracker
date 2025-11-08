@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
 import { PlantSearchDto } from '../models/plant-search-dto';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { PlantDto } from '../models/plant-dto';
 
 
@@ -24,8 +24,22 @@ export class ApiService {
   }
 
   // Get full plant details by ID
-  getPlantById(id: number): Observable<PlantDto> {
+  savePlant(id: number): Observable<boolean> {
     const url = `${this.plantUrl}/${id}`;
-    return this.http.get<PlantDto>(url);
+    let response: String = '';
+    this.http.get<String>(url).subscribe(res => {
+      response = res;
+
+      if(response === "added to database" || response === "already exists in database") {
+
+      return of(true);
+    }
+    return of(false);
+    });
+    
+    console.log("Failed to add plant to database"  + response);
+    return of(false);
   }
+
+
 }

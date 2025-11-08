@@ -1,9 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.dto.GardenDto;
-import com.example.demo.dto.GardenReportDto;
-import com.example.demo.dto.PlantDto;
-import com.example.demo.dto.PlantReportDTO;
+import com.example.demo.dto.*;
 import com.example.demo.entities.*;
 import com.example.demo.repository.GardenPlantRepository;
 import com.example.demo.repository.GardenRepository;
@@ -26,14 +23,18 @@ public class GardenServiceImpl implements GardenService {
     private final PlantRepository plantRepository;
     private final UserService userService;
     private final GardenPlantRepository gardenPlantRepository;
+    private final ApiService apiService;
+    private final PlantService plantService;
 
 
     @Autowired
-    GardenServiceImpl(GardenRepository gardenRepository, PlantRepository plantRepository, UserService userService, GardenPlantRepository gardenPlantRepository) {
+    GardenServiceImpl(GardenRepository gardenRepository, PlantRepository plantRepository, UserService userService, GardenPlantRepository gardenPlantRepository, ApiService apiService, PlantService plantService) {
         this.gardenRepository = gardenRepository;
         this.plantRepository = plantRepository;
         this.userService = userService;
         this.gardenPlantRepository = gardenPlantRepository;
+        this.apiService = apiService;
+        this.plantService = plantService;
     }
 
     @Override
@@ -49,16 +50,27 @@ public class GardenServiceImpl implements GardenService {
         List<GardenPlant> list = gardenPlantRepository.findByGardenId(garden.getId());
         for (GardenPlant gardenPlant : list) {
             if(gardenPlant.getDateAbsent() == null){
-                PlantDto plant = new PlantDto();
-                plant.setId(gardenPlant.getPlant().getId());
-                plant.setDescription(gardenPlant.getPlant().getDescription());
-                plant.setSci_name(gardenPlant.getPlant().getSciName());
-                plant.setCommon_name(gardenPlant.getPlant().getCommonName());
+                PlantDto plant = getPlantDto(gardenPlant);
 
                 plantList.add(plant);
             }
         }
         return plantList;
+    }
+
+    private static PlantDto getPlantDto(GardenPlant gardenPlant) {
+        PlantDto plant = new PlantDto(
+                gardenPlant.getId(),
+                gardenPlant.getPlant().getCommonName(),
+                gardenPlant.getPlant().getSciName(),
+                gardenPlant.getPlant().getImageUrl(),
+                gardenPlant.getPlant().getDescription()
+        );
+        plant.setId(gardenPlant.getPlant().getId());
+        plant.setDescription(gardenPlant.getPlant().getDescription());
+        plant.setSciName(gardenPlant.getPlant().getSciName());
+        plant.setCommonName(gardenPlant.getPlant().getCommonName());
+        return plant;
     }
 
 //    @Transactional
@@ -154,36 +166,35 @@ public class GardenServiceImpl implements GardenService {
 //        return null;
 //    }
 
-    @Transactional
-    @Override
-    public Plant addPlantToGarden(Long plantId, long gardenId, String currentUsername, LocalDate dateAdded) {
-        Garden garden = findGardenByIdAndUsername(gardenId, currentUsername);
-        boolean existsInGarden = false;
-        for(GardenPlant gardenPlant : garden.getGardenPlants()){
-            if (gardenPlant.getPlant().getCommonName() != null && gardenPlant.getPlant().getId() == plantId) {
-                existsInGarden = true;
-                break;
-            }
-        }
-        Plant newPlant = new Plant();
-        if (!existsInGarden) {
-            if (garden.getUser().getUsername().equals(currentUsername)) {
-                if (!plantRepository.existsById(plantId)) {
-                    newPlant = null;
-                } else {
-                    newPlant = plantRepository.getPlantById(plantId);
-                }
 
-                if (gardenRepository.findById(gardenId).isPresent()) {
-                    GardenPlant gardenPlant = new GardenPlant();
-                    gardenPlant.setGarden(garden);
-                    gardenPlant.setPlant(newPlant);
-                    gardenPlant.setDatePlanted(dateAdded);
-                    garden.getGardenPlants().add(gardenPlant);
-                    gardenRepository.save(garden);
-                }
+    @Override
+    public Plant addPlantToGarden(long plantId, long gardenId, String currentUsername, LocalDate dateAdded) {
+        Garden garden = findGardenByIdAndUsername(gardenId, currentUsername);
+        apiResponsePlantDto newPlant = apiService.getPlant(plantId);
+        Plant plant = plantService.addPlant(newPlant);
+        boolean existsInGarden = garden.getGardenPlants().stream()
+                .anyMatch(gp -> gp.getPlant().getId() == plantId);
+
+        if (!existsInGarden) {
+
+            System.out.println(plantId);
+//            newPlant = plantRepository.findById(plantId)
+//                    .orElseThrow(() -> new RuntimeException("CRITICAL ERROR: Plant with ID " + plantId + " was not found in the database before trying to add it to a garden."));
+
+            System.out.println(plant);
+
+
+            if (gardenRepository.findById(gardenId).isPresent()) {
+                GardenPlant gardenPlant = new GardenPlant();
+                gardenPlant.setGarden(garden);
+                gardenPlant.setPlant(plant);
+                gardenPlant.setDatePlanted(dateAdded);
+                garden.getGardenPlants().add(gardenPlant);
+                gardenRepository.save(garden);
+
             }
-            return newPlant;
+            return plant;
+
         }
         return null;
     }

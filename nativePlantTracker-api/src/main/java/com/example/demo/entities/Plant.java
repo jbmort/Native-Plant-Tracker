@@ -30,6 +30,7 @@ public class Plant {
     private String plantType;
     private Double averageHeight;
 //    private String toxicity;
+    @Column(columnDefinition = "TEXT")
     private String description;
 
 

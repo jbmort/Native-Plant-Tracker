@@ -96,33 +96,32 @@ public class ApiServiceImpl  implements ApiService {
 
     // Select a single plant from API //
     @Override
-    public Plant getPlant(long id) {
+    public apiResponsePlantDto getPlant(long id) {
         //create get request with "plant/<id>"
         String url = baseUrl + "plants/" + id;
-
         // Add authentication headers
         HttpEntity<Void> requestEntity = headers();
 
         try {
-            ResponseEntity<ApiResponseDto> responseEntity = restTemplate.exchange(
+            ResponseEntity<apiResponsePlantDto> responseEntity = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
                     requestEntity,
-                    ApiResponseDto.class
+                    apiResponsePlantDto.class
             );
 
             // Collect API Response
-            ApiResponseDto response = responseEntity.getBody();
+            apiResponsePlantDto response = responseEntity.getBody();
 
-            if (response != null && response.getPlants() != null) {
-                apiResponsePlantDto plantData = response.getPlants().getFirst();
-                return apiResponseToPlant(plantData);
+            if (response != null) {
+                return response;
             }
         }
         catch (Exception e){
-            System.err.println("Error calling Permapeople API: Could not retrieve plant by id" + e.getMessage());
+            System.out.println("Error calling Permapeople API: Could not retrieve plant by id" + e.getMessage());
         }
-        return null;}
+        return null;
+    }
 
 
     // //   Helper Methods   // //

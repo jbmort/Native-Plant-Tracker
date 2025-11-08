@@ -10,5 +10,5 @@ public interface ApiService {
 
     List<ApiResultsDto> searchPlantsApi(String name);
 
-    public Plant getPlant(long id);
+    public apiResponsePlantDto getPlant(long id);
 }

@@ -8,6 +8,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { AddGardenModalComponent } from '../../components/add-garden-modal/add-garden-modal.component';
 import { PlantDto } from '../../models/plant-dto';
 import { AddPlantApiModalComponent } from '../../components/add-plant-api-modal/add-plant-api-modal.component';
+import { PlantSearchDto } from '../../models/plant-search-dto';
 
 
 @Component({
@@ -27,7 +28,7 @@ export class GardenDetailComponent implements OnInit{
 
   gardenId: number = 0;
   garden: Garden | null = null;
-  plantList: Array<PlantDto> = new Array();
+  plantList: Array<PlantSearchDto> = new Array();
   errorMessage: String | null = null;
   editMode: boolean = false;
   gardenAge: String = '';
@@ -107,7 +108,8 @@ export class GardenDetailComponent implements OnInit{
       next: (plants) => {
         this.plantList = plants;
         for(let plant of this.plantList){
-          this.presentId.add(plant.id);
+          this.presentId.add(plant.externalId);
+          console.log(plant);
         }
         this.errorMessage = null;
       },

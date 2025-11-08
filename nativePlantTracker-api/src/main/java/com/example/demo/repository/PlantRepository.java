@@ -16,4 +16,6 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
 
     List<Plant> searchPlantsByCommonNameContainingIgnoreCase(String name);
     List<Plant>  searchPlantsBySciNameContainingIgnoreCase(String name);
+
+    boolean existsPlantById(long id);
 }

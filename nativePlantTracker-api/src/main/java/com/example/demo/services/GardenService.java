@@ -23,7 +23,7 @@ public interface GardenService {
 //    Plant addPlantToGarden(PlantDto plant, long gardenId, String currentUsername, LocalDate dateAdded);
 
     @Transactional
-    Plant addPlantToGarden(Long plantId, long gardenId, String currentUsername, LocalDate dateAdded);
+    Plant addPlantToGarden(long plantId, long gardenId, String currentUsername, LocalDate dateAdded);
 
     void deleteGarden(long id, String username);
 //    void deletePlantFromGarden(long plantId, long gardenId, LocalDate date);

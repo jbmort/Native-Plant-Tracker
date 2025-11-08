@@ -3,6 +3,9 @@
   <h4 class="modal-title">Add a Plant to Your Garden</h4>
   <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
 </div>
+<div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+</div>
 
 <!-- Search for Plant -->
 <div *ngIf="selectedPlant == null">
@@ -31,9 +34,9 @@
 
         </div> -->
 
-        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+        <!-- <div *ngIf="errorMessage" class="alert alert-danger mt-3">
         {{ errorMessage }}
-        </div>
+        </div> -->
 
     </form>
 
@@ -66,7 +69,7 @@
     <button type="button" class="btn btn-secondary mb-3" (click)="backToSearch()">Back to Search</button>
     <h5>You have selected:</h5>
     <p><strong>Common Name:</strong> {{ selectedPlant.commonName }}</p>
-    <p><strong>Scientific Name:</strong> {{ selectedPlant.scientificName }}{{ selectedPlant.externalId}}</p>
+    <p><strong>Scientific Name:</strong> {{ selectedPlant.scientificName }}</p>
     <div *ngIf="selectedPlant.imageUrl">
         <img src="{{ selectedPlant.imageUrl }}" alt="Image of {{ selectedPlant.commonName }}" width="150" height="150"/>
     </div>

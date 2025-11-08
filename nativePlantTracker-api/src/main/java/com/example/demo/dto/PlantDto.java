@@ -4,15 +4,16 @@ package com.example.demo.dto;
 
 public class PlantDto {
 
-    public Long getId() {
-        return id;
+    public long getId() {
+        return externalId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(long id) {
+        this.externalId = id;
     }
 
-    private Long id;
+    private long externalId;
+
 
     public String getTypeName() {
         return typeName;
@@ -24,8 +25,18 @@ public class PlantDto {
 
     private String typeName;
 
-    private String common_name;
-    private String sci_name;
+    private String commonName;
+    private String sciName;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    private String imageUrl;
     private String description;
     private long type;
 
@@ -39,29 +50,28 @@ public class PlantDto {
 
     private String flowerColor;
 
-    public PlantDto() {
-    }
-    public PlantDto(String common_name, String sci_name, String description, long type) {
-        this.common_name = common_name;
-        this.sci_name = sci_name;
+    public PlantDto(long id, String common_name, String sci_name, String imageUrl, String description) {
+        this.externalId = id;
+        this.commonName = common_name;
+        this.sciName = sci_name;
+        this.imageUrl = imageUrl;
         this.description = description;
-        this.type = type;
     }
 
-    public String getCommon_name() {
-        return common_name;
+    public String getCommonName() {
+        return commonName;
     }
 
-    public void setCommon_name(String common_name) {
-        this.common_name = common_name;
+    public void setCommonName(String commonName) {
+        this.commonName = commonName;
     }
 
-    public String getSci_name() {
-        return sci_name;
+    public String getSciName() {
+        return sciName;
     }
 
-    public void setSci_name(String sci_name) {
-        this.sci_name = sci_name;
+    public void setSciName(String sciName) {
+        this.sciName = sciName;
     }
 
     public String getDescription() {

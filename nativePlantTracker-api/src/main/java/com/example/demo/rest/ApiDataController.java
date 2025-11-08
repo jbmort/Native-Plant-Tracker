@@ -1,12 +1,12 @@
 package com.example.demo.rest;
 
 import com.example.demo.dto.ApiResultsDto;
+import com.example.demo.dto.apiResponsePlantDto;
 import com.example.demo.entities.Plant;
 import com.example.demo.services.ApiService;
 import com.example.demo.services.PlantService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -82,16 +82,19 @@ public class ApiDataController{
 
         // Check database for plant by id
         Plant databasePlant = plantService.getPlant(Long.parseLong(id));
+        System.out.println("search plant" + databasePlant);
         if(databasePlant == null) {
             // Pull full plant data from api and save plant to database for future reference
-            Plant apiPlant = apiService.getPlant(Long.parseLong(id));
-            if(apiPlant == null) {
+            apiResponsePlantDto apiPlant = apiService.getPlant(Long.parseLong(id));
+            System.out.println("search plant" + apiPlant);
+            if(apiPlant != null) {
+                System.out.println(apiPlant.name());
                 plantService.addPlant(apiPlant);
-                return ResponseEntity.ok("Plant added to database");
+                return ResponseEntity.ok("added to database");
             }
             else{ return ResponseEntity.internalServerError().build();}
         }
-        return ResponseEntity.ok("Plant already exists in database");
+        return ResponseEntity.ok("already exists in database");
     }
 
 

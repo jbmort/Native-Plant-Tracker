@@ -5,6 +5,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GardenService } from '../../services/garden.service';
 import { PlantSearchDto } from '../../models/plant-search-dto';
 import { ApiService } from '../../services/api.service';
+import { switchMap } from 'rxjs';
 
 
 
@@ -55,13 +56,14 @@ isChecked(): boolean {
 }
 
 onSubmit() {
-  let today: String;
-  today = new Date().toLocaleDateString();
-  if(this.dateForm.get('todayCheckbox')?.value == false && !this.dateForm.get('plantedDate')?.value) {
+  let today: Date;
+  today = new Date();
+  if(this.dateForm.get('todayCheckbox')?.value == false && !this.dateForm.get('datePlanted')?.value) {
     this.errorMessage = 'Please select a date or choose Today.';
     return;
   }
-  if(this.dateForm.get('datePlanted')?.value > today) {
+  let plantedDate: Date = new Date(this.dateForm.get('datePlanted')?.value); 
+  if(plantedDate > today) {
     this.errorMessage = 'The planted date cannot be in the future.';
     return;
   }
@@ -70,30 +72,19 @@ onSubmit() {
   if(this.selectedPlant) {
     const plantToAdd = {
       plantId: this.selectedPlant.externalId,
-      datePlanted: this.dateForm.get('todayCheckbox')?.value ? today : this.dateForm.get('plantedDate')?.value
+      datePlanted: (this.dateForm.get('todayCheckbox')?.value ? today : plantedDate).toISOString().split('T')[0]
     };
-    
+    console.log(this.gardenId, plantToAdd.plantId, plantToAdd.datePlanted);
+
     // Call the service to add the plant to the garden
-    this.apiService.getPlantById(plantToAdd.plantId).subscribe({
+  this.gardenService.addPlantToGarden(plantToAdd.plantId, this.gardenId, plantToAdd.datePlanted).subscribe({
       next: () => {
-        if(!(this.gardenId === 0)) {
-        this.gardenService.addPlantToGarden(plantToAdd.plantId, this.gardenId, plantToAdd.datePlanted).subscribe({
-          next: () => {
-            this.plantAdded.emit(); // Notify parent component
-            this.activeModal.close('Plant Added');
-          },
-          error: (error) => {
-            console.error('Error adding plant to garden:', error);
-            this.errorMessage = 'An error occurred while adding the plant. Please try again later.';
-          }
-        });
-        }else {
-        this.errorMessage = 'Garden ID is invalid. Please go back and try again.';
-        }
+        this.plantAdded.emit(); // Notify parent component
+        this.activeModal.close('Plant Added');
       },
       error: (error) => {
-        console.error('Error fetching plant details:', error);
-        this.errorMessage = 'An error occurred while retrieving plant details. Please try again later.';
+        console.error('Error adding plant to garden:', error);
+        this.errorMessage = 'An error occurred while adding the plant. Please try again later.';
       }
     });
   }

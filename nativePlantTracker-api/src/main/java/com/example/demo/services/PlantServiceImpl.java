@@ -1,6 +1,8 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.PlantDataDto;
 import com.example.demo.dto.PlantDto;
+import com.example.demo.dto.apiResponsePlantDto;
 import com.example.demo.entities.*;
 import com.example.demo.repository.PlantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,37 +50,46 @@ public class PlantServiceImpl implements PlantService {
         return plantRepository.findAll();
     }
 
-
     @Override
-    public Plant addPlant(PlantDto plant) {
-        if(!plantRepository.existsPlantByCommonName(plant.getCommon_name())
-                && !plantRepository.existsPlantBySciName(plant.getSci_name()) ){
+    public Plant addPlant(apiResponsePlantDto plant) {
+        System.out.println("Adding plant " + plant);
+        if(!plantRepository.existsById((plant.id())) ){
             Plant newPlant = new Plant();
 
-            newPlant.setCommonName(plant.getCommon_name());
-            newPlant.setDescription(plant.getDescription());
-            newPlant.setSciName(plant.getSci_name());
+            newPlant.setCommonName(plant.name());
+            newPlant.setDescription(plant.description());
+            newPlant.setSciName(plant.scientificName());
+            newPlant.setPlantType(plant.type());
+            newPlant.setId(plant.id());
+            newPlant.setImageUrl(plant.images().thumb());
+
+            List<String> edibleParts = plant.data().stream()
+                    .filter(d -> d.key().equals("edible parts"))
+                    .map(PlantDataDto::value)
+                    .toList();
+
+            newPlant.setEdibleParts(edibleParts);
            return plantRepository.save(newPlant);
         }
-        return plantRepository.getPlantByCommonName(plant.getCommon_name());
+        return plantRepository.findById(plant.id()).orElseThrow(() -> new RuntimeException("Plant with id " + plant.id() + " not found in the database before trying to add it"));
     }
 
-    @Override
-    public Plant addPlant(Plant plant) {
-        if(!plantRepository.existsPlantByCommonName(plant.getCommonName())
-                && !plantRepository.existsPlantBySciName(plant.getSciName()) ){
-            return plantRepository.save(plant);
-        }
-        return plantRepository.getPlantByCommonName(plant.getCommonName());
-    }
+//    @Override
+//    public Plant addPlant(Plant plant) {
+//        if(!plantRepository.existsPlantByCommonName(plant.getCommonName())
+//                && !plantRepository.existsPlantBySciName(plant.getSciName()) ){
+//            return plantRepository.save(plant);
+//        }
+//        return plantRepository.getPlantByCommonName(plant.getCommonName());
+//    }
 
     @Override
     public Plant updatePlant(long id, PlantDto plant) {
         Plant updatedPlant = plantRepository.getPlantById(id);
 
         updatedPlant.setDescription(plant.getDescription());
-        updatedPlant.setSciName(plant.getSci_name());
-        updatedPlant.setCommonName(plant.getCommon_name());
+        updatedPlant.setSciName(plant.getSciName());
+        updatedPlant.setCommonName(plant.getCommonName());
         return plantRepository.save(updatedPlant);
     }
 

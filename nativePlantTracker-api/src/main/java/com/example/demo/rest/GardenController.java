@@ -105,7 +105,7 @@ public class GardenController {
                                                   @RequestBody String date,
                                                   Authentication authentication) {
         String currentUsername = authentication.getName();
-        LocalDate dateAdded = date.length() == 10 ? LocalDate.parse(date) : LocalDate.now();
+        LocalDate dateAdded = LocalDate.parse(date);
         Plant newPlant = gardenService.addPlantToGarden(plantId, gardenID, currentUsername, dateAdded);
         if (newPlant != null) {
             return ResponseEntity.ok(newPlant);
