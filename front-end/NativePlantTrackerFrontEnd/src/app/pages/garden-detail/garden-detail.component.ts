@@ -127,13 +127,6 @@ export class GardenDetailComponent implements OnInit{
       modalRef.componentInstance.plantAdded.subscribe(() => {
         this.loadGardenData(this.gardenId);
       });
-  
-      modalRef.result.then(
-        (result) => {
-        },
-        (reason) => {
-        }
-      );
     }
 
     openEditGardenModal(): void {
@@ -143,14 +136,6 @@ export class GardenDetailComponent implements OnInit{
         modalRef.componentInstance.gardenCreated.subscribe(() => {
           this.loadGarden(this.gardenId);
         });
-    
-        // You can also handle the result when the modal is closed
-        modalRef.result.then(
-          (result) => {
-          },
-          (reason) => {
-          }
-        );
       }
 
 }

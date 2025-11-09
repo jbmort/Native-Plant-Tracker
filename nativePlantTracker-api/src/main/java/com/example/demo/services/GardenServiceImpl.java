@@ -68,7 +68,7 @@ public class GardenServiceImpl implements GardenService {
         );
         plant.setId(gardenPlant.getPlant().getId());
         plant.setDescription(gardenPlant.getPlant().getDescription());
-        plant.setSciName(gardenPlant.getPlant().getSciName());
+        plant.setScientificName(gardenPlant.getPlant().getSciName());
         plant.setCommonName(gardenPlant.getPlant().getCommonName());
         return plant;
     }

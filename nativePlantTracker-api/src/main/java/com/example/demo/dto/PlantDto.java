@@ -26,7 +26,7 @@ public class PlantDto {
     private String typeName;
 
     private String commonName;
-    private String sciName;
+    private String scientificName;
 
     public String getImageUrl() {
         return imageUrl;
@@ -38,22 +38,12 @@ public class PlantDto {
 
     private String imageUrl;
     private String description;
-    private long type;
 
-    public String getFlowerColor() {
-        return flowerColor;
-    }
-
-    public void setFlowerColor(String flowerColor) {
-        this.flowerColor = flowerColor;
-    }
-
-    private String flowerColor;
 
     public PlantDto(long id, String common_name, String sci_name, String imageUrl, String description) {
         this.externalId = id;
         this.commonName = common_name;
-        this.sciName = sci_name;
+        this.scientificName = sci_name;
         this.imageUrl = imageUrl;
         this.description = description;
     }
@@ -66,12 +56,12 @@ public class PlantDto {
         this.commonName = commonName;
     }
 
-    public String getSciName() {
-        return sciName;
+    public String getScientificName() {
+        return scientificName;
     }
 
-    public void setSciName(String sciName) {
-        this.sciName = sciName;
+    public void setScientificName(String scientificName) {
+        this.scientificName = scientificName;
     }
 
     public String getDescription() {
@@ -82,11 +72,4 @@ public class PlantDto {
         this.description = description;
     }
 
-    public long getType() {
-        return type;
-    }
-
-    public void setType(long type) {
-        this.type = type;
-    }
 }
