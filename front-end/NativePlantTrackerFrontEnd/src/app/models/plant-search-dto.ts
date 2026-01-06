@@ -1,6 +1,8 @@
 export interface PlantSearchDto {
-    externalId: number; 
+    id: number;
     commonName: string | null;
     scientificName: string;
     imageUrl: string | null
+    description: string | null;
+    typeName: string | null;
 }

@@ -27,11 +27,11 @@ export class AddPlantApiModalComponent implements OnInit {
 // This will be passed in from the GardenDetailComponent
   @Input() gardenId: Number = 0;
   @Input() Ids: Set<Number> = new Set();
-  
+
   // To notify the parent component that a plant was added
   @Output() plantAdded = new EventEmitter<void>();
 
-  isLoadingPlants = false; 
+  isLoadingPlants = false;
   selectedPlant: PlantSearchDto | null = null;
 
   constructor(
@@ -62,7 +62,7 @@ onSubmit() {
     this.errorMessage = 'Please select a date or choose Today.';
     return;
   }
-  let plantedDate: Date = new Date(this.dateForm.get('datePlanted')?.value); 
+  let plantedDate: Date = new Date(this.dateForm.get('datePlanted')?.value);
   if(plantedDate > today) {
     this.errorMessage = 'The planted date cannot be in the future.';
     return;
@@ -71,7 +71,7 @@ onSubmit() {
 
   if(this.selectedPlant) {
     const plantToAdd = {
-      plantId: this.selectedPlant.externalId,
+      plantId: this.selectedPlant.id,
       datePlanted: (this.dateForm.get('todayCheckbox')?.value ? today : plantedDate).toISOString().split('T')[0]
     };
     console.log(this.gardenId, plantToAdd.plantId, plantToAdd.datePlanted);
@@ -122,7 +122,7 @@ searchForPlant() {
 }
 
 selectPlant(plant: PlantSearchDto) {
-  if(this.Ids.has(plant.externalId)) {
+  if(this.Ids.has(plant.id)) {
     alert('This plant is already in your garden.');
     return;
   }

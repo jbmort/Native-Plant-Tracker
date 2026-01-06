@@ -129,11 +129,10 @@ public class GardenController {
     @DeleteMapping("/{gardenID}/{plantID}")
     public ResponseEntity<Void> deletePlant(@PathVariable long gardenID,
                                              @PathVariable long plantID,
-                                             @RequestBody String date,
                                              Authentication authentication) {
         String currentUsername = authentication.getName();
         Plant plant = gardenService.getPlantById(gardenID, plantID, currentUsername);
-        LocalDate dateAbsent = date.length() == 10 ? LocalDate.parse(date) : LocalDate.now();
+        LocalDate dateAbsent = LocalDate.now();
         gardenService.deletePlantFromGarden(gardenID, plant.getId(), dateAbsent);
         return ResponseEntity.noContent().build();
     }

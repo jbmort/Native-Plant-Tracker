@@ -41,7 +41,7 @@
         <div  class="button-group row justify-content-center">
           <!-- The "Add Plant" button is always visible -->
           <button class="btn stand-button button-font" (click)="openAddPlantModal(gardenId)">+ Add Plant</button>
-          
+
           <!-- The "Edit Plants" button toggles the editMode flag -->
           <button *ngIf="plantList != null && plantList.length > 0" class="btn stand-button button-font" (click)="toggleEditMode()">
             {{ editMode ? 'Done Editing' : 'Edit Plants' }}
@@ -53,7 +53,7 @@
       <ul class="plant-list list-group mt-3 container">
         <div class="row justify-content-between">
         <li *ngFor="let plant of plantList" class="list-group-item col-md-3 m-1 mt-5 p-2 container" style="height: fit-content;">
-          
+
           <img src="{{plant.imageUrl}}" alt="{{plant.commonName}} image" class="plant-image justify-content-center" style="max-height: 50%; width: 100%;"/>
           <span class="plant-name heading-font row fs-5 m-1 text-center">{{plant.commonName}}</span>
           <span *ngIf="plant.scientificName != null" class="m-1 text-center body-font row fst-italic">{{plant.scientificName}}</span>
@@ -61,7 +61,7 @@
           <span *ngIf="plant.description != null" class="body-font row">{{plant.description}}</span> -->
 
           <div *ngIf="editMode" class="plant-actions row align-self-end">
-            <button class="btn btn-sm delete-button m-1" (click)="deletePlant(plant.externalId)">Delete</button>
+            <button class="btn btn-sm delete-button m-1" (click)="deletePlant(plant.id)">Delete</button>
           </div>
 
         </li>

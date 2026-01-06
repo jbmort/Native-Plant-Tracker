@@ -28,7 +28,7 @@ export class GardenDetailComponent implements OnInit{
 
   gardenId: number = 0;
   garden: Garden | null = null;
-  plantList: Array<PlantSearchDto> = new Array();
+  plantList: Array<PlantSearchDto> = [];
   errorMessage: String | null = null;
   editMode: boolean = false;
   gardenAge: String = '';
@@ -37,7 +37,7 @@ export class GardenDetailComponent implements OnInit{
 
   ngOnInit(): void {
       this.route.paramMap.subscribe(params => {
-     
+
       const idString = params.get('id');
 
       if (idString) {
@@ -53,7 +53,7 @@ export class GardenDetailComponent implements OnInit{
     if(this.garden != null ){
       date = new Date(this.garden.created_on)
     }
-    
+
     if(this.garden != null){
     const currentDate = Date.now();
 
@@ -76,10 +76,11 @@ export class GardenDetailComponent implements OnInit{
 
   deletePlant(plantId: number): void {
     if (this.gardenId && plantId) {
+      console.log('deleting plant');
       this.gardenService.deletePlantFromGarden(this.gardenId, plantId).subscribe({
         next: () => {
           console.log(`Plant ${plantId} deleted successfully.`);
-          this.loadGardenData(this.gardenId); 
+          this.loadGardenData(this.gardenId);
         },
         error: (err) => {
           console.error(`Error deleting plant ${plantId}:`, err);
@@ -108,9 +109,10 @@ export class GardenDetailComponent implements OnInit{
       next: (plants) => {
         this.plantList = plants;
         for(let plant of this.plantList){
-          this.presentId.add(plant.externalId);
+          this.presentId.add(plant.id);
           console.log(plant);
         }
+        console.log(this.presentId);
         this.errorMessage = null;
       },
       error: (err) => {
@@ -123,7 +125,6 @@ export class GardenDetailComponent implements OnInit{
       const modalRef = this.modalService.open(AddPlantApiModalComponent);
       modalRef.componentInstance.gardenId = gardenID;
       modalRef.componentInstance.Ids = this.presentId;
-  
       modalRef.componentInstance.plantAdded.subscribe(() => {
         this.loadGardenData(this.gardenId);
       });
@@ -132,7 +133,7 @@ export class GardenDetailComponent implements OnInit{
     openEditGardenModal(): void {
         const modalRef = this.modalService.open(AddGardenModalComponent);
         modalRef.componentInstance.gardenToEdit = this.garden;
-    
+
         modalRef.componentInstance.gardenCreated.subscribe(() => {
           this.loadGarden(this.gardenId);
         });
