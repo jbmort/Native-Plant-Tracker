@@ -101,7 +101,7 @@ public class ApiDataController{
     private ApiResultsDto convertToApiResultDto(Plant plant) {
         ApiResultsDto response = new ApiResultsDto();
 
-        response.setExternalId(plant.getId());
+        response.setId(plant.getId());
         response.setCommonName(plant.getCommonName());
         response.setScientificName(plant.getSciName());
         response.setImageUrl(plant.getImageUrl());

@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ApiResultsDto {
-    public Long getExternalId() {
-        return externalId;
+    public Long getId() {
+        return id;
     }
 
-    public void setExternalId(Long externalId) {
-        this.externalId = externalId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCommonName() {
@@ -37,7 +37,7 @@ public class ApiResultsDto {
         this.imageUrl = imageUrl;
     }
 
-    private Long externalId;
+    private Long id;
 
     private String commonName;
 

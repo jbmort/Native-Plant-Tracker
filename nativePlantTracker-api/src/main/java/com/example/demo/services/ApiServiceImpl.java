@@ -137,7 +137,7 @@ public class ApiServiceImpl  implements ApiService {
 
     private ApiResultsDto toApiResultsDto(apiResponsePlantDto Plant) {
         ApiResultsDto dto = new ApiResultsDto();
-        dto.setExternalId(Plant.id());
+        dto.setId(Plant.id());
         dto.setCommonName(Plant.name());
         dto.setScientificName(Plant.scientificName());
         if (Plant.images() != null) {
