@@ -42,7 +42,6 @@ public class GardenController {
     public ResponseEntity<List<Garden>> getGardensForCurrentUser(Authentication authentication) {
         String currentUsername = authentication.getName();
         List<Garden> gardens = gardenService.findGardensByUsername(currentUsername);
-        System.out.println(gardens);
         return ResponseEntity.ok(gardens);
     }
 

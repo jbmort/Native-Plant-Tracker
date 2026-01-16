@@ -9,8 +9,9 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 
 @Entity
@@ -30,6 +31,33 @@ public class Garden {
     @NotNull
     private LocalDateTime created_on;
 
+    //
+    // New User Provided Garden Data Points
+    //
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "sunlight_level")
+    private Integer sunlight;
+
+    @Column(name = "soil_moisture")
+    private Integer soilMoisture;
+
+    @Column(name = "soil_type")
+    private String soilType;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "garden_goals",
+            joinColumns = @JoinColumn(name = "garden_id"),
+            inverseJoinColumns = @JoinColumn(name = "goal_id")
+    )
+    private Set<Goal> goals = new HashSet<>();
+
+    @Column(name = "area_sqft")
+    private Double area;
+
+    // Plants in the Garden
     @OneToMany(
             mappedBy = "garden",
             cascade = CascadeType.ALL,
@@ -111,5 +139,53 @@ public class Garden {
     public void removeGardenPlant(GardenPlant gardenPlant) {
         gardenPlants.remove(gardenPlant);
         gardenPlant.setGarden(null); // Remove the back-reference
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Integer getSunlight() {
+        return sunlight;
+    }
+
+    public void setSunlight(Integer sunlight) {
+        this.sunlight = sunlight;
+    }
+
+    public Integer getSoilMoisture() {
+        return soilMoisture;
+    }
+
+    public void setSoilMoisture(Integer soilMoisture) {
+        this.soilMoisture = soilMoisture;
+    }
+
+    public String getSoilType() {
+        return soilType;
+    }
+
+    public void setSoilType(String soilType) {
+        this.soilType = soilType;
+    }
+
+    public Set<Goal> getGoals() {
+        return goals;
+    }
+
+    public void setGoals(Set<Goal> goals) {
+        this.goals = goals;
+    }
+
+    public Double getArea() {
+        return area;
+    }
+
+    public void setArea(Double area) {
+        this.area = area;
     }
 }
