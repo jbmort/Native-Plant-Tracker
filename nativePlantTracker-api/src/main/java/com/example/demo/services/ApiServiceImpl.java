@@ -72,14 +72,14 @@ public class ApiServiceImpl  implements ApiService {
                         .sorted(Comparator.comparingDouble(
                                 (ApiResultsDto dto) -> {
                                     double commonNameScore = 0.0;
-                                    if (dto.getCommonName() != null) {
-                                        commonNameScore = sim.apply(normalizedSearch, dto.getCommonName().toLowerCase());
+                                    if (dto.commonName() != null) {
+                                        commonNameScore = sim.apply(normalizedSearch, dto.commonName().toLowerCase());
                                     }
 
                                     // Calculate similarity for the scientific name
                                     double scientificNameScore = 0.0;
-                                    if (dto.getScientificName() != null) {
-                                        scientificNameScore = sim.apply(normalizedSearch, dto.getScientificName().toLowerCase());
+                                    if (dto.scientificName() != null) {
+                                        scientificNameScore = sim.apply(normalizedSearch, dto.scientificName().toLowerCase());
                                     }
 
                                     // Use the HIGHER of the two scores as the final relevance score for this item
@@ -136,14 +136,13 @@ public class ApiServiceImpl  implements ApiService {
     }
 
     private ApiResultsDto toApiResultsDto(apiResponsePlantDto Plant) {
-        ApiResultsDto dto = new ApiResultsDto();
-        dto.setId(Plant.id());
-        dto.setCommonName(Plant.name());
-        dto.setScientificName(Plant.scientificName());
+        String url = "Unknown";
+
         if (Plant.images() != null) {
-            dto.setImageUrl(Plant.images().thumb());
+            url = Plant.images().thumb();
         }
-        return dto;
+
+        return new ApiResultsDto(Plant.id(), Plant.name(), Plant.scientificName(), url);
     }
 
     private Plant apiResponseToPlant(apiResponsePlantDto response) {

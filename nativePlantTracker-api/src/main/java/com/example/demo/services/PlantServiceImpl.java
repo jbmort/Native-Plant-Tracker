@@ -87,9 +87,9 @@ public class PlantServiceImpl implements PlantService {
     public Plant updatePlant(long id, PlantDto plant) {
         Plant updatedPlant = plantRepository.getPlantById(id);
 
-        updatedPlant.setDescription(plant.getDescription());
-        updatedPlant.setSciName(plant.getScientificName());
-        updatedPlant.setCommonName(plant.getCommonName());
+        updatedPlant.setDescription(plant.description());
+        updatedPlant.setSciName(plant.scientificName());
+        updatedPlant.setCommonName(plant.commonName());
         return plantRepository.save(updatedPlant);
     }
 

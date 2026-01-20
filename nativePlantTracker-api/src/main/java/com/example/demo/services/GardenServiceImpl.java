@@ -59,18 +59,18 @@ public class GardenServiceImpl implements GardenService {
     }
 
     private static PlantDto getPlantDto(GardenPlant gardenPlant) {
-        PlantDto plant = new PlantDto(
-                gardenPlant.getId(),
+        //        plant.setId(gardenPlant.getPlant().getId());
+//        plant.setDescription(gardenPlant.getPlant().getDescription());
+//        plant.setScientificName(gardenPlant.getPlant().getSciName());
+//        plant.setCommonName(gardenPlant.getPlant().getCommonName());
+        return new PlantDto(
+                gardenPlant.getPlant().getId(),
+                gardenPlant.getPlant().getPlantType(),
                 gardenPlant.getPlant().getCommonName(),
                 gardenPlant.getPlant().getSciName(),
                 gardenPlant.getPlant().getImageUrl(),
                 gardenPlant.getPlant().getDescription()
         );
-        plant.setId(gardenPlant.getPlant().getId());
-        plant.setDescription(gardenPlant.getPlant().getDescription());
-        plant.setScientificName(gardenPlant.getPlant().getSciName());
-        plant.setCommonName(gardenPlant.getPlant().getCommonName());
-        return plant;
     }
 
 //    @Transactional
@@ -115,8 +115,8 @@ public class GardenServiceImpl implements GardenService {
     public void addGarden(GardenDto garden) {
         if (garden != null) {
             Garden newGarden = new Garden();
-            newGarden.setName(garden.getName());
-            newGarden.setDescription(garden.getDescription());
+            newGarden.setName(garden.name());
+            newGarden.setDescription(garden.description());
             gardenRepository.save(newGarden);
         }
 
@@ -213,8 +213,8 @@ public class GardenServiceImpl implements GardenService {
     @Transactional
     public Garden updateGarden(long gardenId, GardenDto gardenDto, String currentUsername) {
         Garden garden = this.findGardenByIdAndUsername(gardenId, currentUsername);
-        garden.setDescription(gardenDto.getDescription());
-        garden.setName(gardenDto.getName());
+        garden.setDescription(gardenDto.description());
+        garden.setName(gardenDto.name());
 
         return gardenRepository.save(garden);
     }
@@ -253,8 +253,8 @@ public class GardenServiceImpl implements GardenService {
         User user = userService.getUserByUsername(currentUsername);
         Garden newGarden = new Garden();
 
-        newGarden.setName(newGardenDto.getName());
-        newGarden.setDescription(newGardenDto.getDescription());
+        newGarden.setName(newGardenDto.name());
+        newGarden.setDescription(newGardenDto.description());
         newGarden.setUser(user);
 
         return gardenRepository.save(newGarden);
@@ -330,18 +330,25 @@ public class GardenServiceImpl implements GardenService {
         List<GardenReportDto> report = new ArrayList<>();
         int i = 1;
         for (Garden garden : gardens) {
-            GardenReportDto line = new GardenReportDto();
-            line.setId(i);
+            String date = garden.getCreated_on().toLocalDate().toString();
+            GardenReportDto line = new GardenReportDto(
+                    i,
+                    garden.getName(),
+                    garden.getDescription(),
+                    garden.getGardenPlants().size(),
+                    date
+                    );
+//            line.setId(i);
             i++;
 
-            line.setGarden_name(garden.getName());
-            line.setDescription(garden.getDescription());
+//            line.setGarden_name(garden.getName());
+//            line.setDescription(garden.getDescription());
 
             // double age = getAge(garden.getCreated_on());
-            String date = garden.getCreated_on().toLocalDate().toString();
-            line.setDate_started(date);
-
-            line.setNum_plants(garden.getGardenPlants().size());
+//
+//            line.setDate_started(date);
+//
+//            line.setNum_plants(garden.getGardenPlants().size());
             report.add(line);
         }
         return report;

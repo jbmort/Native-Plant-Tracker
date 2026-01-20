@@ -87,8 +87,8 @@ public class UserServiceImpl implements UserService {
         User user = findByUsername(username);
 
         Garden newGarden = new Garden();
-        newGarden.setName(gardenDto.getName());
-        newGarden.setDescription(gardenDto.getDescription());
+        newGarden.setName(gardenDto.name());
+        newGarden.setDescription(gardenDto.description());
 
         newGarden.setUser(user);
 

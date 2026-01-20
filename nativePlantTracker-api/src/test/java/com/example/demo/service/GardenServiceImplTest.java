@@ -52,9 +52,7 @@ class GardenServiceImplTest {
         testUser.setUsername("testuser");
 
         // Create test DTO
-        gardenDto = new GardenDto();
-        gardenDto.setName("Test Garden");
-        gardenDto.setDescription("A garden for testing.");
+        gardenDto = new GardenDto("Test Garden", "A garden for testing.");
 
         // Create test Garden
         testGarden = new Garden();
@@ -114,8 +112,8 @@ class GardenServiceImplTest {
             assertEquals(testGarden.getId(), result.getId());
             assertNotEquals("Garden One", result.getName());
             assertNotEquals("Basic Garden", result.getDescription());
-            assertEquals(gardenDto.getName(), result.getName());
-            assertEquals(gardenDto.getDescription(), result.getDescription());
+            assertEquals(gardenDto.name(), result.getName());
+            assertEquals(gardenDto.description(), result.getDescription());
             assertEquals(testUser.getUsername(), result.getUser().getUsername());
             assertEquals(testGarden.getCreated_on(), result.getCreated_on());
             assertEquals(testGarden.getGardenPlants().size(), result.getGardenPlants().size());

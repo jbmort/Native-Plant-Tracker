@@ -99,12 +99,11 @@ public class ApiDataController{
 
 
     private ApiResultsDto convertToApiResultDto(Plant plant) {
-        ApiResultsDto response = new ApiResultsDto();
 
-        response.setId(plant.getId());
-        response.setCommonName(plant.getCommonName());
-        response.setScientificName(plant.getSciName());
-        response.setImageUrl(plant.getImageUrl());
-        return  response;
+//        response.getId(plant.getId());
+//        response.setCommonName(plant.getCommonName());
+//        response.setScientificName(plant.getSciName());
+//        response.setImageUrl(plant.getImageUrl());
+        return new ApiResultsDto(plant.getId(), plant.getCommonName(), plant.getSciName(), plant.getImageUrl());
     }
 }

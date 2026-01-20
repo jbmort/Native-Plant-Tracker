@@ -73,11 +73,7 @@ public class ApiDataControllerTest {
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
-        ApiResultsDto apiResultsDto = new ApiResultsDto();
-        apiResultsDto.setCommonName("Common Milkweed");
-        apiResultsDto.setScientificName("Asclepias syriaca");
-        apiResultsDto.setImageUrl("www.example.com");
-        apiResultsDto.setId(100L);
+        ApiResultsDto apiResultsDto = new ApiResultsDto(100L, "Common Milkweed", "Asclepias syriaca", "www.example.com" );
         expectedContent.add(apiResultsDto);
 
         plant1.setCommonName("Ironweed");
