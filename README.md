@@ -15,8 +15,6 @@ plants
 > I am currently working to expand garden data options to provide the user with feedback on what plants work well
 for their garden and for future plant suggestions based on garden conditions.
 
->As of September 26th, 2025 the original version of the application is still live on AWS and can be visited at http://jm-capstone-front-end-2025.s3-website-us-east-1.amazonaws.com/
-
 ## Upcoming Features
 + Add optional conditions for gardens such as location, amount of sunlight and soil moisture. (Currently working on)
 + Add AI-powered plant recommendations for users gardens based on conditions and plants that already exist in that garden
